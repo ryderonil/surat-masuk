@@ -37,11 +37,11 @@ a{
 }
 
 .ui-layout-resizer { /* all 'resizer-bars' */ 
-	background-color: #A4A5A6;
+	background-color: #F1DBFE;
 } 
 
 .ui-layout-toggler { /* all 'toggler-buttons' */ 
-	background: #8E8F90; 
+	background: #AE45F0; 
 	-webkit-border-top-left-radius: 5px;
 	-moz-border-radius-topleft: 5px;
 	-moz-border-radius-bottomleft: 5px;
@@ -65,14 +65,14 @@ a{
 }
 
 .content_panel{
-	background: #ececec;
+	background: #E3ACFA;
 	padding:7px;
 	overflow:auto;
 	height:98%;
 }
 
 .leftmenu_panel{
-	background: #ececec;
+	background: #E3ACFA;
 	height:100%;
 	overflow:auto;
 }

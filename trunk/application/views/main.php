@@ -1,17 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Sistem Informasi Pendataan & Kerjasama</title>
+		<title>Pengelolaan Surat Masuk</title>
 		
 		<!-- ICON -->
-		<link rel="icon" type="image/x-icon" href="<?php echo base_url() ?>images/favicon.ico" />
+		<link rel="icon" type="image/x-icon" href="<?php echo base_url() ?>images/favicon.png" />
 		
 		<!-- Link CSS -->
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/flexigrid.css" media="screen, tv, projection" title="Default" />
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>form_attribute/view.css" media="screen, tv, projection" title="Default" />
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/button.css" media="screen, tv, projection" title="Default" />
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/main.css" media="screen, tv, projection" title="Default" />
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/accordion.css" media="screen, tv, projection" title="Default" />
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/datepicker.css" media="screen, tv, projection" title="Default" />	
 
 		<!-- JAVASCRIPT -->
@@ -97,7 +96,7 @@
 		</div>
 		
 		<div class="ui-layout-south">
-			<div class="footer_panel"><div style="padding:10px 0 0 10px;">© 2011 Research & Development Team.</div></div>
+			<div align="center" class="footer_panel"><div style="padding:10px 0 0 10px;">© 2012 Research & Development Team</div></div>
 		</div> 
 	</div> 
 	</body>
