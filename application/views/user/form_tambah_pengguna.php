@@ -12,7 +12,7 @@
 				<li id="li_1" >
 					<label class="description" for="element_1">Username</label>
 					<div>
-						<input id="username" name="username" class="element text small" type="text" maxlength="11" value=""/> 
+						<input id="username" name="username" class="element text small" type="text" maxlength="11" value="<?php echo set_value('username');?>"/> 
 					</div>
 					<p class="guidelines" id="guide_1"><small>Username</small></p> 
 					<?php echo form_error('username'); ?>
@@ -37,7 +37,7 @@
 				<li id="li_14" >
 					<label class="description" for="element_14">Nama Lengkap</label>
 					<div>
-						<input id="nama" name="nama" class="element text medium" type="text" maxlength="100" /> 					
+						<input id="nama" name="nama" class="element text medium" type="text" maxlength="100" value="<?php echo set_value('nama');?>"/> 					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Nama Lengkap</small> 
 					<?php echo form_error('nama'); ?></p>
@@ -55,7 +55,7 @@
 												'5' => 'Bupati',
 												'6' => 'Dinas'
 											);
-								echo form_dropdown('grup',$options,'0', 'class="element select medium"');
+								echo form_dropdown('grup',$options, set_value('grup'), 'class="element select medium"');
 						?>					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Grup Pengguna</small></p> 
@@ -66,7 +66,7 @@
 					<div>
 					<div>
 						<?php 
-							echo form_dropdown('jabatan',$jabatan,'0', 'class="element select medium"');
+							echo form_dropdown('jabatan',$jabatan,set_value('jabatan'), 'class="element select medium"');
 						?>
 					</div>
 					<p class="guidelines" id="guide_21"><small>Jabatan</small></p>
@@ -75,7 +75,7 @@
 				<li id="li_14" >
 					<label class="description" for="element_14">Email</label>
 					<div>
-						<input id="Email" name="email" class="element text medium" type="text" maxlength="100" /> 					
+						<input id="Email" name="email" class="element text medium" type="text" maxlength="100" value="<?php echo set_value('email');?>"/> 					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Email</small></p> 
 					<?php echo form_error('email'); ?>
@@ -84,7 +84,7 @@
 				<li id="li_14" >
 					<label class="description" for="element_14">No HP</label>
 					<div>
-						<input id="handphone" name="handphone" class="element text medium" type="text" maxlength="100" /> 					
+						<input id="handphone" name="handphone" class="element text medium" type="text" maxlength="100" value="<?php echo set_value('handphone');?>" /> 					
 					</div>
 					<p class="guidelines" id="guide_14"><small>No HP</small></p> 
 					<?php echo form_error('handphone'); ?>
