@@ -126,6 +126,31 @@ class Manajemen_pengguna extends CI_Controller {
 				{
 					$status_user = 'Tidak Aktif';
 				}
+				
+				if($row->ROLE == 1)
+				{
+					$role = 'Administrator';
+				}
+				else if($row->ROLE == 2)
+				{
+					$role = 'Asisten';
+				}
+				else if($row->ROLE == 3)
+				{
+					$role = 'Sekretaris';
+				}
+				else if($row->ROLE == 4)
+				{
+					$role = 'Wakil Bupati';
+				}
+				else if($row->ROLE == 5)
+				{
+					$role = 'Bupati';
+				}
+				else
+				{
+					$role = 'Dinas';
+				}
 				$no = $no+1;
 				$record_items[] = array(
 										$row->USER_ID,
@@ -135,7 +160,7 @@ class Manajemen_pengguna extends CI_Controller {
 										$row->NAMA_JABATAN,
 										$row->EMAIL,
 										$row->NO_HP,
-										$row->ROLE,
+										$role,
 										$status_user,
 								'<a href='.base_url().'index.php/manajemen_pengguna/edit/'.$row->USER_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>'
 								//'<a href='.base_url().'index.php/manajemen_pengguna/delete/'.$row->USER_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
