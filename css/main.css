@@ -11,7 +11,7 @@ div, p, ul, h1, h4, h5, img {
 }
 
 a{
-	color:#FC0;
+	color:#0B9FEF;
 	text-decoration:none;
 }
 
@@ -87,15 +87,19 @@ a{
 
 .title{
 	background-color:#cfd0d1;
-	background: -webkit-gradient(linear, left top, left bottom, from(#cfd0d1), to(#8a8b8c));
-	background: -moz-linear-gradient(top,  #cfd0d1,  #8a8b8c);
+	background: -webkit-gradient(linear, left top, left bottom, from(#E47BDE), to(#7B3399));
+	background: -moz-linear-gradient(top,  #E47BDE,  #7B3399);
     border-color: #BBBBBB;
-    color: #0c374f;
+    color: #FCF8FC;
     font-size: 120%;
     font-weight: bold;
     padding: 10px;
 	text-shadow: 1px 1px #C7C7C7;
 	margin:1px;
+}
+
+.error_message{
+	color: #F40509;
 }
 
 .border_content{
