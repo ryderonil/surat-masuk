@@ -1,18 +1,82 @@
 /* CSS Document */
 
 input[type="submit"], input.submit[type="button"] {
-    background: url("../images/login-button.png") #000;
-    border: thin solid #000000;
-    border-radius: 6px;
-	width:71px;
-	height:26px;
-	color:#fff;
+	font: 11px Tahoma, sans-serif;
+	font-weight: bold;
+	color: #fff;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+	vertical-align: baseline;
+	margin: 0 3px 0 1px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	padding: 6px 8px;
+	text-shadow: 1px 1px 1px #555;
+	width: auto;
+	overflow: visible;
+	line-height: 110%;
+	border: 1px solid #981271;
+	background: #cb60b3;
+}
+
+input[type="button"] , input.submit[type="button"] {
+    font: 11px Tahoma, sans-serif;
+	font-weight: bold;
+	color: #fff;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+	vertical-align: baseline;
+	margin: 0 3px 0 1px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	padding: 6px 8px;
+	text-shadow: 1px 1px 1px #555;
+	width: auto;
+	overflow: visible;
+	line-height: 110%;
+	border: 1px solid #981271;
+	background: #cb60b3;
+}
+
+input[type="button"]:hover , input.submit[type="button"]:hover {
+    opacity: 0.9;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
+	filter: alpha(opacity=90);
+}
+
+input[type="submit"]:hover, input.submit[type="button"]:hover {
+	opacity: 0.9;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
+	filter: alpha(opacity=90);
 }
 
 input[type="reset"] {
-    background: url("../images/reset-button.png") #fff;
-    border: 1px solid #666666;
-    border-radius: 6px;
-	width:71px;
-	height:26px;
+    font: 11px Tahoma, sans-serif;
+	font-weight: bold;
+	color: #fff;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+	vertical-align: baseline;
+	margin: 0 3px 0 1px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	padding: 6px 8px;
+	text-shadow: 1px 1px 1px #555;
+	width: auto;
+	overflow: visible;
+	line-height: 110%;
+	border: 1px solid #981271;
+	background: #cb60b3;
+}
+
+input[type="reset"]:hover {
+	opacity: 0.9;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
+	filter: alpha(opacity=90);
 }

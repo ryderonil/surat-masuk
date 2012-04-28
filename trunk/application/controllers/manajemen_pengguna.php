@@ -162,7 +162,7 @@ class Manajemen_pengguna extends CI_Controller {
 										$row->NO_HP,
 										$role,
 										$status_user,
-								'<a href='.base_url().'index.php/manajemen_pengguna/edit/'.$row->USER_ID.'><img border=\'0\' src=\''.base_url().'images/flexigrid/magnifier.png\'></a>'
+								'<a href='.base_url().'index.php/manajemen_pengguna/edit/'.$row->USER_ID.'><img border=\'0\' src=\''.base_url().'images/icon/edit.png\'></a>'
 								//'<a href='.base_url().'index.php/manajemen_pengguna/delete/'.$row->USER_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
 								);
 		}
@@ -199,6 +199,8 @@ class Manajemen_pengguna extends CI_Controller {
 		$this->form_validation->set_error_delimiters('<p class="error_message">', '</p>');
 		$this->form_validation->set_message('required', 'Kolom %s harus diisi !!');
 		$this->form_validation->set_message('matches', 'Kolom %s tidak sesuai dengan isian password !!');
+		$this->form_validation->set_message('valid_email', 'Masukkan alamat email sesuai format');
+		$this->form_validation->set_message('numeric', 'Masukkan hanya angka');
 		return $this->form_validation->run();
 	}
 	
