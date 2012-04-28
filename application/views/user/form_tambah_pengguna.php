@@ -91,6 +91,7 @@
 				</li>
 				<li>
 					<input id="submit-button" type="submit" name="daftar_warna" value="Tambah" />
+					<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('manajemen_pengguna')?>'"/>
 				</li>
 			</ul>
 		<?php echo form_close(); ?>

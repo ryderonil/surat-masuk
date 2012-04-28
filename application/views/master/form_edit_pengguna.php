@@ -1,5 +1,5 @@
 <div id="form_container">
-		<div class="title">EDIT PENGGUNA</div>
+		<div class="title">TAMBAH PENGGUNA</div>
 		
 		<?php 
 			$attributes = array('class' => 'appnitro');
@@ -111,7 +111,7 @@
 				</li>
 				<li>
 					<input id="submit-button" type="submit" name="daftar_warna" value="Perbarui" />
-					<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('manajemen_pengguna')?>'"/>
+					<input type="reset" name="reset" value="Reset" />
 				</li>
 			</ul>
 		<?php echo form_close(); ?>

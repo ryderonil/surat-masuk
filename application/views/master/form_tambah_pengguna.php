@@ -1,9 +1,9 @@
 <div id="form_container">
-		<div class="title">EDIT PENGGUNA</div>
+		<div class="title">TAMBAH PENGGUNA</div>
 		
 		<?php 
 			$attributes = array('class' => 'appnitro');
-			echo form_open(uri_string(),$attributes); ?>
+			echo form_open('manajemen_pengguna/add_process',$attributes); ?>
 			<ul>
 			  	<li>
 					<?= anchor(site_url('manajemen_pengguna'),img(array('src'=>'images/flexigrid/prev.gif','border'=>'0','alt'=>'')).'Kembali Ke Manajemen Pengguna',''); ?>
@@ -12,8 +12,7 @@
 				<li id="li_1" >
 					<label class="description" for="element_1">Username</label>
 					<div>
-						<?php if(set_value('username')!='') $username = set_value('username')?>
-						<input id="username" name="username" class="element text small" type="text" maxlength="11" value="<?php echo $username;?>"/> 
+						<input id="username" name="username" class="element text small" type="text" maxlength="11" value="<?php echo set_value('username');?>"/> 
 					</div>
 					<p class="guidelines" id="guide_1"><small>Username</small></p> 
 					<?php echo form_error('username'); ?>
@@ -38,8 +37,7 @@
 				<li id="li_14" >
 					<label class="description" for="element_14">Nama Lengkap</label>
 					<div>
-						<?php if(set_value('nama')!='') $nama = set_value('nama')?>
-						<input id="nama" name="nama" class="element text medium" type="text" maxlength="100" value="<?php echo $nama;?>"/> 					
+						<input id="nama" name="nama" class="element text medium" type="text" maxlength="100" value="<?php echo set_value('nama');?>"/> 					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Nama Lengkap</small> 
 					<?php echo form_error('nama'); ?></p>
@@ -47,7 +45,6 @@
 				<li id="li_14" >
 					<label class="description" for="element_14">Grup Pengguna</label>
 					<div>
-						<?php if(set_value('grup')!=0) $grup_dipilih = set_value('grup')?>
 						<?php 
 								$options = array(
 												'0' => '-- Pilih Grup --',
@@ -58,7 +55,7 @@
 												'5' => 'Bupati',
 												'6' => 'Dinas'
 											);
-								echo form_dropdown('grup',$options,$grup_dipilih, 'class="element select medium"');
+								echo form_dropdown('grup',$options, set_value('grup'), 'class="element select medium"');
 						?>					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Grup Pengguna</small></p> 
@@ -68,9 +65,8 @@
 					<label class="description" for="element_21">Jabatan</label>
 					<div>
 					<div>
-						<?php if(set_value('jabatan')!=0) $jabatan_dipilih = set_value('jabatan')?>
 						<?php 
-							echo form_dropdown('jabatan',$jabatan,$jabatan_dipilih, 'class="element select medium"');
+							echo form_dropdown('jabatan',$jabatan,set_value('jabatan'), 'class="element select medium"');
 						?>
 					</div>
 					<p class="guidelines" id="guide_21"><small>Jabatan</small></p>
@@ -79,8 +75,7 @@
 				<li id="li_14" >
 					<label class="description" for="element_14">Email</label>
 					<div>
-						<?php if(set_value('email')!='') $email = set_value('email')?>
-						<input id="Email" name="email" class="element text medium" type="text" maxlength="100" value="<?php echo $email;?>" /> 					
+						<input id="Email" name="email" class="element text medium" type="text" maxlength="100" value="<?php echo set_value('email');?>"/> 					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Email</small></p> 
 					<?php echo form_error('email'); ?>
@@ -89,29 +84,14 @@
 				<li id="li_14" >
 					<label class="description" for="element_14">No HP</label>
 					<div>
-						<?php if(set_value('handphone')!='') $handphone = set_value('handphone')?>
-						<input id="handphone" name="handphone" class="element text medium" type="text" maxlength="100" value="<?php echo $handphone;?>"/> 					
+						<input id="handphone" name="handphone" class="element text medium" type="text" maxlength="100" value="<?php echo set_value('handphone');?>" /> 					
 					</div>
 					<p class="guidelines" id="guide_14"><small>No HP</small></p> 
 					<?php echo form_error('handphone'); ?>
 				</li>
-				<li id="li_14" >
-					<label class="description" for="element_14">Status</label>
-					<div>
-						<?php 
-								$options = array(
-												'1' => 'Aktif',
-												'2' => 'Tidak Aktif'
-											);
-								echo form_dropdown('status_user',$options,$status_user, 'class="element select medium"');
-						?>					
-					</div>
-					<p class="guidelines" id="guide_14"><small>Status</small></p> 
-					<?php echo form_error('status_user'); ?>
-				</li>
 				<li>
-					<input id="submit-button" type="submit" name="daftar_warna" value="Perbarui" />
-					<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('manajemen_pengguna')?>'"/>
+					<input id="submit-button" type="submit" name="daftar_warna" value="Tambah" />
+					<input type="reset" name="reset" value="Reset" />
 				</li>
 			</ul>
 		<?php echo form_close(); ?>

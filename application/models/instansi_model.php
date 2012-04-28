@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Jabatan_model extends CI_Model{
+class Instansi_model extends CI_Model{
 	
 	function __construct()
 	{
@@ -9,51 +9,51 @@ class Jabatan_model extends CI_Model{
 		$this->CI = get_instance();
 	}
 		
-	function grid_jabatan()
+	function grid_instansi()
 	{
 		$this->db->select('*');
-		$this->db->from('jabatan');
+		$this->db->from('instansi');
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
 		
 		$this->db->select('*');
-		$this->db->from('jabatan');
+		$this->db->from('instansi');
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
 		return $return;		
 	}
 		
-	function add($jabatan)
+	function add($instansi)
 	{
-		$this->db->insert('jabatan', $jabatan);
+		$this->db->insert('instansi', $instansi);
 	}
 			
-	function update($jabatan_id, $jabatan)
+	function update($instansi_id, $instansi)
 	{
-		$this->db->where('jabatan.JABATAN_ID', $jabatan_id);
-		$this->db->update('jabatan', $jabatan);
+		$this->db->where('instansi.INSTANSI_ID', $instansi_id);
+		$this->db->update('instansi', $instansi);
 	}
 		
-	function delete($jabatan_id)
+	function delete($instansi_id)
 	{
-		$this->db->where('jabatan.JABATAN_ID', $jabatan_id);
-		$this->db->delete('jabatan');
+		$this->db->where('instansi.INSTANSI_ID', $instansi_id);
+		$this->db->delete('instansi');
 	}
 		
-	function get_jabatan($jabatan_id)
+	function get_instansi($instansi_id)
 	{
 		$this->db->select('*');
-		$this->db->from('jabatan');
-		$this->db->where('jabatan.JABATAN_ID', $jabatan_id);
+		$this->db->from('instansi');
+		$this->db->where('instansi.INSTANSI_ID', $instansi_id);
 		$result = $this->db->get();
 		return $result;
 	}
 		
-	function cek_jabatan($jabatan)
+	function cek_instansi($instansi)
 	{
 		$this->db->select('*');
-		$this->db->from('jabatan');
-		$this->db->where('NAMA_JABATAN', $jabatan);
+		$this->db->from('instansi');
+		$this->db->where('NAMA_INSTANSI', $instansi);
 		$result = $this->db->get();
 		if ($result->num_rows())
 		{
@@ -65,12 +65,12 @@ class Jabatan_model extends CI_Model{
 		}
 	}
 	
-	function cek_jabatan_baru($nama_jabatan, $jabatan_id)
+	function cek_instansi_baru($nama_instansi, $instansi_id)
 	{	
 		$this->db->select('*');
-		$this->db->from('jabatan');
-		$this->db->where('NAMA_JABATAN', $nama_jabatan);			
-		$this->db->where('JABATAN_ID <>',$jabatan_id);
+		$this->db->from('instansi');
+		$this->db->where('NAMA_INSTANSI', $nama_instansi);			
+		$this->db->where('INSTANSI_ID <>',$instansi_id);
 		//$query = $this->db->query('select * from login WHERE username =  "'.$username.'" and kode_user <> '.$kode_user);
 		$query = $this->db->get();
 		if ($query->num_rows())
@@ -83,11 +83,11 @@ class Jabatan_model extends CI_Model{
 		}
 	}
 	
-	public function cek_referensi($JABATAN_ID)
+	public function cek_referensi($INSTANSI_ID)
 	{	
-		$this->db->select('JABATAN_ID');
-		$this->db->from('user');
-		$this->db->where('JABATAN_ID', $JABATAN_ID);
+		$this->db->select('INSTANSI_ID');
+		$this->db->from('surat_masuk');
+		$this->db->where('INSTANSI_ID', $INSTANSI_ID);
 		if($this->db->get()->num_rows())
 		{
 			return FALSE;
