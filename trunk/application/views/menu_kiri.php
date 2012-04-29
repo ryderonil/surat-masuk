@@ -43,7 +43,7 @@
 		<p class="menu_head" ><?php echo anchor(site_url('home'),img(array('src'=>'images/icon/home.png','border'=>'0','alt'=>'')).' Halaman Utama',''); ?></p>
 		<p class="menu_head"><?php echo img(array('src'=>'images/icon/dir.png','border'=>'0','alt'=>''))?>Surat Masuk</p>
 		<div class="menu_body" align="left">
-			<?php if($catat_surat_masuk) echo anchor(site_url('daftar_ijin_kerma'),img(array('src'=>'images/flexigrid/iconedit.png','border'=>'0','alt'=>'')).' Catat Surat Masuk',''); ?>
+			<?php if($catat_surat_masuk) echo anchor(site_url('surat_masuk/add'),img(array('src'=>'images/flexigrid/iconedit.png','border'=>'0','alt'=>'')).' Catat Surat Masuk',''); ?>
 			<?php if($surat_masuk) echo anchor(site_url('permohonan/daftar_permohonan'),img(array('src'=>'images/icon/mail.png','border'=>'0','alt'=>'')).' Daftar Surat Masuk',''); ?>
 		</div>
 		
@@ -57,7 +57,7 @@
 		<p class="menu_head"><?php echo img(array('src'=>'images/icon/dir.png','border'=>'0','alt'=>''))?> User Menu</p>
 		<div class="menu_body" align="left">
 		  <?php if ($manajemen_pengguna) { ?><?php echo anchor(site_url('manajemen_pengguna'),img(array('src'=>'images/icon/user-icon.png','border'=>'0','alt'=>'')).' Manajemen Pengguna',''); ?><?php } ?>
-          <?php echo anchor(site_url('login/log_out'),img(array('src'=>'images/icon/lock.png','border'=>'0','alt'=>'')).' Logout',''); ?>
+          <?php echo anchor(site_url('login/logout'),img(array('src'=>'images/icon/lock.png','border'=>'0','alt'=>'')).' Logout',''); ?>
 		</div>
 	  
   </div>  <!--Code for menu ends here-->

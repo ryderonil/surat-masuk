@@ -27,6 +27,11 @@ class Jenis_surat_model extends CI_Model{
 	{
 		$this->db->insert('jenis_surat', $jenis_surat);
 	}
+	
+	function addtes($jenis_surat)
+	{
+		$this->db->insert('te', $jenis_surat);
+	}
 			
 	function update($jenis_surat_id, $jenis_surat)
 	{
@@ -38,6 +43,15 @@ class Jenis_surat_model extends CI_Model{
 	{
 		$this->db->where('jenis_surat.JENIS_SURAT_ID', $jenis_surat_id);
 		$this->db->delete('jenis_surat');
+	}
+	
+	function get_all_jenis_surat()
+	{
+		$this->db->select('*');
+		$this->db->from('jenis_surat');
+		$this->db->where('jenis_surat.STATUS_JENIS_SURAT', 1);
+		$result = $this->db->get();
+		return $result;
 	}
 		
 	function get_jenis_surat($jenis_surat_id)

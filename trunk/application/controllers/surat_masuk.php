@@ -1,12 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Jenis_surat extends CI_Controller {
+class Surat_masuk extends CI_Controller {
 	
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->library('flexigrid');	
 		$this->load->helper('flexigrid');
+		$this->load->model('surat_masuk_model');
+		$this->load->model('instansi_model');
 		$this->load->model('jenis_surat_model');
 		$this->cek_session();
 	}
@@ -14,7 +16,7 @@ class Jenis_surat extends CI_Controller {
 	function cek_session()
 	{	
 		$kode_role = $this->session->userdata('kode_role');
-		if($kode_role == '' || $kode_role != 1)
+		if($kode_role == '')
 		{
 			redirect('login/login_ulang');
 		}
@@ -138,17 +140,22 @@ class Jenis_surat extends CI_Controller {
 			$this->output->set_output('{"page":"1","total":"0","rows":[]}');
 	}
 	
-	function cek_validasi($edit,$jenis_surat_id)
+	function cek_validasi($sifat)
 	{	
-		if($edit)
+		if($sifat == '1')
 		{
-			$callback_jenis_surat = '|callback_cek_jenis_surat_baru['.$jenis_surat_id.']';
+			$this->form_validation->set_rules('tgl_terima', 'Tanggal Terima', 'required');
+			$this->form_validation->set_rules('nomor', 'Nomor Surat', 'required|callback_cek_nomor');
+			$this->form_validation->set_rules('perihal', 'Perihal Surat', 'required');
+			$this->form_validation->set_rules('pejabat', 'Kepada', 'callback_cek_dropdown');
+			$this->form_validation->set_rules('tgl_surat', 'Tanggal Surat', 'required');
+			$this->form_validation->set_rules('lampiran', 'Lampiran Surat', 'required');
 		}
-		else
+		else if($sifat == '2')
 		{
-			$callback_jenis_surat = '|callback_cek_jenis_surat';
+			$this->form_validation->set_rules('tgl_terima', 'Tanggal Terima', 'required');
+			$this->form_validation->set_rules('perihal', 'Perihal Surat', 'required');
 		}
-		$this->form_validation->set_rules('jenis_surat', 'Nama Jenis Surat', 'required'.$callback_jenis_surat);
 		
 		$this->form_validation->set_error_delimiters('<p class="error_message">', '</p>');
 		$this->form_validation->set_message('required', 'Kolom %s harus diisi !!');
@@ -157,20 +164,139 @@ class Jenis_surat extends CI_Controller {
 	
 	public function add()
 	{
-		$data['content'] = $this->load->view('master/form_tambah_jenis_surat',null,true);
+		$result1 = $this->instansi_model->get_all_instansi();
+		$result2 = $this->jenis_surat_model->get_all_jenis_surat();
+		foreach($result1->result() as $row1)
+		{
+			$instansi[$row1->INSTANSI_ID] = $row1->NAMA_INSTANSI;
+		}
+		$data['instansi'] = $instansi;
+		foreach($result2->result() as $row2)
+		{
+			$jenis_surat[$row2->JENIS_SURAT_ID] = $row2->NAMA_JENIS_SURAT;
+		}
+		$data['jenis_surat'] = $jenis_surat;
+		$data['pejabat'] = array(
+									'0' => '-- Pilih Pejabat --',
+									'1' => 'Asisten',
+									'2' => 'Sekretaris',
+									'3' => 'Wakil Bupati',
+									'4' => 'Bupati',
+									'5' => 'Dinas'
+							);
+		$data['content'] = $this->load->view('form_catat_surat_masuk',$data,true);
 		$this->load->view('main',$data);
+	}
+	
+	public function tes()
+	{
+		$result2 = $this->jenis_surat_model->get_all_jenis_surat();
+		foreach($result2->result() as $row2)
+		{
+			$jenis_surat[$row2->JENIS_SURAT_ID] = $row2->NAMA_JENIS_SURAT;
+		}
+		$data['jenis_surat'] = $jenis_surat;
+		$data['content'] = $this->load->view('tes',$data,true);
+		$this->load->view('main',$data);
+	}
+	
+	public function tes_process()
+	{
+		$data = array(
+						'NAMA_JENIS_SURAT' => $this->input->post('jenis_surat')
+					);
+		
+		$this->jenis_surat_model->addtes($data);
+		redirect('jenis_surat');
 	}
 	
 	public function add_process()
 	{
-		$data = array(
-						'NAMA_JENIS_SURAT' => $this->input->post('jenis_surat'),
-						'STATUS_JENIS_SURAT' => '1'
-					);
-		if($this->cek_validasi(false,null))
+		$temp_nomor = rand();
+		while($this->surat_masuk_model->cek_nomor($temp_nomor))
 		{
-			$this->jenis_surat_model->add($data);
-			redirect('jenis_surat');
+			$temp_nomor = rand();
+		}
+		if($this->input->post('perlakuan') == 1)
+		{
+			$kirim = 1;
+		}
+		else if($this->input->post('perlakuan') == 2)
+		{
+			$kirim = 2;
+		}
+		else
+		{
+			$kirim = 0;
+		}
+		$sifat = $this->input->post('sifat');
+		$tgl_terima = $this->input->post('tgl_terima');
+		$bln_terima = $this->input->post('bln_terima');
+		$thn_terima = $this->input->post('thn_terima');
+		$tanggal_terima = $thn_terima.'-'.$bln_terima.'-'.$tgl_terima;
+		$tgl_surat = $this->input->post('tgl_surat');
+		$bln_surat = $this->input->post('bln_surat');
+		$thn_surat = $this->input->post('thn_surat');
+		$tanggal_surat = $thn_surat.'-'.$bln_surat.'-'.$tgl_surat;
+		$files_available = array();
+		$files_max = 10;
+		for ( $i=0; $i<$files_max; $i++ )
+		{
+			if(isset($_FILES['userfile'.$i]) && !empty($_FILES['userfile'.$i]['name']))
+			{
+				array_push($files_available,'userfile'.$i);
+			}
+		}
+		if($sifat == 1)
+		{
+			$data = array(
+						'SIFAT' 							 => $this->input->post('sifat'),
+						'NOMOR'							     => $this->input->post('nomor'),
+						'TGL_TERIMA' 		 				 => $tanggal_terima,
+						'JENIS_SURAT_ID'	 				 => $this->input->post('jenis_surat'),
+						'INSTANSI_ID' 		 				 => $this->input->post('instansi'),
+						'PERIHAL' 			 				 => $this->input->post('perihal'),
+						'KEPADA' 		    			     => $this->input->post('pejabat'),
+						'TGL_SURAT' 		 				 => $tanggal_surat,
+						'LAMPIRAN' 		 					 => $this->input->post('lampiran'),
+						'CATATAN_TERIMA_SURAT_MASUK' 		 => $this->input->post('catatan'),
+						'DATE_CREATED' 		 				 => date("Y-m-j G:i:s"),
+						'KIRIM' 		 				 	 => $kirim
+					);
+		}
+		else if($sifat == 2)
+		{
+			$data = array(
+						'SIFAT' 			 => $this->input->post('sifat'),
+						'NOMOR' 			 => $temp_nomor,
+						'TGL_TERIMA' 		 => $tanggal_terima,
+						'JENIS_SURAT_ID' 	 => $this->input->post('jenis_surat'),
+						'INSTANSI_ID' 		 => $this->input->post('instansi'),
+						'PERIHAL' 		 	 => $this->input->post('perihal'),
+						'DATE_CREATED' 		 => date("Y-m-j G:i:s")
+					);
+		}
+		
+		if($this->cek_validasi($sifat))
+		{
+			$this->surat_masuk_model->add($data);
+			$surat_masuk_id = $this->surat_masuk_model->get_max_surat_masuk_id()->row()->SURAT_MASUK_ID;
+			for($i=0;$i<count($files_available);$i++)
+			{
+				$field_name = 'userfile'.$i;
+				$surat[$i] = $this->upload_surat($field_name);
+				if($surat[$i] != "")
+				{
+					$data_file = array(
+										'SURAT_MASUK_ID' 	=> $surat_masuk_id,
+										'PATH_FILE' 		=> $surat[$i][0],
+										'NAMA_FILE' 		=> $surat[$i][1]
+					);
+					$this->surat_masuk_model->add2($data_file);
+				}
+			}
+			echo 'sukses';
+			//redirect('surat_masuk');
 		}
 		else
 		{
@@ -230,11 +356,33 @@ class Jenis_surat extends CI_Controller {
 		$this->output->set_output($msg);
 	}
 	
-	function cek_jenis_surat($value)
+	function upload_surat($field_name)
+	{	
+		$config['upload_path'] = "uploads/surat";
+		$config['allowed_types'] ='doc|docx|pdf|txt';
+		
+		$this->load->library('upload', $config);		
+		$files = $this->upload->do_upload($field_name);	
+				
+		$out = '';		
+		if (  ! $files ){
+			$out .= array('error' => $this->upload->display_errors());
+			return "";
+		}	
+		else{
+			$data = $this->upload->data($field_name);
+			$file_name = $data['file_name'];
+			$path[0] = 'uploads/surat/'.$file_name;
+			$path[1] = $file_name;
+			return $path;
+		}
+	}
+	
+	function cek_dropdown($value)
 	{
-		if($this->jenis_surat_model->cek_jenis_surat($value))
+		if($value == 0)
 		{
-			$this->form_validation->set_message('cek_jenis_surat', 'Jenis Surat Sudah Ada');
+			$this->form_validation->set_message('cek_dropdown', 'Kolom %s harus dipilih!!');
 			return FALSE;
 		}
 		else
@@ -243,11 +391,11 @@ class Jenis_surat extends CI_Controller {
 		}
 	}
 	
-	function cek_jenis_surat_baru($value, $jenis_surat_id)
+	function cek_nomor($value)
 	{
-		if($this->jenis_surat_model->cek_jenis_surat_baru($value, $jenis_surat_id))
+		if($this->surat_masuk_model->cek_nomor($value))
 		{
-			$this->form_validation->set_message('cek_jenis_surat_baru', 'Jenis Surat Sudah Ada');
+			$this->form_validation->set_message('cek_nomor', 'Nomor Surat Sudah Ada');
 			return FALSE;
 		}
 		else
