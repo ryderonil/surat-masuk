@@ -1,0 +1,6 @@
+notifikasi masih membingungkan
+
+antara dikirim ke email user atau ke semua pelanggan
+
+user autentikasi : pake login atau tidak
+

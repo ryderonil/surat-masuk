@@ -75,4 +75,11 @@ class Login extends CI_Controller {
 		return FALSE;
 	}
 
+	//Memproses logout
+	function logout()
+	{
+		$this->session->unset_userdata();
+		$this->session->sess_destroy();
+		redirect('login');
+	}
 }
