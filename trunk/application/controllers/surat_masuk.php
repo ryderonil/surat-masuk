@@ -30,10 +30,16 @@ class Surat_masuk extends CI_Controller {
 	public function grid()
 	{
 		$colModel['no'] = array('No',20,TRUE,'center',0);
-		$colModel['NAMA_JENIS_SURAT'] = array('Jenis Surat',200,TRUE,'center',1);
-		$colModel['STATUS_JENIS_SURAT'] = array('Status',50,TRUE,'center',1);
+		$colModel['TGL_TERIMA'] = array('Tanggal Terima',100,TRUE,'center',1);
+		$colModel['NOMOR'] = array('Nomor',100,TRUE,'center',1);
+		$colModel['PERIHAL'] = array('Perihal',200,TRUE,'center',1);
+		$colModel['status'] = array('Status',30,FALSE,'center',0);
+		$colModel['kirim_ke_sekretaris'] = array('Kirim ke Sekretaris',90,FALSE,'center',0);
+		$colModel['kirim_ke_bupati'] = array('Kirim ke Bupati',70,FALSE,'center',0);
+		$colModel['disposisi'] = array('Disposisi',40,FALSE,'center',0);
+		$colModel['komentar'] = array('Komentar',60,FALSE,'center',0);
+		$colModel['detail'] = array('Detail',40,FALSE,'center',0);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
-		//$colModel['hapus'] = array('Hapus',30,FALSE,'center',0);
 			
 		//setting konfigurasi pada bottom tool bar flexigrid
 		$gridParams = array(
@@ -43,7 +49,7 @@ class Surat_masuk extends CI_Controller {
 							'rpOptions' => '[15,30,50,100]',
 							'pagestat' => 'Menampilkan : {from} ke {to} dari {total} data.',
 							'blockOpacity' => 0,
-							'title' => 'Master Jenis Surat',
+							'title' => 'Daftar Surat Masuk',
 							'showTableToggleBtn' => false
 							);
 							
@@ -58,7 +64,7 @@ class Surat_masuk extends CI_Controller {
 		
 				
 		// mengambil data dari file controler ajax pada method grid_user		
-		$url = site_url()."/jenis_surat/grid_data_jenis_surat";
+		$url = site_url()."/surat_masuk/grid_data_surat_masuk";
 		$grid_js = build_grid_js('user',$url,$colModel,'ID','asc',$gridParams,$buttons);
 		$data['js_grid'] = $grid_js;
 		$data['added_js'] = 
@@ -69,7 +75,7 @@ class Surat_masuk extends CI_Controller {
 				$('.bDiv tbody tr',grid).addClass('trSelected');
 			}
 			if (com=='Tambah'){
-				location.href= '".base_url()."index.php/jenis_surat/add';    
+				location.href= '".base_url()."index.php/surat_masuk/add';    
 			}
 			if (com=='Hapus Pilihan')
 			{
@@ -86,7 +92,7 @@ class Surat_masuk extends CI_Controller {
 							}
 							$.ajax({
 							   type: 'POST',
-							   url: '".site_url('/jenis_surat/delete')."',
+							   url: '".site_url('/surat_masuk/delete')."',
 							   data: 'items='+itemlist,
 							   success: function(data){
 								$('#user').flexReload();
@@ -105,32 +111,29 @@ class Surat_masuk extends CI_Controller {
 		$this->load->view('main',$data);
 	}
 	
-	function grid_data_jenis_surat() 
+	function grid_data_surat_masuk() 
 	{
-		$valid_fields = array('JENIS_SURAT_ID','NAMA_JENIS_SURAT','STATUS_JENIS_SURAT');
-		$this->flexigrid->validate_post('JENIS_SURAT_ID','asc',$valid_fields);
-		$records = $this->jenis_surat_model->grid_jenis_surat();	
+		$valid_fields = array('SURAT_MASUK_ID','NOMOR','PERIHAL','TGL_TERIMA');
+		$this->flexigrid->validate_post('SURAT_MASUK_ID','asc',$valid_fields);
+		$records = $this->surat_masuk_model->grid_surat_masuk();	
 		$this->output->set_header($this->config->item('json_header'));
 			
 		$no = 0;
 		foreach ($records['records']->result() as $row){
-				if($row->STATUS_JENIS_SURAT == 1)
-				{
-					$status_jenis_surat = 'Aktif';					
-				}
-				else
-				{
-					$status_jenis_surat = 'Tidak Aktif';
-				}
-			
 				$no = $no+1;
 				$record_items[] = array(
-										$row->JENIS_SURAT_ID,
+										$row->SURAT_MASUK_ID,
 										$no,
-										$row->NAMA_JENIS_SURAT,
-										$status_jenis_surat,
-								'<a href='.base_url().'index.php/jenis_surat/edit/'.$row->JENIS_SURAT_ID.'><img border=\'0\' src=\''.base_url().'images/icon/edit.png\'></a>'
-								//'<a href='.base_url().'index.php/manajemen_pengguna/delete/'.$row->USER_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
+										$row->TGL_TERIMA,
+										$row->NOMOR,
+										$row->PERIHAL,
+								'<a href='.base_url().'index.php/surat_masuk/status/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/status.png\'></a>',
+								'<a href='.base_url().'index.php/surat_masuk/kirim_ke_sekretaris/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/email-send.png\'></a>',
+								'<a href='.base_url().'index.php/surat_masuk/kirim_ke_bupati/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/email-send.png\'></a>',
+								'<a href='.base_url().'index.php/surat_masuk/disposisi/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/disposisi.png\'></a>',
+								'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
+								'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>',
+								'<a href='.base_url().'index.php/surat_masuk/ubah/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/application--pencil.png\'></a>'
 								);
 		}
 		
@@ -279,6 +282,21 @@ class Surat_masuk extends CI_Controller {
 		
 		if($this->cek_validasi($sifat))
 		{
+			if(!$this->jenis_surat_model->cek_jenis_surat2($data['JENIS_SURAT_ID']) || !$this->instansi_model->cek_instansi2($data['INSTANSI_ID']))
+			{
+				$data_jenis_surat = array(
+										'NAMA_JENIS_SURAT' => $data['JENIS_SURAT_ID'],
+										'STATUS_JENIS_SURAT' => 1
+									);
+				$data_instansi = array(
+										'NAMA_INSTANSI' => $data['INSTANSI_ID'],
+										'STATUS_INSTANSI' => 1 
+									);
+				$this->jenis_surat_model->add($data_jenis_surat);
+				$this->instansi_model->add($data_instansi);
+				$data['JENIS_SURAT_ID'] = $this->jenis_surat_model->get_last_jenis_surat_id()->row()->JENIS_SURAT_ID;
+				$data['INSTANSI_ID'] = $this->instansi_model->get_last_instansi_id()->row()->INSTANSI_ID;
+			}
 			$this->surat_masuk_model->add($data);
 			$surat_masuk_id = $this->surat_masuk_model->get_max_surat_masuk_id()->row()->SURAT_MASUK_ID;
 			for($i=0;$i<count($files_available);$i++)
@@ -301,7 +319,6 @@ class Surat_masuk extends CI_Controller {
 		else
 		{
 			$this->add();
-			//redirect('manajemen_pengguna/add');
 		}
 	}
 	

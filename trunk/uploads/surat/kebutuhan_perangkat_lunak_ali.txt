@@ -1,0 +1,73 @@
+user admin
+
+menu:
+- Home
+- Client (daftar client)
+- order (daftar pending order, active order, expired order, cancelled order
+- support (nampilin ticket) -> form ticket (subject, body)
+- report (nampilin graph pemesanan harian dan bulanan)
+- produk
+
+form tambah produk :
+- IP VPS
+- Password
+- Type
+- dedicated ram
+- cpu cores
+- disk space
+- raid - 10
+- setup free
+- bandwith
+- semi-managed
+- IP
+- uptime
+
+user support
+
+menu:
+sama kayak admin cuma minus report
+
+user:
+
+sama kayak admin minus :
+- client
+- order
+- support
+- report
+tambahan menu :
+- my invoice (nampilin tagihan bulanan)
+- my service (nampilin detail vps nya)
+
+billing cycle :
+
+- monthly
+- quarterly
+- semi anually
+- anually
+
+ada dua tampilan : back end dan home buat pemesanan
+
+form order layanan
+
+- product/service
+- billing cycle
+- configure server
+
+tombol empty cart : membatalkan pembelian
+tombol continue shopping : menambah produk lagi
+tombol checkout : melakukan pembayaran
+
+setelah melakukan checkout maka user mengisikan detail informasinya kemudian user menekan complete order dan tampilan akan 
+
+
+ditambahi kolom note isinya detail pembayaran :
+silahkan lakukan pembayaran sejumlah nominal x ke bank ini.
+setelah melakukan pembayaran silahkan membuka ticket dengan menyertakan detail transaksi anda.
+
+
+setiap produk VPS yang sudah dikonfirmasi pembayarannya oleh user maka admin akan mengirim detail VPS ke user via email
+dan jika sudah dikirim detailnya maka tombol kirim akan hilang
+kemudian data akan disimpan di table tersendiri dengan detail :
+- detail VPS
+- tanggal  register
+- due date tergantung dia piliha paket apa

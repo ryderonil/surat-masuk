@@ -218,7 +218,7 @@ class Manajemen_pengguna extends CI_Controller {
 	
 	public function add()
 	{
-		$jabatan = $this->jabatan_model->get_jabatan();
+		$jabatan = $this->jabatan_model->get_all_jabatan();
 		$hasil[0] = '-- Pilih Jabatan --';
 		foreach($jabatan->result() as $row){
 			$hasil[$row->JABATAN_ID] = $row->NAMA_JABATAN;
@@ -274,7 +274,7 @@ class Manajemen_pengguna extends CI_Controller {
 		else
 		{
 			$result = $this->user_model->get_user($userid)->row();
-			$jabatan = $this->jabatan_model->get_jabatan();
+			$jabatan = $this->jabatan_model->get_all_jabatan();
 			$hasil[0] = '-- Pilih Jabatan --';
 			foreach($jabatan->result() as $row){
 				$hasil[$row->JABATAN_ID] = $row->NAMA_JABATAN;
