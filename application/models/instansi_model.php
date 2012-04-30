@@ -74,6 +74,22 @@ class Instansi_model extends CI_Model{
 		}
 	}
 	
+	function cek_instansi2($instansi_id)
+	{
+		$this->db->select('*');
+		$this->db->from('instansi');
+		$this->db->where('INSTANSI_ID', $instansi_id);
+		$result = $this->db->get();
+		if ($result->num_rows())
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
 	function cek_instansi_baru($nama_instansi, $instansi_id)
 	{	
 		$this->db->select('*');
@@ -105,6 +121,13 @@ class Instansi_model extends CI_Model{
 		{
 			return TRUE;
 		}	
+	}
+	
+	function get_last_instansi_id()
+	{
+		$this->db->select_max('INSTANSI_ID');
+		$query = $this->db->get('instansi');
+		return $query;
 	}
 	
 }

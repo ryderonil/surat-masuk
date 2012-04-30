@@ -48,6 +48,14 @@ class Jabatan_model extends CI_Model{
 		$result = $this->db->get();
 		return $result;
 	}
+	
+	function get_all_jabatan()
+	{
+		$this->db->select('*');
+		$this->db->from('jabatan');
+		$result = $this->db->get();
+		return $result;
+	}
 		
 	function cek_jabatan($jabatan)
 	{

@@ -44,7 +44,7 @@
 		<p class="menu_head"><?php echo img(array('src'=>'images/icon/dir.png','border'=>'0','alt'=>''))?>Surat Masuk</p>
 		<div class="menu_body" align="left">
 			<?php if($catat_surat_masuk) echo anchor(site_url('surat_masuk/add'),img(array('src'=>'images/flexigrid/iconedit.png','border'=>'0','alt'=>'')).' Catat Surat Masuk',''); ?>
-			<?php if($surat_masuk) echo anchor(site_url('permohonan/daftar_permohonan'),img(array('src'=>'images/icon/mail.png','border'=>'0','alt'=>'')).' Daftar Surat Masuk',''); ?>
+			<?php if($surat_masuk) echo anchor(site_url('surat_masuk'),img(array('src'=>'images/icon/mail.png','border'=>'0','alt'=>'')).' Daftar Surat Masuk',''); ?>
 		</div>
 		
 		<?php if ($master_data) { ?><p class="menu_head"><?php echo img(array('src'=>'images/icon/dir.png','border'=>'0','alt'=>''))?> Master Data</p>

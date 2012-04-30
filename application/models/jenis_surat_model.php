@@ -62,12 +62,35 @@ class Jenis_surat_model extends CI_Model{
 		$result = $this->db->get();
 		return $result;
 	}
+	
+	function get_last_jenis_surat_id()
+	{
+		$this->db->select_max('JENIS_SURAT_ID');
+		$query = $this->db->get('jenis_surat');
+		return $query;
+	}
 		
 	function cek_jenis_surat($jenis_surat)
 	{
 		$this->db->select('*');
 		$this->db->from('jenis_surat');
 		$this->db->where('NAMA_JENIS_SURAT', $jenis_surat);
+		$result = $this->db->get();
+		if ($result->num_rows())
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function cek_jenis_surat2($jenis_surat_id)
+	{
+		$this->db->select('*');
+		$this->db->from('jenis_surat');
+		$this->db->where('JENIS_SURAT_ID', $jenis_surat_id);
 		$result = $this->db->get();
 		if ($result->num_rows())
 		{

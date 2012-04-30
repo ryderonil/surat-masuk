@@ -53,11 +53,12 @@
 									</tbody>
 								</table>
 							</div>
+							<p class="guidelines" id="guide_14"><small>Tanggal Surat</small></p>
+							<?php echo form_error('tgl_terima'); ?>
+							<?php echo form_error('bln_terima'); ?>
+							<?php echo form_error('thn_terima'); ?>
 						</span>
 				</li>
-				<?php echo form_error('tgl_terima'); ?>
-				<?php echo form_error('bln_terima'); ?>
-				<?php echo form_error('thn_terima'); ?>
 				<li id="li_21" >
 					<label class="description" for="element_21">Jenis Surat</label>
 					<div>
@@ -74,7 +75,7 @@
 					<div>
 						<?php
 							
-							echo form_dropdown('instansi',$instansi,set_value('instansi'), 'class="element select medium"');
+							echo form_dropdown('instansi',$instansi,set_value('instansi'), 'id="instansi" class="element select medium"');
 						?>
 					</div>
 					<p class="guidelines" id="guide_21"><small>Dari</small></p>
@@ -145,11 +146,13 @@
 										</tbody>
 									</table>
 								</div>
+								<p class="guidelines" id="guide_14"><small>Tanggal Surat</small></p>
+								<?php echo form_error('tgl_surat'); ?>
+								<?php echo form_error('bln_surat'); ?>
+								<?php echo form_error('thn_surat'); ?>
 							</span>
 					</li>
-					<?php echo form_error('tgl_surat'); ?>
-					<?php echo form_error('bln_surat'); ?>
-					<?php echo form_error('thn_surat'); ?>
+					
 					<li id="li_14" >
 						<label class="description" for="element_14">Lampiran</label>
 						<div>
@@ -231,6 +234,14 @@
 				typeAhead: true,
 				triggerAction: 'all',
 				transform:'jenis_surat',
+				width: 350,
+				forceSelection: false
+			});
+			
+			var instansi = new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				transform:'instansi',
 				width: 350,
 				forceSelection: false
 			});

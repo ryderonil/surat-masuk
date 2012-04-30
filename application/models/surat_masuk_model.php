@@ -9,17 +9,15 @@ class Surat_masuk_model extends CI_Model{
 		$this->CI = get_instance();
 	}
 		
-	function grid_user()
+	function grid_surat_masuk()
 	{
 		$this->db->select('*');
-		$this->db->from('user');
-		$this->db->join('jabatan','jabatan.JABATAN_ID = user.JABATAN_ID');
+		$this->db->from('surat_masuk');
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
 		
 		$this->db->select('*');
-		$this->db->from('user');
-		$this->db->join('jabatan','jabatan.JABATAN_ID = user.JABATAN_ID');
+		$this->db->from('surat_masuk');
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
 		return $return;		
@@ -59,7 +57,7 @@ class Surat_masuk_model extends CI_Model{
 	
 	function get_max_surat_masuk_id()
 	{
-		$this->db->select_avg('SURAT_MASUK_ID');
+		$this->db->select_max('SURAT_MASUK_ID');
 		$query = $this->db->get('surat_masuk');
 		return $query;
 	}
