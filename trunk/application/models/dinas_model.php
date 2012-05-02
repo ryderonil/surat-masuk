@@ -51,6 +51,14 @@ class Dinas_model extends CI_Model{
 		$result = $this->db->get();
 		return $result;
 	}
+	
+	function get_all_dinas()
+	{
+		$this->db->select('*');
+		$this->db->from('dinas');
+		$result = $this->db->get();
+		return $result;
+	}
 		
 	function cek_dinas($dinas)
 	{

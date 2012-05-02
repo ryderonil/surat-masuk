@@ -7,9 +7,11 @@ class Surat_masuk extends CI_Controller {
 		parent::__construct();
 		$this->load->library('flexigrid');	
 		$this->load->helper('flexigrid');
+		$this->load->helper('download');
 		$this->load->model('surat_masuk_model');
 		$this->load->model('instansi_model');
 		$this->load->model('jenis_surat_model');
+		$this->load->model('dinas_model');
 		$this->cek_session();
 	}
 	
@@ -36,7 +38,7 @@ class Surat_masuk extends CI_Controller {
 		$colModel['status'] = array('Status',30,FALSE,'center',0);
 		$colModel['kirim_ke_sekretaris'] = array('Kirim ke Sekretaris',90,FALSE,'center',0);
 		$colModel['kirim_ke_bupati'] = array('Kirim ke Bupati',70,FALSE,'center',0);
-		$colModel['disposisi'] = array('Disposisi',40,FALSE,'center',0);
+		$colModel['disposisi'] = array('Disposisi',60,FALSE,'center',0);
 		$colModel['komentar'] = array('Komentar',60,FALSE,'center',0);
 		$colModel['detail'] = array('Detail',40,FALSE,'center',0);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
@@ -120,6 +122,35 @@ class Surat_masuk extends CI_Controller {
 			
 		$no = 0;
 		foreach ($records['records']->result() as $row){
+				if($row->DISPOSISI == 0)
+				{
+					$disposisi = '<a href='.base_url().'index.php/surat_masuk/disposisi/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/disposisi.png\'></a>';
+				}
+				else if($row->DISPOSISI == 1)
+				{
+					$disposisi = '<img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'>';
+				}
+				
+				switch($row->KIRIM_SEKRETARIS)
+				{
+					case 0:
+						$kirim1 = '<a href='.base_url().'index.php/surat_masuk/kirim_ke_sekretaris/'.$row->SURAT_MASUK_ID.' onclick="return confirm(\'Anda yakin ingin mengirim?\')"><img border=\'0\' src=\''.base_url().'images/icon/email-send.png\'></a>'; 
+						break;
+					case 1:
+						$kirim1 = '<img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'>';
+						break;
+				}
+				
+				switch($row->KIRIM_BUPATI)
+				{
+					case 0:
+						$kirim2 = '<a href='.base_url().'index.php/surat_masuk/kirim_ke_bupati/'.$row->SURAT_MASUK_ID.' onclick="return confirm(\'Anda yakin ingin mengirim?\')"><img border=\'0\' src=\''.base_url().'images/icon/email-send.png\'></a>'; 
+						break;
+					case 1:
+						$kirim2 = '<img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'>';
+						break;
+				}
+				
 				$no = $no+1;
 				$record_items[] = array(
 										$row->SURAT_MASUK_ID,
@@ -128,9 +159,9 @@ class Surat_masuk extends CI_Controller {
 										$row->NOMOR,
 										$row->PERIHAL,
 								'<a href='.base_url().'index.php/surat_masuk/status/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/status.png\'></a>',
-								'<a href='.base_url().'index.php/surat_masuk/kirim_ke_sekretaris/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/email-send.png\'></a>',
-								'<a href='.base_url().'index.php/surat_masuk/kirim_ke_bupati/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/email-send.png\'></a>',
-								'<a href='.base_url().'index.php/surat_masuk/disposisi/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/disposisi.png\'></a>',
+								$kirim1,
+								$kirim2,
+								$disposisi,
 								'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
 								'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>',
 								'<a href='.base_url().'index.php/surat_masuk/ubah/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/application--pencil.png\'></a>'
@@ -143,12 +174,21 @@ class Surat_masuk extends CI_Controller {
 			$this->output->set_output('{"page":"1","total":"0","rows":[]}');
 	}
 	
-	function cek_validasi($sifat)
+	function cek_validasi($sifat,$edit,$surat_masuk_id)
 	{	
+		if($edit)
+		{
+			$cek_nomor = '|callback_cek_nomor_baru['.$surat_masuk_id.']';
+		}
+		else
+		{
+			$cek_nomor = '|callback_cek_nomor';			
+		}
+		
 		if($sifat == '1')
 		{
 			$this->form_validation->set_rules('tgl_terima', 'Tanggal Terima', 'required');
-			$this->form_validation->set_rules('nomor', 'Nomor Surat', 'required|callback_cek_nomor');
+			$this->form_validation->set_rules('nomor', 'Nomor Surat', 'required'.$cek_nomor);
 			$this->form_validation->set_rules('perihal', 'Perihal Surat', 'required');
 			$this->form_validation->set_rules('pejabat', 'Kepada', 'callback_cek_dropdown');
 			$this->form_validation->set_rules('tgl_surat', 'Tanggal Surat', 'required');
@@ -280,7 +320,7 @@ class Surat_masuk extends CI_Controller {
 					);
 		}
 		
-		if($this->cek_validasi($sifat))
+		if($this->cek_validasi($sifat,false,null))
 		{
 			if(!$this->jenis_surat_model->cek_jenis_surat2($data['JENIS_SURAT_ID']) || !$this->instansi_model->cek_instansi2($data['INSTANSI_ID']))
 			{
@@ -301,7 +341,8 @@ class Surat_masuk extends CI_Controller {
 			$surat_masuk_id = $this->surat_masuk_model->get_max_surat_masuk_id()->row()->SURAT_MASUK_ID;
 			for($i=0;$i<count($files_available);$i++)
 			{
-				$field_name = 'userfile'.$i;
+				//$field_name = 'userfile'.$i;
+				$field_name = $files_available[$i];
 				$surat[$i] = $this->upload_surat($field_name);
 				if($surat[$i] != "")
 				{
@@ -313,8 +354,8 @@ class Surat_masuk extends CI_Controller {
 					$this->surat_masuk_model->add2($data_file);
 				}
 			}
-			echo 'sukses';
-			//redirect('surat_masuk');
+			//echo 'sukses';
+			redirect('surat_masuk');
 		}
 		else
 		{
@@ -322,25 +363,127 @@ class Surat_masuk extends CI_Controller {
 		}
 	}
 	
-	public function edit($jenis_surat_id)
+	public function ubah($surat_masuk_id)
 	{
-		$data = array(
-						'NAMA_JENIS_SURAT' => $this->input->post('jenis_surat'),
-						'STATUS_JENIS_SURAT' => $this->input->post('status_jenis_surat')
-					);
-		if($this->cek_validasi(true,$jenis_surat_id))
+		$sifat = $this->input->post('sifat');
+		$result1 = $this->instansi_model->get_all_instansi();
+		$result2 = $this->jenis_surat_model->get_all_jenis_surat();
+		$result3 = $this->surat_masuk_model->get_surat_masuk_by_id($surat_masuk_id)->row();
+		$result4 = $this->surat_masuk_model->get_file_surat_masuk_by_id($surat_masuk_id)->result();
+		$tgl_terima = $this->input->post('tgl_terima');
+		$bln_terima = $this->input->post('bln_terima');
+		$thn_terima = $this->input->post('thn_terima');
+		$tanggal_terima = $thn_terima.'-'.$bln_terima.'-'.$tgl_terima;
+		$tgl_surat = $this->input->post('tgl_surat');
+		$bln_surat = $this->input->post('bln_surat');
+		$thn_surat = $this->input->post('thn_surat');
+		$tanggal_surat = $thn_surat.'-'.$bln_surat.'-'.$tgl_surat;
+		$files_available = array();
+		//$files_max = $this->surat_masuk_model->count_file_surat_masuk($surat_masuk_id);
+		foreach ( $result4 as $row )
 		{
-			$this->jenis_surat_model->update($jenis_surat_id, $data);
-			redirect('jenis_surat');
+			if(isset($_FILES['userfile_'.$row->FILE_SURAT_MASUK_ID]) && !empty($_FILES['userfile_'.$row->FILE_SURAT_MASUK_ID]['name']))
+			{
+				array_push($files_available,'userfile_'.$row->FILE_SURAT_MASUK_ID);
+			}
+		}
+		if($sifat == 1)
+		{
+			$data = array(
+						'SIFAT' 							 => $this->input->post('sifat'),
+						'NOMOR'							     => $this->input->post('nomor'),
+						'TGL_TERIMA' 		 				 => $tanggal_terima,
+						'JENIS_SURAT_ID'	 				 => $this->input->post('jenis_surat'),
+						'INSTANSI_ID' 		 				 => $this->input->post('instansi'),
+						'PERIHAL' 			 				 => $this->input->post('perihal'),
+						'KEPADA' 		    			     => $this->input->post('pejabat'),
+						'TGL_SURAT' 		 				 => $tanggal_surat,
+						'LAMPIRAN' 		 					 => $this->input->post('lampiran'),
+						'CATATAN_TERIMA_SURAT_MASUK' 		 => $this->input->post('catatan'),
+						'DATE_EDITED' 		 				 => date("Y-m-j G:i:s")
+					);
+		}
+		else if($sifat == 2)
+		{
+			$data = array(
+						'SIFAT'					 			 => $this->input->post('sifat'),
+						'TGL_TERIMA' 		 				 => $tanggal_terima,
+						'JENIS_SURAT_ID' 	 				 => $this->input->post('jenis_surat'),
+						'INSTANSI_ID' 		 				 => $this->input->post('instansi'),
+						'PERIHAL' 		 	 				 => $this->input->post('perihal'),
+						'KEPADA' 		    			     => null,
+						'TGL_SURAT' 		 				 => null,
+						'LAMPIRAN' 		 					 => null,
+						'CATATAN_TERIMA_SURAT_MASUK' 		 => null,
+						'DATE_EDITED' 		 				 => date("Y-m-j G:i:s")
+					);
+		}
+		if($this->cek_validasi($sifat,true,$surat_masuk_id))
+		{
+			if(count($files_available) >  0)
+			{
+				for($i=0;$i<count($files_available);$i++)
+				{
+					//$field_name = 'userfile'.$i;
+					$field_name = $files_available[$i];
+					$file_surat_masuk_id = explode('_',$field_name);
+					$surat[$i] = $this->upload_surat($field_name);
+					if($surat[$i] != "")
+					{
+						$data_file = array(
+											'PATH_FILE' 		=> $surat[$i][0],
+											'NAMA_FILE' 		=> $surat[$i][1]
+						);
+						$this->surat_masuk_model->update2($file_surat_masuk_id[1],$data_file);
+					}
+				}
+			}
+			$this->surat_masuk_model->update($surat_masuk_id, $data);
+			redirect('surat_masuk');
 		}
 		else
 		{
-			$result = $this->jenis_surat_model->get_jenis_surat($jenis_surat_id)->row();
 			
-			$data['jenis_surat'] = $result->NAMA_JENIS_SURAT;
-			$data['status_jenis_surat'] = $result->STATUS_SURAT;
+			foreach($result1->result() as $row1)
+			{
+				$instansi[$row1->INSTANSI_ID] = $row1->NAMA_INSTANSI;
+			}
+			$data['instansi'] = $instansi;
+			foreach($result2->result() as $row2)
+			{
+				$jenis_surat[$row2->JENIS_SURAT_ID] = $row2->NAMA_JENIS_SURAT;
+			}
+			$data['jenis_surat'] = $jenis_surat;
+			$temp1 = explode('-', $result3->TGL_TERIMA);
+			$data['sifat'] = $result3->SIFAT;
+			$data['nomor'] = $result3->NOMOR;
+			$data['tgl_terima'] = $temp1[2];
+			$data['bln_terima'] = $temp1[1];
+			$data['thn_terima'] = $temp1[0];
+			$data['jenis_surat_dipilih'] = $result3->JENIS_SURAT_ID;
+			$data['instansi_dipilih'] = $result3->INSTANSI_ID;
+			$data['perihal'] = $result3->PERIHAL;
+			$data['pejabat_dipilih'] = $result3->KEPADA;
+			if($result3->TGL_SURAT != null)
+			{
+				$temp2 = explode('-',$result3->TGL_SURAT);
+				$data['tgl_surat'] = $temp1[2];
+				$data['bln_surat'] = $temp1[1];
+				$data['thn_surat'] = $temp1[0];
+			}
+			$data['lampiran'] = $result3->LAMPIRAN;
+			$data['catatan'] = $result3->CATATAN_TERIMA_SURAT_MASUK;
+			$data['file_surat_masuk'] = $result4;
+			$data['pejabat'] = array(
+										'0' => '-- Pilih Pejabat --',
+										'1' => 'Asisten',
+										'2' => 'Sekretaris',
+										'3' => 'Wakil Bupati',
+										'4' => 'Bupati',
+										'5' => 'Dinas'
+								);
 			
-			$data['content'] = $this->load->view('master/form_edit_jenis_surat',$data,true);
+			$data['content'] = $this->load->view('form_ubah_surat_masuk',$data,true);
 			$this->load->view('main',$data);
 		}
 	}
@@ -420,6 +563,103 @@ class Surat_masuk extends CI_Controller {
 			return TRUE;
 		}
 	}
+	
+	function cek_nomor_baru($value, $surat_masuk_id)
+	{
+		if($this->surat_masuk_model->cek_nomor_baru($value, $surat_masuk_id))
+		{
+			$this->form_validation->set_message('cek_nomor_baru', 'Nomor Surat Sudah Ada');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+	
+	function disposisi($surat_masuk_id)
+	{
+		$data_surat_masuk = array('DISPOSISI'=> 1);
+		$data_disposisi_surat_masuk = array(
+											'SURAT_MASUK_ID'    => $surat_masuk_id,
+											'DINAS_ID' 			=> $this->input->post('dinas'),
+											'CATATAN_DISPOSISI' => $this->input->post('catatan'),
+											'USER_ID'  			=> $this->session->userdata('iduser')
+										);
+		$this->form_validation->set_rules('dinas', 'Dinas', 'callback_cek_dropdown');					
+		$this->form_validation->set_error_delimiters('<p class="error_message">', '</p>');
+		$this->form_validation->set_message('required', 'Kolom %s harus diisi !!');
+		if($this->form_validation->run())
+		{
+			$this->surat_masuk_model->update($surat_masuk_id, $data_surat_masuk);
+			$this->surat_masuk_model->add3($data_disposisi_surat_masuk);
+			redirect('surat_masuk');
+		}
+		else
+		{
+			$result1 = $this->surat_masuk_model->get_surat_masuk_by_id($surat_masuk_id)->row();
+			$result2 = $this->dinas_model->get_all_dinas();
+			$dinas[0] = '-- Pilih Dinas --';
+			foreach($result2->result() as $row)
+			{
+				$dinas[$row->DINAS_ID] = $row->NAMA_DINAS;
+			}
+			$data['dinas'] = $dinas;
+			$data['nomor'] = $result1->NOMOR;
+			$data['content'] = $this->load->view('form_disposisi',$data,true);
+			$this->load->view('main',$data);
+		}
+	}
+	
+	function kirim_ke_sekretaris($surat_masuk_id)
+	{
+		$data_surat_masuk = array('KIRIM_SEKRETARIS'=> 1);
+		$this->surat_masuk_model->update($surat_masuk_id, $data_surat_masuk);
+		redirect('surat_masuk');
+	}
+	
+	function kirim_ke_bupati($surat_masuk_id)
+	{
+		$data_surat_masuk = array('KIRIM_BUPATI'=> 1);
+		$this->surat_masuk_model->update($surat_masuk_id, $data_surat_masuk);
+		redirect('surat_masuk');
+	}
+	
+	function komentar($surat_masuk_id)
+	{	
+		$result = $this->surat_masuk_model->get_surat_masuk_by_id($surat_masuk_id)->row();
+		$data['surat_masuk_id'] = $surat_masuk_id;
+		$data['nomor'] = $result->NOMOR;
+		$data['komentar'] = $result->KOMENTAR;
+		$data['content'] = $this->load->view('form_komentar',$data,true);
+		$this->load->view('main',$data);
+	}
+	
+	function komentar_proses($surat_masuk_id)
+	{
+		$data_surat_masuk = array('KOMENTAR'=> $this->input->post('komentar'));
+		$this->surat_masuk_model->update($surat_masuk_id, $data_surat_masuk);
+		redirect('surat_masuk');
+	}
+	
+	// fungsi untuk download file yg ter-upload
+	function download($file_surat_masuk_id)
+	{
+		// gett the file from DB
+		$record = $this->surat_masuk_model->get_file_surat_masuk_by_id2($file_surat_masuk_id);
+		if($record->num_rows() > 0 )
+		{
+			$nama_paket = $record->row()->PATH_FILE;
+			if (is_file('./'.$nama_paket)){
+				$data = file_get_contents('./'.$nama_paket);			
+				force_download($nama_paket, $data); 
+			}
+		}
+		else
+		{
+			echo 'tidak ada file yang ditemukan';
+		}
+	}// end of download 
 }
 
 /* End of file welcome.php */

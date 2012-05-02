@@ -29,7 +29,7 @@ class Login extends CI_Controller {
 		//cek apakah username dan password sudah diisikan dengan benar
 		if ($this->form_validation->run())
 		{
-			redirect ('manajemen_pengguna'); //true gak bisa tapi false kok bisa ??/ //			
+			redirect ('home'); //true gak bisa tapi false kok bisa ??/ //			
 		}//end validation
 		else
 		{
