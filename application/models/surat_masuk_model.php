@@ -32,11 +32,22 @@ class Surat_masuk_model extends CI_Model{
 	{
 		$this->db->insert('file_surat_masuk', $file_surat_masuk);
 	}
-			
-	function update($userid, $user)
+	
+	function add3($disposisi_surat_masuk)
 	{
-		$this->db->where('user.USER_ID', $userid);
-		$this->db->update('user', $user);
+		$this->db->insert('disposisi_surat_masuk', $disposisi_surat_masuk);
+	}
+			
+	function update($surat_masuk_id, $surat_masuk)
+	{
+		$this->db->where('surat_masuk.SURAT_MASUK_ID', $surat_masuk_id);
+		$this->db->update('surat_masuk', $surat_masuk);
+	}
+	
+	function update2($file_surat_masuk_id, $file_surat_masuk)
+	{
+		$this->db->where('file_surat_masuk.FILE_SURAT_MASUK_ID', $file_surat_masuk_id);
+		$this->db->update('file_surat_masuk', $file_surat_masuk);
 	}
 		
 	function delete($userid)
@@ -45,12 +56,29 @@ class Surat_masuk_model extends CI_Model{
 		$this->db->delete('user');
 	}
 		
-	function get_user($userid)
+	function get_surat_masuk_by_id($surat_masuk_id)
 	{
 		$this->db->select('*');
-		$this->db->from('user');
-		$this->db->join('jabatan', 'jabatan.JABATAN_ID = user.JABATAN_ID');
-		$this->db->where('user.USER_ID', $userid);
+		$this->db->from('surat_masuk');
+		$this->db->where('surat_masuk.SURAT_MASUK_ID', $surat_masuk_id);
+		$result = $this->db->get();
+		return $result;
+	}
+	
+	function get_file_surat_masuk_by_id($surat_masuk_id)
+	{
+		$this->db->select('*');
+		$this->db->from('file_surat_masuk');
+		$this->db->where('file_surat_masuk.SURAT_MASUK_ID', $surat_masuk_id);
+		$result = $this->db->get();
+		return $result;
+	}
+	
+	function get_file_surat_masuk_by_id2($file_surat_masuk_id)
+	{
+		$this->db->select('*');
+		$this->db->from('file_surat_masuk');
+		$this->db->where('file_surat_masuk.FILE_SURAT_MASUK_ID', $file_surat_masuk_id);
 		$result = $this->db->get();
 		return $result;
 	}
@@ -78,12 +106,12 @@ class Surat_masuk_model extends CI_Model{
 		}
 	}
 	
-	function cek_username_baru($username, $user_id)
+	function cek_nomor_baru($nomor, $surat_masuk_id)
 	{	
 		$this->db->select('*');
-		$this->db->from('user');
-		$this->db->where('USERNAME', $username);			
-		$this->db->where('USER_ID <>',$user_id);
+		$this->db->from('surat_masuk');
+		$this->db->where('NOMOR', $nomor);			
+		$this->db->where('SURAT_MASUK_ID <>',$surat_masuk_id);
 		//$query = $this->db->query('select * from login WHERE username =  "'.$username.'" and kode_user <> '.$kode_user);
 		$query = $this->db->get();
 		if ($query->num_rows())
@@ -137,4 +165,10 @@ class Surat_masuk_model extends CI_Model{
 		}	
 	}
 	
+	function count_file_surat_masuk($surat_masuk_id)
+	{				
+		$this->db->where('SURAT_MASUK_ID', $surat_masuk_id);
+		$this->db->from('file_surat_masuk');
+		return $this->db->count_all_results();
+	}
 }
