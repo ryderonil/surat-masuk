@@ -1,5 +1,5 @@
 <div id="form_container">
-		<div class="title">CATAT SURAT MASUK</div>
+		<div class="title">UBAH SURAT MASUK</div>
 		
 		<?php 
 			$attributes = array('class' => 'appnitro', 'name' => 'form_ubah_surat_masuk');
@@ -9,7 +9,7 @@
 					<?= anchor(site_url('surat_masuk'),img(array('src'=>'images/flexigrid/prev.gif','border'=>'0','alt'=>'')).'Kembali Ke Daftar Surat Masuk',''); ?>
 				</li>
 				<li id="li_14" >
-					<label class="description" for="element_14">Sifat</label>
+					<div class="left"><label class="description" for="element_14">Sifat</label></div>
 					<div>
 						<?php 
 								if(set_value('sifat')!='') $sifat = set_value('sifat');
@@ -24,7 +24,7 @@
 					<?php echo form_error('sifat'); ?>
 				</li>
 				<li id="li_14" >
-					<label class="description" for="element_14">Nomor</label>
+					<div class="left"><label class="description" for="element_14">Nomor</label></div>
 					<div>
 						<input id="nomor" name="nomor" class="element text medium" type="text" value="<?php if(isset($nomor))echo $nomor;?>"/> 					
 					</div>
@@ -32,7 +32,7 @@
 					<?php echo form_error('nomor'); ?>
 				</li>
 				<li>
-					<label class="description">Tanggal Terima</label>
+					<div class="left"><label class="description">Tanggal Terima</label></div>
 						<span>
 							<div id="newline-wrapper">
 								<table class="split-date-wrap" cellpadding="0" cellspacing="0" border="0">
@@ -58,7 +58,7 @@
 						</span>
 				</li>
 				<li id="li_21" >
-					<label class="description" for="element_21">Jenis Surat</label>
+					<div class="left"><label class="description" for="element_21">Jenis Surat</label></div>
 					<div>
 						<?php 
 							echo form_dropdown('jenis_surat',$jenis_surat,$jenis_surat_dipilih, 'id="jenis_surat" class="element select medium"');
@@ -68,7 +68,7 @@
 					<?php echo form_error('jenis_surat'); ?>
 				</li>
 				<li id="li_21" >
-					<label class="description" for="element_21">Dari</label>
+					<div class="left"><label class="description" for="element_21">Dari</label></div>
 					<div>
 						<?php
 							
@@ -79,7 +79,7 @@
 					<?php echo form_error('instansi'); ?>
 				</li>
 				<li id="li_14" >
-					<label class="description" for="element_14">Perihal</label>
+					<div class="left"><label class="description" for="element_14">Perihal</label></div>
 					<div>
 						<input id="perihal" name="perihal" class="element text medium" type="text" value="<?php echo $perihal;?>"/> 					
 					</div>
@@ -88,7 +88,7 @@
 				</li>
 				<li id="li_1" >
 					<div id="dvFile_file">
-						<label class="description" for="element_1">File Surat</label>
+						<div class="left"><label class="description" for="element_1">File Surat</label></div>
 						<table width="60%" border="1" cellspacing="0" cellpadding="2">
 						<tr>
 							<th align="center" bgcolor="#b9c9fe">Update File</th>
@@ -111,14 +111,17 @@
 				<?php if($sifat == 1) $tampilan = 'hidden'; else $tampilan = 'visible'; ?>
 				<div id="rhs" style="visibility:<?php echo $tampilan;?>;">
 					<li>
-						<input id="submit-button" type="submit" name="daftar_warna" value="Tambah" />
-						<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('surat_masuk')?>'"/>
+						<div class="left"></div>
+						<div>
+							<input id="submit-button" type="submit" name="daftar_warna" value="Tambah" />
+							<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('surat_masuk')?>'"/>
+						</div>
 					</li>
 				</div>
 				<?php if($sifat == 2) $tampilan2 = 'hidden'; else $tampilan2 = 'visible'; ?>
 				<div id="hideme" style="visibility:<?php echo $tampilan2;?>;">
 					<li id="li_21" >
-						<label class="description" for="element_21">Kepada</label>
+						<div class="left"><label class="description" for="element_21">Kepada</label></div>
 						<div>
 							<?php
 								echo form_dropdown('pejabat',$pejabat,$pejabat_dipilih, 'class="element select medium"');
@@ -128,7 +131,7 @@
 						<?php echo form_error('pejabat'); ?>
 					</li>
 					<li>
-						<label class="description">Tanggal Surat</label>
+						<div class="left"><label class="description">Tanggal Surat</label></div>
 							<span>
 								<div id="newline-wrapper">
 									<table class="split-date-wrap" cellpadding="0" cellspacing="0" border="0">
@@ -155,7 +158,7 @@
 					</li>
 					
 					<li id="li_14" >
-						<label class="description" for="element_14">Lampiran</label>
+						<div class="left"><label class="description" for="element_14">Lampiran</label></div>
 						<div>
 							<input id="lampiran" name="lampiran" class="element text medium" type="text" value="<?php echo $lampiran;?>"/> 					
 						</div>
@@ -163,7 +166,7 @@
 						<?php echo form_error('lampiran'); ?>
 					</li>
 					<li id="li_14" >
-						<label class="description" for="element_14">Catatan</label>
+						<div class="left"><label class="description" for="element_14">Catatan</label></div>
 						<div>
 							<?php 
 								$data = array(
@@ -180,8 +183,11 @@
 						<?php echo form_error('catatan'); ?>
 					</li>
 					<li>
-						<input id="submit-button" type="submit" name="daftar_warna" value="Tambah" />
-						<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('surat_masuk')?>'"/>
+						<div class="left"></div>
+						<div>	
+							<input id="submit-button" type="submit" name="daftar_warna" value="Tambah" />
+							<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('surat_masuk')?>'"/>
+						</div>
 					</li>
 				</div>
 			</ul>
@@ -239,4 +245,3 @@
 		}	
 	);
 </script>
-	</script>

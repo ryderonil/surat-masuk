@@ -33,7 +33,7 @@ class Home extends CI_Controller {
 	function cek_session()
 	{	
 		$kode_role = $this->session->userdata('kode_role');
-		if($kode_role == '' || $kode_role != 1)
+		if($kode_role == '')
 		{
 			redirect('login/login_ulang');
 		}

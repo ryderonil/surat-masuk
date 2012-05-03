@@ -56,12 +56,35 @@ class Jabatan_model extends CI_Model{
 		$result = $this->db->get();
 		return $result;
 	}
+	
+	function get_last_jabatan_id()
+	{
+		$this->db->select_max('JABATAN_ID');
+		$query = $this->db->get('jabatan');
+		return $query;
+	}
 		
 	function cek_jabatan($jabatan)
 	{
 		$this->db->select('*');
 		$this->db->from('jabatan');
 		$this->db->where('NAMA_JABATAN', $jabatan);
+		$result = $this->db->get();
+		if ($result->num_rows())
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function cek_jabatan2($jabatan_id)
+	{
+		$this->db->select('*');
+		$this->db->from('jabatan');
+		$this->db->where('JABATAN_ID', $jabatan_id);
 		$result = $this->db->get();
 		if ($result->num_rows())
 		{

@@ -65,6 +65,18 @@ class Surat_masuk_model extends CI_Model{
 		return $result;
 	}
 	
+	function get_surat_masuk_by_id2($surat_masuk_id)
+	{
+		$this->db->select('*');
+		$this->db->from('surat_masuk');
+		$this->db->join('jenis_surat','jenis_surat.JENIS_SURAT_ID = surat_masuk.JENIS_SURAT_ID');
+		$this->db->join('instansi','instansi.INSTANSI_ID = surat_masuk.INSTANSI_ID');
+		//$this->db->join('disposisi_surat_masuk','disposisi_surat_masuk.SURAT_MASUK_ID = surat_masuk.SURAT_MASUK_ID');
+		$this->db->where('surat_masuk.SURAT_MASUK_ID', $surat_masuk_id);
+		$result = $this->db->get();
+		return $result;
+	}
+	
 	function get_file_surat_masuk_by_id($surat_masuk_id)
 	{
 		$this->db->select('*');
@@ -89,7 +101,42 @@ class Surat_masuk_model extends CI_Model{
 		$query = $this->db->get('surat_masuk');
 		return $query;
 	}
+	
+	function get_catatan_disposisi($surat_masuk_id)
+	{
+		$this->db->select('CATATAN_DISPOSISI');
+		$this->db->from('disposisi_surat_masuk');
+		$this->db->where('disposisi_surat_masuk.SURAT_MASUK_ID', $surat_masuk_id);
+		$result = $this->db->get()->row()->CATATAN_DISPOSISI;
+		return $result;
+	}
+	
+	function get_nama_dinas($surat_masuk_id)
+	{
+		$this->db->select('*');
+		$this->db->from('disposisi_surat_masuk');
+		$this->db->join('dinas', 'disposisi_surat_masuk.DINAS_ID = dinas.DINAS_ID');
+		$this->db->where('disposisi_surat_masuk.SURAT_MASUK_ID', $surat_masuk_id);
+		$result = $this->db->get();
+		return $result;
+	}
 		
+	function cek_surat_masuk_id($surat_masuk_id)
+	{
+		$this->db->select('*');
+		$this->db->from('disposisi_surat_masuk');
+		$this->db->where('SURAT_MASUK_ID', $surat_masuk_id);
+		$result = $this->db->get();
+		if ($result->num_rows())
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
 	function cek_nomor($nomor)
 	{
 		$this->db->select('*');
