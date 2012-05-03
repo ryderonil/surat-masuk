@@ -11,7 +11,14 @@ class Login extends CI_Controller {
 	
 	function index(){
 		//$data['content'] = $this->load->view('login','',TRUE);
-		$this->load->view('login');
+		if($this->session->userdata('kode_role'))
+		{
+			redirect('home');
+		}
+		else
+		{
+			$this->load->view('login');
+		}
 	}
 	
 	function login_ulang()

@@ -14,6 +14,7 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/datepicker.css" media="screen, tv, projection" title="Default" />	
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/accordion.css" media="screen, tv, projection" title="Default" />	
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/ext-all.css" media="screen, tv, projection" title="Default" />	
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/downloadButtons.css" media="screen, tv, projection" title="Default" />	
 
 		<!-- JAVASCRIPT -->
 		<script type="text/javascript" src="<?php echo base_url() ?>js/jquery.js"></script>

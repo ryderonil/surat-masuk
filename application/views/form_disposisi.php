@@ -3,7 +3,7 @@
 		
 		<?php 
 			$attributes = array('class' => 'appnitro', 'name' => 'form_disposisi');
-			echo form_open_multipart(uri_string(),$attributes); ?>
+			echo form_open_multipart('surat_masuk/disposisi_process/'.$surat_masuk_id,$attributes); ?>
 			<ul>
 			  	<li>
 					<?= anchor(site_url('surat_masuk'),img(array('src'=>'images/flexigrid/prev.gif','border'=>'0','alt'=>'')).'Kembali Ke Daftar Surat Masuk',''); ?>
@@ -49,51 +49,15 @@
 			</ul>
 		<?php echo form_close(); ?>
 	</div>
-	<script type="text/javascript">
-		function hapus_tanggal_terima(){
-			document.form_catat_surat_masuk.tgl_terima.value = '';
-			document.form_catat_surat_masuk.bln_terima.value = '';
-			document.form_catat_surat_masuk.thn_terima.value = '';
-		}
-		
-		function hapus_tanggal_surat(){
-			document.form_catat_surat_masuk.tgl_surat.value = '';
-			document.form_catat_surat_masuk.bln_surat.value = '';
-			document.form_catat_surat_masuk.thn_surat.value = '';
-		}
-		
-		function _add_more_file() {
-			var content = document.getElementById('userfile0');
-			var index = jQuery('[name^="userfile"]');
-			if(index.length<10)
-			{
-				var txt = "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr><td><input id=\"userfile"+index.length+"\" name=\"userfile"+index.length+"\" class=\"element text medium\" type=\"file\" size=\"36\"/></td></tr></table>";
-				document.getElementById("dvFile_file").innerHTML += txt;
-			}
-			else
-			{
-				alert("Maksimum file yang diupload 10");
-			}
-		}
-		
+	<script type="text/javascript">		
 		Ext.onReady(function(){
-			// autocomplete utk jenis surat
-			var jenis_surat = new Ext.form.ComboBox({
+			var dinas = new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
-				transform:'jenis_surat',
-				width: 350,
-				forceSelection: false
-			});
-			
-			var instansi = new Ext.form.ComboBox({
-				typeAhead: true,
-				triggerAction: 'all',
-				transform:'instansi',
+				transform:'dinas',
 				width: 350,
 				forceSelection: false
 			});
 		}	
 	);
 </script>
-	</script>

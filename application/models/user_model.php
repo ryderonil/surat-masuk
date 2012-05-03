@@ -106,12 +106,6 @@ class User_model extends CI_Model{
 		return $result;
 	}
 	
-	function ubah_pass($userid, $pass)
-	{
-		$this->db->where('user.USERID', $userid);
-		$this->db->update('user.PASSWORD', $pass);
-	}
-	
 	public function cek_referensi($USER_ID)
 	{	
 		$this->db->select('USER_ID');

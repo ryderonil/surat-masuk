@@ -70,7 +70,7 @@
 					<div>
 						<?php if(set_value('jabatan')!=0) $jabatan_dipilih = set_value('jabatan')?>
 						<?php 
-							echo form_dropdown('jabatan',$jabatan,$jabatan_dipilih, 'class="element select medium"');
+							echo form_dropdown('jabatan',$jabatan,$jabatan_dipilih, 'id="jabatan" class="element select medium"');
 						?>
 					</div>
 					<p class="guidelines" id="guide_21"><small>Jabatan</small></p>
@@ -116,3 +116,16 @@
 			</ul>
 		<?php echo form_close(); ?>
 	</div>
+	<script type="text/javascript">		
+		Ext.onReady(function(){
+			var jabatan = new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				transform:'jabatan',
+				width: 340,
+				forceSelection: false
+			});
+		}	
+	);
+	</script>
+	

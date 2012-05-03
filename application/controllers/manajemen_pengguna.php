@@ -179,7 +179,7 @@ class Manajemen_pengguna extends CI_Controller {
 		{
 			$callback_username = '|callback_cek_username_baru['.$user_id.']';
 			$password = '';
-			$konfirmasi_password = '';
+			$konfirmasi_password = 'matches[password]';
 		}
 		else
 		{
@@ -190,7 +190,7 @@ class Manajemen_pengguna extends CI_Controller {
 		$this->form_validation->set_rules('nama', 'Nama User', 'required');
 		$this->form_validation->set_rules('username', 'Username', 'required'.$callback_username);
 		$this->form_validation->set_rules('grup', 'Grup Pengguna', 'callback_cek_dropdown');
-		$this->form_validation->set_rules('jabatan', 'Jabatan', 'callback_cek_dropdown');
+		//$this->form_validation->set_rules('jabatan', 'Jabatan', 'callback_cek_dropdown');
 		$this->form_validation->set_rules('email', 'Alamat Email', 'required|valid_email');
 		$this->form_validation->set_rules('handphone', 'No HP', 'required|numeric');
 		$this->form_validation->set_rules('password', 'Password', $password);
@@ -219,7 +219,7 @@ class Manajemen_pengguna extends CI_Controller {
 	public function add()
 	{
 		$jabatan = $this->jabatan_model->get_all_jabatan();
-		$hasil[0] = '-- Pilih Jabatan --';
+		//$hasil[0] = '-- Pilih Jabatan --';
 		foreach($jabatan->result() as $row){
 			$hasil[$row->JABATAN_ID] = $row->NAMA_JABATAN;
 		}
@@ -242,6 +242,15 @@ class Manajemen_pengguna extends CI_Controller {
 					);
 		if($this->cek_validasi(false,null))
 		{
+			if(!$this->jabatan_model->cek_jabatan2($data['JABATAN_ID']))
+			{
+				$data_jabatan = array(
+										'NAMA_JABATAN' => $data['JABATAN_ID'],
+										'STATUS_JABATAN' => 1
+									);
+				$this->jabatan_model->add($data_jabatan);
+				$data['JABATAN_ID'] = $this->jabatan_model->get_last_jabatan_id()->row()->JABATAN_ID;
+			}
 			$this->user_model->add($data);
 			redirect('manajemen_pengguna');
 		}
@@ -268,6 +277,15 @@ class Manajemen_pengguna extends CI_Controller {
 					);
 		if($this->cek_validasi(true,$userid))
 		{
+			if(!$this->jabatan_model->cek_jabatan2($data['JABATAN_ID']))
+			{
+				$data_jabatan = array(
+										'NAMA_JABATAN' => $data['JABATAN_ID'],
+										'STATUS_JABATAN' => 1
+									);
+				$this->jabatan_model->add($data_jabatan);
+				$data['JABATAN_ID'] = $this->jabatan_model->get_last_jabatan_id()->row()->JABATAN_ID;
+			}
 			$this->user_model->update($userid, $data);
 			redirect('manajemen_pengguna');
 		}

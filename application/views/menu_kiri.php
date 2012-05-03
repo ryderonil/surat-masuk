@@ -6,7 +6,7 @@
 	$surat_masuk = true;
 	$catat_surat_masuk = true;
 	
-/*
+
 	$this->load->library('session');
 	$kode_role = $this->session->userdata('kode_role');
 	if($kode_role == 1 ){	//untuk role admin
@@ -15,25 +15,12 @@
 		$surat_masuk = true;
 		$catat_surat_masuk = true; 
 	}
-	else if($kode_role == 2){ //untuk role asisten dan sekretaris
+	else { //untuk role asisten dan sekretaris
 		$master_data = false;
 		$manajemen_pengguna = false;
 		$surat_masuk = true;
 		$catat_surat_masuk = false; 
 	}
-	else if($kode_role == 3){ //untuk role wakil bupati dan bupati
-		$master_data = false;
-		$manajemen_pengguna = false;
-		$surat_masuk = true;
-		$catat_surat_masuk = false;
-	}
-	else if($kode_role == 4){ //dinas
-		$master_data = false;
-		$manajemen_pengguna = false;
-		$surat_masuk = true;
-		$catat_surat_masuk = false;
-	}
-*/
 
 
 ?>

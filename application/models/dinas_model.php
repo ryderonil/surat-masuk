@@ -59,12 +59,35 @@ class Dinas_model extends CI_Model{
 		$result = $this->db->get();
 		return $result;
 	}
+
+	function get_last_dinas_id()
+	{
+		$this->db->select_max('DINAS_ID');
+		$query = $this->db->get('dinas');
+		return $query;
+	}
 		
 	function cek_dinas($dinas)
 	{
 		$this->db->select('*');
 		$this->db->from('dinas');
 		$this->db->where('NAMA_DINAS', $dinas);
+		$result = $this->db->get();
+		if ($result->num_rows())
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function cek_dinas2($dinas_id)
+	{
+		$this->db->select('*');
+		$this->db->from('dinas');
+		$this->db->where('DINAS_ID', $dinas_id);
 		$result = $this->db->get();
 		if ($result->num_rows())
 		{
@@ -97,7 +120,7 @@ class Dinas_model extends CI_Model{
 	public function cek_referensi($DINAS_ID)
 	{	
 		$this->db->select('DINAS_ID');
-		$this->db->from('surat_masuk');
+		$this->db->from('disposisi_surat_masuk');
 		$this->db->where('DINAS_ID', $DINAS_ID);
 		if($this->db->get()->num_rows())
 		{

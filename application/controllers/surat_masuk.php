@@ -31,17 +31,18 @@ class Surat_masuk extends CI_Controller {
 	
 	public function grid()
 	{
+		$kode_role = $this->session->userdata('kode_role');
 		$colModel['no'] = array('No',20,TRUE,'center',0);
 		$colModel['TGL_TERIMA'] = array('Tanggal Terima',100,TRUE,'center',1);
 		$colModel['NOMOR'] = array('Nomor',100,TRUE,'center',1);
 		$colModel['PERIHAL'] = array('Perihal',200,TRUE,'center',1);
-		$colModel['status'] = array('Status',30,FALSE,'center',0);
-		$colModel['kirim_ke_sekretaris'] = array('Kirim ke Sekretaris',90,FALSE,'center',0);
-		$colModel['kirim_ke_bupati'] = array('Kirim ke Bupati',70,FALSE,'center',0);
-		$colModel['disposisi'] = array('Disposisi',60,FALSE,'center',0);
-		$colModel['komentar'] = array('Komentar',60,FALSE,'center',0);
+		if($kode_role != 6) $colModel['status'] = array('Status',30,FALSE,'center',0);
+		if($kode_role == 1) $colModel['kirim_ke_sekretaris'] = array('Kirim ke Sekretaris',90,FALSE,'center',0);
+		if($kode_role == 2 || $kode_role == 3) $colModel['kirim_ke_bupati'] = array('Kirim ke Bupati',70,FALSE,'center',0);
+		if($kode_role == 2 || $kode_role == 3 || $kode_role == 4 || $kode_role == 5 ) $colModel['disposisi'] = array('Disposisi',60,FALSE,'center',0);
+		if($kode_role == 6) $colModel['komentar'] = array('Komentar',60,FALSE,'center',0);
 		$colModel['detail'] = array('Detail',40,FALSE,'center',0);
-		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
+		if($kode_role == 1) $colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
 			
 		//setting konfigurasi pada bottom tool bar flexigrid
 		$gridParams = array(
@@ -115,6 +116,7 @@ class Surat_masuk extends CI_Controller {
 	
 	function grid_data_surat_masuk() 
 	{
+		$kode_role = $this->session->userdata('kode_role');
 		$valid_fields = array('SURAT_MASUK_ID','NOMOR','PERIHAL','TGL_TERIMA');
 		$this->flexigrid->validate_post('SURAT_MASUK_ID','asc',$valid_fields);
 		$records = $this->surat_masuk_model->grid_surat_masuk();	
@@ -152,6 +154,7 @@ class Surat_masuk extends CI_Controller {
 				}
 				
 				$no = $no+1;
+				if($kode_role == 1)
 				$record_items[] = array(
 										$row->SURAT_MASUK_ID,
 										$no,
@@ -160,11 +163,44 @@ class Surat_masuk extends CI_Controller {
 										$row->PERIHAL,
 								'<a href='.base_url().'index.php/surat_masuk/status/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/status.png\'></a>',
 								$kirim1,
-								$kirim2,
-								$disposisi,
-								'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
 								'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>',
 								'<a href='.base_url().'index.php/surat_masuk/ubah/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/application--pencil.png\'></a>'
+								);
+								
+				if($kode_role == 2 || $kode_role == 3)
+				$record_items[] = array(
+										$row->SURAT_MASUK_ID,
+										$no,
+										$row->TGL_TERIMA,
+										$row->NOMOR,
+										$row->PERIHAL,
+										'<a href='.base_url().'index.php/surat_masuk/status/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/status.png\'></a>',
+										$kirim2,
+										$disposisi,
+										'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>'
+								);
+								
+				if($kode_role == 4 || $kode_role == 5)
+				$record_items[] = array(
+										$row->SURAT_MASUK_ID,
+										$no,
+										$row->TGL_TERIMA,
+										$row->NOMOR,
+										$row->PERIHAL,
+										'<a href='.base_url().'index.php/surat_masuk/status/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/status.png\'></a>',
+										$disposisi,
+										'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>'
+									);
+								
+				if($kode_role == 6)
+				$record_items[] = array(
+										$row->SURAT_MASUK_ID,
+										$no,
+										$row->TGL_TERIMA,
+										$row->NOMOR,
+										$row->PERIHAL,
+										'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
+										'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>'
 								);
 		}
 		
@@ -438,6 +474,23 @@ class Surat_masuk extends CI_Controller {
 					}
 				}
 			}
+			
+			if(!$this->jenis_surat_model->cek_jenis_surat2($data['JENIS_SURAT_ID']) || !$this->instansi_model->cek_instansi2($data['INSTANSI_ID']))
+			{
+				$data_jenis_surat = array(
+										'NAMA_JENIS_SURAT' => $data['JENIS_SURAT_ID'],
+										'STATUS_JENIS_SURAT' => 1
+									);
+				$data_instansi = array(
+										'NAMA_INSTANSI' => $data['INSTANSI_ID'],
+										'STATUS_INSTANSI' => 1 
+									);
+				$this->jenis_surat_model->add($data_jenis_surat);
+				$this->instansi_model->add($data_instansi);
+				$data['JENIS_SURAT_ID'] = $this->jenis_surat_model->get_last_jenis_surat_id()->row()->JENIS_SURAT_ID;
+				$data['INSTANSI_ID'] = $this->instansi_model->get_last_instansi_id()->row()->INSTANSI_ID;
+			}
+			
 			$this->surat_masuk_model->update($surat_masuk_id, $data);
 			redirect('surat_masuk');
 		}
@@ -579,6 +632,22 @@ class Surat_masuk extends CI_Controller {
 	
 	function disposisi($surat_masuk_id)
 	{
+		$result1 = $this->surat_masuk_model->get_surat_masuk_by_id($surat_masuk_id)->row();
+		$result2 = $this->dinas_model->get_all_dinas();
+		//$dinas[0] = '-- Pilih Dinas --';
+		foreach($result2->result() as $row)
+		{
+			$dinas[$row->DINAS_ID] = $row->NAMA_DINAS;
+		}
+		$data['dinas'] = $dinas;
+		$data['surat_masuk_id'] = $surat_masuk_id;
+		$data['nomor'] = $result1->NOMOR;
+		$data['content'] = $this->load->view('form_disposisi',$data,true);
+		$this->load->view('main',$data);
+	}
+	
+	function disposisi_process($surat_masuk_id)
+	{
 		$data_surat_masuk = array('DISPOSISI'=> 1);
 		$data_disposisi_surat_masuk = array(
 											'SURAT_MASUK_ID'    => $surat_masuk_id,
@@ -586,29 +655,20 @@ class Surat_masuk extends CI_Controller {
 											'CATATAN_DISPOSISI' => $this->input->post('catatan'),
 											'USER_ID'  			=> $this->session->userdata('iduser')
 										);
-		$this->form_validation->set_rules('dinas', 'Dinas', 'callback_cek_dropdown');					
-		$this->form_validation->set_error_delimiters('<p class="error_message">', '</p>');
-		$this->form_validation->set_message('required', 'Kolom %s harus diisi !!');
-		if($this->form_validation->run())
+		
+		
+		if(!$this->dinas_model->cek_dinas2($data_disposisi_surat_masuk['DINAS_ID']))
 		{
-			$this->surat_masuk_model->update($surat_masuk_id, $data_surat_masuk);
-			$this->surat_masuk_model->add3($data_disposisi_surat_masuk);
-			redirect('surat_masuk');
+			$data_dinas = array(
+									'NAMA_DINAS' => $data_disposisi_surat_masuk['DINAS_ID'],
+									'STATUS_DINAS' => 1
+								);
+			$this->dinas_model->add($data_dinas);
+			$data_disposisi_surat_masuk['DINAS_ID'] = $this->dinas_model->get_last_dinas_id()->row()->DINAS_ID;
 		}
-		else
-		{
-			$result1 = $this->surat_masuk_model->get_surat_masuk_by_id($surat_masuk_id)->row();
-			$result2 = $this->dinas_model->get_all_dinas();
-			$dinas[0] = '-- Pilih Dinas --';
-			foreach($result2->result() as $row)
-			{
-				$dinas[$row->DINAS_ID] = $row->NAMA_DINAS;
-			}
-			$data['dinas'] = $dinas;
-			$data['nomor'] = $result1->NOMOR;
-			$data['content'] = $this->load->view('form_disposisi',$data,true);
-			$this->load->view('main',$data);
-		}
+		$this->surat_masuk_model->update($surat_masuk_id, $data_surat_masuk);
+		$this->surat_masuk_model->add3($data_disposisi_surat_masuk);
+		redirect('surat_masuk');
 	}
 	
 	function kirim_ke_sekretaris($surat_masuk_id)
@@ -659,7 +719,89 @@ class Surat_masuk extends CI_Controller {
 		{
 			echo 'tidak ada file yang ditemukan';
 		}
-	}// end of download 
+	}// end of download
+	
+	function detail($surat_masuk_id)
+	{
+		$result3 = $this->surat_masuk_model->get_surat_masuk_by_id2($surat_masuk_id)->row();
+		$result4 = $this->surat_masuk_model->get_file_surat_masuk_by_id($surat_masuk_id)->result();
+		$result5 = '';
+		if($this->surat_masuk_model->cek_surat_masuk_id($surat_masuk_id))
+		{
+			$result5 = $this->surat_masuk_model->get_catatan_disposisi($surat_masuk_id);
+		}
+		$temp1 = explode('-', $result3->TGL_TERIMA);
+		$temp2 = explode('-', $result3->TGL_SURAT);
+		$data['sifat'] = $result3->SIFAT;
+		$data['nomor'] = $result3->NOMOR;
+		$data['tgl_terima'] = $temp1[2].'-'.$temp1[1].'-'.$temp1[0];
+		if($result3->TGL_SURAT != null)
+		{
+			$data['tgl_surat'] = $temp2[2].'-'.$temp2[1].'-'.$temp2[0];
+		}
+		$data['jenis_surat'] = $result3->NAMA_JENIS_SURAT;
+		$data['dari'] = $result3->NAMA_INSTANSI;
+		$data['perihal'] = $result3->PERIHAL;
+		$data['pejabat'] = array(
+									'0' => '-- Pilih Pejabat --',
+									'1' => 'Asisten',
+									'2' => 'Sekretaris',
+									'3' => 'Wakil Bupati',
+									'4' => 'Bupati',
+									'5' => 'Dinas'
+							);
+		$kepada = '';
+		switch($result3->KEPADA)
+		{
+			case 1:
+				$kepada = 'Asisten';
+				break;
+			case 2:
+				$kepada = 'Sekretaris';
+				break;
+			case 3:
+				$kepada = 'Wakil Bupati';
+				break;
+			case 4:
+				$kepada = 'Bupati';
+				break;
+			case 5:
+				$kepada = 'Dinas';
+				break;
+		}
+		$data['kepada'] = $kepada;
+		$data['catatan_disposisi'] = $result5;
+		$data['lampiran'] = $result3->LAMPIRAN;
+		$data['catatan'] = $result3->CATATAN_TERIMA_SURAT_MASUK;
+		$data['komentar'] = $result3->KOMENTAR;
+		$data['file_surat_masuk'] = $result4;
+		$data['content'] = $this->load->view('detail_surat_masuk',$data,true);
+		$this->load->view('main',$data);
+	}
+	
+	function status($surat_masuk_id)
+	{
+		if($this->surat_masuk_model->cek_surat_masuk_id($surat_masuk_id))
+		{
+			$result4 = $this->surat_masuk_model->get_nama_dinas($surat_masuk_id)->row();
+		}
+		$result3 = $this->surat_masuk_model->get_surat_masuk_by_id2($surat_masuk_id)->row();
+		$data['kirim_sekretaris'] = $result3->KIRIM_SEKRETARIS;
+		$data['kirim_bupati'] = $result3->KIRIM_BUPATI;
+		$data['status_disposisi'] = $result3->DISPOSISI;
+		$data['status_terima'] = $result3->STATUS_TERIMA;
+		$data['nama_dinas'] = $result4->NAMA_DINAS;
+		
+		if($this->session->userdata('kode_role') == 1)
+		{
+			$data['content'] = $this->load->view('status_surat_masuk',$data,true);
+		}
+		else
+		{
+			$data['content'] = $this->load->view('status_surat_masuk2',$data,true);
+		}
+		$this->load->view('main',$data);
+	}
 }
 
 /* End of file welcome.php */
