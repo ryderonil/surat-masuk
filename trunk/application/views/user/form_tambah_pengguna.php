@@ -2,7 +2,7 @@
 		<div class="title">TAMBAH PENGGUNA</div>
 		
 		<?php 
-			$attributes = array('class' => 'appnitro');
+			$attributes = array('class' => 'appnitro', 'name' => 'form_tambah_pengguna');
 			echo form_open('manajemen_pengguna/add_process',$attributes); ?>
 			<ul>
 			  	<li>
@@ -61,6 +61,16 @@
 					<p class="guidelines" id="guide_14"><small>Grup Pengguna</small></p> 
 					<?php echo form_error('grup'); ?>
 				</li>
+				<li id="li_14" >
+					<label class="description" for="element_14">Dinas</label>
+					<div>
+						<?php 
+							echo form_dropdown('dinas',$dinas, set_value('dinas'), 'id="dinas" class="element select medium"');
+						?>					
+					</div>
+					<p class="guidelines" id="guide_14"><small>Dinas</small></p> 
+					<?php echo form_error('dinas'); ?>
+				</li>
 				<li id="li_21" >
 					<label class="description" for="element_21">Jabatan</label>
 					<div>
@@ -88,7 +98,7 @@
 					</div>
 					<p class="guidelines" id="guide_14"><small>No HP</small></p> 
 					<?php echo form_error('handphone'); ?>
-				</li>
+				</li>	
 				<li>
 					<input id="submit-button" type="submit" name="daftar_warna" value="Tambah" />
 					<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('manajemen_pengguna')?>'"/>
@@ -102,6 +112,14 @@
 				typeAhead: true,
 				triggerAction: 'all',
 				transform:'jabatan',
+				width: 340,
+				forceSelection: false
+			});
+			
+			var dinas = new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				transform:'dinas',
 				width: 340,
 				forceSelection: false
 			});

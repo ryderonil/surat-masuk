@@ -58,11 +58,22 @@
 												'5' => 'Bupati',
 												'6' => 'Dinas'
 											);
-								echo form_dropdown('grup',$options,$grup_dipilih, 'class="element select medium"');
+								echo form_dropdown('grup',$options,$grup_dipilih, 'class="element select medium" onChange="document.getElementById(\'hideme\').style.visibility=(this.options[6].selected?\'visible\':\'hidden\');"');
 						?>					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Grup Pengguna</small></p> 
 					<?php echo form_error('grup'); ?>
+				</li>
+				<li id="li_14" >
+					<label class="description" for="element_14">Dinas</label>
+					<div>
+						<?php 
+							if(isset($dinas_dipilih)) $dinas_dipilih = $dinas_dipilih; else $dinas_dipilih = '';
+							echo form_dropdown('dinas',$dinas, $dinas_dipilih, 'class="id="dinas" element select medium"');
+						?>					
+					</div>
+					<p class="guidelines" id="guide_14"><small>Dinas</small></p> 
+					<?php echo form_error('dinas'); ?>
 				</li>
 				<li id="li_21" >
 					<label class="description" for="element_21">Jabatan</label>
@@ -122,6 +133,14 @@
 				typeAhead: true,
 				triggerAction: 'all',
 				transform:'jabatan',
+				width: 340,
+				forceSelection: false
+			});
+			
+			var dinas = new Ext.form.ComboBox({
+				typeAhead: true,
+				triggerAction: 'all',
+				transform:'dinas',
 				width: 340,
 				forceSelection: false
 			});
