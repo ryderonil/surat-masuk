@@ -9,15 +9,53 @@ class Surat_masuk_model extends CI_Model{
 		$this->CI = get_instance();
 	}
 		
-	function grid_surat_masuk()
+	function grid_surat_masuk($kode_role)
 	{
 		$this->db->select('*');
 		$this->db->from('surat_masuk');
+		if($kode_role == 2 || $kode_role == 3)
+		{
+			$this->db->where('KIRIM_SEKRETARIS', 1);
+		}
+		else if($kode_role == 4 || $kode_role == 5)
+		{
+			$this->db->where('KIRIM_BUPATI',1);
+		}
+		
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
 		
 		$this->db->select('*');
 		$this->db->from('surat_masuk');
+		if($kode_role == 2 || $kode_role == 3)
+		{
+			$this->db->where('KIRIM_SEKRETARIS', 1);
+		}
+		else if($kode_role == 4 || $kode_role == 5)
+		{
+			$this->db->where('KIRIM_BUPATI',1);
+		}
+		
+		$this->CI->flexigrid->build_query(FALSE);
+		$return['record_count'] = $this->db->count_all_results();
+		return $return;		
+	}
+	
+	function grid_surat_masuk_dinas()
+	{
+		$this->db->select('*');
+		$this->db->from('surat_masuk');
+		$this->db->join('disposisi_surat_masuk','disposisi_surat_masuk.SURAT_MASUK_ID = surat_masuk.SURAT_MASUK_ID');
+		$this->db->join('dinas','disposisi_surat_masuk.DINAS_ID = dinas.DINAS_ID');
+		//$this->db->order_by('surat_masuk.SURAT_MASUK_ID','ASC');
+		$this->CI->flexigrid->build_query();		
+		$return['records'] = $this->db->get();
+		
+		$this->db->select('*');
+		$this->db->from('surat_masuk');
+		$this->db->join('disposisi_surat_masuk','disposisi_surat_masuk.SURAT_MASUK_ID = surat_masuk.SURAT_MASUK_ID');
+		$this->db->join('dinas','disposisi_surat_masuk.DINAS_ID = dinas.DINAS_ID');
+		//$this->db->order_by('surat_masuk.SURAT_MASUK_ID','ASC');
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
 		return $return;		
@@ -171,32 +209,6 @@ class Surat_masuk_model extends CI_Model{
 		}
 	}
 	
-	function login($user, $pass)
-	{
-	    $this->db->select('*');
-		$this->db->from('user');
-		$this->db->where('USERNAME', $user);
-		$this->db->where('PASSWORD', $pass);
-		$resilt = $this->db->get();
-		return $resilt;
-	}
-	
-	function cek_password($userid, $pass_lama)
-	{
-		$this->db->select('*');
-		$this->db->from('user');
-		$this->db->where('PASSWORD', $pass_lama);
-		$this->db->where('USERID', $userid);
-		$result = $this->db->get();
-		return $result;
-	}
-	
-	function ubah_pass($userid, $pass)
-	{
-		$this->db->where('user.USERID', $userid);
-		$this->db->update('user.PASSWORD', $pass);
-	}
-	
 	public function cek_referensi($USER_ID)
 	{	
 		$this->db->select('USER_ID');
@@ -217,5 +229,17 @@ class Surat_masuk_model extends CI_Model{
 		$this->db->where('SURAT_MASUK_ID', $surat_masuk_id);
 		$this->db->from('file_surat_masuk');
 		return $this->db->count_all_results();
+	}
+	
+	function sendMessage($dest, $date, $message) {
+		$data = array (
+				'InsertIntoDB' => date('Y-m-d H:i:s'),
+				'SendingDateTime' => $date,
+				'DestinationNumber' => $dest,
+				'Coding' => 'Default_No_Compression',
+				'TextDecoded' => $message,
+				'CreatorId' => ' ',
+					);
+		$this->db->insert('outbox',$data);		
 	}
 }

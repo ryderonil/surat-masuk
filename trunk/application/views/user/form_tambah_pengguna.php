@@ -12,7 +12,7 @@
 				<li id="li_1" >
 					<label class="description" for="element_1">Username</label>
 					<div>
-						<input id="username" name="username" class="element text small" type="text" maxlength="11" value="<?php echo set_value('username');?>"/> 
+						<input id="username" name="username" class="element text small" type="text" value="<?php echo set_value('username');?>"/> 
 					</div>
 					<p class="guidelines" id="guide_1"><small>Username</small></p> 
 					<?php echo form_error('username'); ?>

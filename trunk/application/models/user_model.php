@@ -52,6 +52,16 @@ class User_model extends CI_Model{
 		return $result;
 	}
 		
+	function get_user_by_role($role_id)
+	{
+		$this->db->select('*');
+		$this->db->from('user');
+		$this->db->join('jabatan', 'jabatan.JABATAN_ID = user.JABATAN_ID');
+		$this->db->where('user.ROLE', $role_id);
+		$result = $this->db->get();
+		return $result;
+	}
+		
 	function cek_username($username)
 	{
 		$this->db->select('*');
@@ -92,6 +102,7 @@ class User_model extends CI_Model{
 		$this->db->from('user');
 		$this->db->where('USERNAME', $user);
 		$this->db->where('PASSWORD', $pass);
+		$this->db->where('STATUS_USER', 1);
 		$resilt = $this->db->get();
 		return $resilt;
 	}

@@ -179,13 +179,13 @@ class Manajemen_pengguna extends CI_Controller {
 		{
 			$callback_username = '|callback_cek_username_baru['.$user_id.']';
 			$password = '';
-			$konfirmasi_password = 'matches[password]';
+			$konfirmasi_password = '';
 		}
 		else
 		{
 			$callback_username = '|callback_cek_username';
 			$password = 'required';
-			$konfirmasi_password = 'required|matches[password]';
+			$konfirmasi_password = '|required';
 		}
 		$this->form_validation->set_rules('nama', 'Nama User', 'required');
 		$this->form_validation->set_rules('username', 'Username', 'required'.$callback_username);
@@ -194,25 +194,13 @@ class Manajemen_pengguna extends CI_Controller {
 		$this->form_validation->set_rules('email', 'Alamat Email', 'required|valid_email');
 		$this->form_validation->set_rules('handphone', 'No HP', 'required|numeric');
 		$this->form_validation->set_rules('password', 'Password', $password);
-		$this->form_validation->set_rules('ulangi_password', 'Konfirmasi Password', $konfirmasi_password);
+		$this->form_validation->set_rules('ulangi_password', 'Konfirmasi Password', 'callback_cek_password_ulang'.$konfirmasi_password);
 		
 		$this->form_validation->set_error_delimiters('<p class="error_message">', '</p>');
 		$this->form_validation->set_message('required', 'Kolom %s harus diisi !!');
 		$this->form_validation->set_message('matches', 'Kolom %s tidak sesuai dengan isian password !!');
 		$this->form_validation->set_message('valid_email', 'Masukkan alamat email sesuai format');
 		$this->form_validation->set_message('numeric', 'Masukkan hanya angka');
-		return $this->form_validation->run();
-	}
-	
-	function cek_validasi_edit()
-	{	
-		$this->form_validation->set_rules('nama', 'Nama User', 'required');
-		$this->form_validation->set_rules('username', 'Username', 'required');
-		$this->form_validation->set_rules('konf_password', 'Konfirmasi Password', 'matches[password]');
-		
-		$this->form_validation->set_error_delimiters('<div class="error_box">', '</div>');
-		$this->form_validation->set_message('required', 'Kolom %s harus diisi !!');
-		$this->form_validation->set_message('required', 'Kolom %s tidak sesuai dengan isian password !!');
 		return $this->form_validation->run();
 	}
 	
@@ -374,6 +362,16 @@ class Manajemen_pengguna extends CI_Controller {
 		}
 		else
 		{
+			return TRUE;
+		}
+	}
+	
+	function cek_password_ulang($value){
+		if($value != $this->input->post('password')){
+			$this->form_validation->set_message('cek_password_ulang', 'Kolom %s harus sama!!');
+			return FALSE;
+		}
+		else{
 			return TRUE;
 		}
 	}

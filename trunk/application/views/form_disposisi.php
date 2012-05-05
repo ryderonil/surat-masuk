@@ -9,7 +9,7 @@
 					<?= anchor(site_url('surat_masuk'),img(array('src'=>'images/flexigrid/prev.gif','border'=>'0','alt'=>'')).'Kembali Ke Daftar Surat Masuk',''); ?>
 				</li>
 				<li id="li_14" >
-					<label class="description" for="element_14">Nomor</label>
+					<label class="description" for="element_14">Nomor Surat</label>
 					<div>
 						<?php if(set_value('nomor')!='') $nomor = set_value('nomor')?>
 						<input id="nomor" name="nomor" class="element text medium" type="text" value="<?php echo $nomor;?>"/> 					

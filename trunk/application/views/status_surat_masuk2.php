@@ -12,9 +12,9 @@
 		<legend><label><b>| Detail |</b></label></legend>
 		<ul>
 			<li>
-				<div class="left"><label class="description" for="element_14">Status Disposisi 	:</label></div>
+				<div><label class="description" for="element_14">Status Disposisi 	:</label></div>
 				<?php 
-				
+					if(isset($nama_dinas)) $nama_dinas = $nama_dinas; else $nama_dinas = '';
 					if($status_disposisi == 0)
 					{
 						$value = 'Belum Didisposisi';
@@ -43,17 +43,22 @@
 				</table>
 			</li>
 			<li>
-				<div class="left"><label class="description" for="element_14">Status Penerimaan	:</label></div>
+				<div><label class="description" for="element_14">Status Penerimaan	:</label></div>
 				<?php 
 				
-					if($status_terima == 3)
+					if($status_terima_dinas == 1)
 					{
 						$value2 = 'Surat Sudah Diperiksa';
 					}
-					else
+					else if($status_terima_dinas == 0 && $status_disposisi == 1)
 					{
 						$value2 = 'Surat Belum Diperiksa';
 					}
+					else if($status_disposisi == 0)
+					{
+						$value2 = '-';
+					}
+					
 				
 				?>
 				
@@ -64,7 +69,7 @@
 							</td>
 							<td>
 								<?php
-									if($status_terima != 3)
+									if($status_terima_dinas == 0 && $status_disposisi == 1)
 									{ ?>
 										<input id="submit-button" type="button" name="kirim_bupati" value="Kirim SMS Notifikasi" onClick="location.href='<?php echo site_url('surat_masuk/kirim_ke_bupati/');?>'"/>
 								<?php

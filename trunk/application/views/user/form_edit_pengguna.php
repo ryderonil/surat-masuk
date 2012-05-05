@@ -13,7 +13,7 @@
 					<label class="description" for="element_1">Username</label>
 					<div>
 						<?php if(set_value('username')!='') $username = set_value('username')?>
-						<input id="username" name="username" class="element text small" type="text" maxlength="11" value="<?php echo $username;?>"/> 
+						<input id="username" name="username" class="element text small" type="text" value="<?php echo $username;?>"/> 
 					</div>
 					<p class="guidelines" id="guide_1"><small>Username</small></p> 
 					<?php echo form_error('username'); ?>
