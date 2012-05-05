@@ -17,13 +17,13 @@
 					<p class="guidelines" id="guide_14"><small>Nomor</small></p>
 				</li>
 				<li id="li_21">
-					<label class="description" for="element_21">Disposisi ke</label>
+					<label class="description" for="element_21">Disposisi ke Dinas</label>
 					<div>
 						<?php
 							echo form_dropdown('dinas',$dinas,'0', 'id="dinas" class="element select medium"');
 						?>
 					</div>
-					<p class="guidelines" id="guide_21"><small>Disposisi ke</small></p>
+					<p class="guidelines" id="guide_21"><small>Disposisi ke Dinas</small></p>
 					<?php echo form_error('dinas'); ?>
 				</li>
 				<li id="li_14" >
