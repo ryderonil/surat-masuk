@@ -41,12 +41,13 @@ class Surat_masuk_model extends CI_Model{
 		return $return;		
 	}
 	
-	function grid_surat_masuk_dinas()
+	function grid_surat_masuk_dinas($dinas_id)
 	{
 		$this->db->select('*');
 		$this->db->from('surat_masuk');
 		$this->db->join('disposisi_surat_masuk','disposisi_surat_masuk.SURAT_MASUK_ID = surat_masuk.SURAT_MASUK_ID');
 		$this->db->join('dinas','disposisi_surat_masuk.DINAS_ID = dinas.DINAS_ID');
+		$this->db->where('disposisi_surat_masuk.DINAS_ID',$dinas_id);
 		//$this->db->order_by('surat_masuk.SURAT_MASUK_ID','ASC');
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
@@ -55,6 +56,7 @@ class Surat_masuk_model extends CI_Model{
 		$this->db->from('surat_masuk');
 		$this->db->join('disposisi_surat_masuk','disposisi_surat_masuk.SURAT_MASUK_ID = surat_masuk.SURAT_MASUK_ID');
 		$this->db->join('dinas','disposisi_surat_masuk.DINAS_ID = dinas.DINAS_ID');
+		$this->db->where('disposisi_surat_masuk.DINAS_ID',$dinas_id);
 		//$this->db->order_by('surat_masuk.SURAT_MASUK_ID','ASC');
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();

@@ -192,14 +192,14 @@ class Dinas extends CI_Controller {
 					);
 		if($this->cek_validasi(true,$dinas_id))
 		{
-			$this->user_model->update($dinas_id, $data);
+			$this->dinas_model->update($dinas_id, $data);
 			redirect('dinas');
 		}
 		else
 		{
 			$result = $this->dinas_model->get_dinas($dinas_id)->row();
 			
-			$data['singkatan'] = $hasil->SINGKATAN;
+			$data['singkatan'] = $result->SINGKATAN;
 			$data['nama_dinas'] = $result->NAMA_DINAS;
 			$data['status_dinas'] = $result->STATUS_DINAS;
 			

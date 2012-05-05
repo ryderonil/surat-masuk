@@ -48,7 +48,7 @@ class Surat_masuk extends CI_Controller {
 		}
 		if($kode_role == 6)
 		{
-			$colModel['disposisi_ke'] = array('Disposisi ke Dinas',250,FALSE,'center',0);
+			//$colModel['disposisi_ke'] = array('Disposisi ke Dinas',250,FALSE,'center',0);
 			$colModel['komentar'] = array('Komentar',60,FALSE,'center',0);
 		}
 		$colModel['detail'] = array('Detail',40,FALSE,'center',0);
@@ -127,10 +127,11 @@ class Surat_masuk extends CI_Controller {
 	function grid_data_surat_masuk() 
 	{
 		$kode_role = $this->session->userdata('kode_role');
+		$dinas_id = $this->user_model->get_user($this->session->userdata('iduser'))->row()->DINAS_ID;
 		$valid_fields = array('SURAT_MASUK_ID','NOMOR','PERIHAL','TGL_TERIMA');
 		$this->flexigrid->validate_post('surat_masuk.SURAT_MASUK_ID','asc',$valid_fields);
 		if($kode_role == 6)
-			$records = $this->surat_masuk_model->grid_surat_masuk_dinas();	
+			$records = $this->surat_masuk_model->grid_surat_masuk_dinas($dinas_id);	
 		else
 			$records = $this->surat_masuk_model->grid_surat_masuk($kode_role);	
 		$this->output->set_header($this->config->item('json_header'));
@@ -256,7 +257,7 @@ class Surat_masuk extends CI_Controller {
 										$row->TGL_TERIMA,
 										$row->NOMOR,
 										$row->PERIHAL,
-										$row->NAMA_DINAS,
+										//$row->NAMA_DINAS,
 										'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
 										'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>'
 								);
@@ -354,13 +355,9 @@ class Surat_masuk extends CI_Controller {
 		{
 			$temp_nomor = rand();
 		}
-		if($this->input->post('perlakuan') == 1)
+		if($this->input->post('perlakuan') == 1 || $this->input->post('perlakuan') == 2)
 		{
 			$kirim = 1;
-		}
-		else if($this->input->post('perlakuan') == 2)
-		{
-			$kirim = 2;
 		}
 		else
 		{
@@ -398,7 +395,7 @@ class Surat_masuk extends CI_Controller {
 						'LAMPIRAN' 		 					 => $this->input->post('lampiran'),
 						'CATATAN_TERIMA_SURAT_MASUK' 		 => $this->input->post('catatan'),
 						'DATE_CREATED' 		 				 => date("Y-m-j G:i:s"),
-						'KIRIM' 		 				 	 => $kirim
+						'KIRIM_SEKRETARIS' 		 		 	 => $kirim
 					);
 		}
 		else if($sifat == 2)
@@ -706,8 +703,6 @@ class Surat_masuk extends CI_Controller {
 	
 	function disposisi_process($surat_masuk_id)
 	{
-		
-		
 		$data_surat_masuk = array('DISPOSISI'=> 1);
 		$data_disposisi_surat_masuk = array(
 											'SURAT_MASUK_ID'    => $surat_masuk_id,
@@ -715,32 +710,41 @@ class Surat_masuk extends CI_Controller {
 											'CATATAN_DISPOSISI' => $this->input->post('catatan'),
 											'USER_ID'  			=> $this->session->userdata('iduser')
 										);
-		
-		
-		if(!$this->dinas_model->cek_dinas2($data_disposisi_surat_masuk['DINAS_ID']))
+		$this->form_validation->set_rules('dinas', 'Dinas', 'callback_cek_dropdown');					
+		$this->form_validation->set_error_delimiters('<p class="error_message">', '</p>');
+		$this->form_validation->set_message('required', 'Kolom %s harus diisi !!');
+		if($this->form_validation->run())
 		{
-			$data_dinas = array(
-									'NAMA_DINAS' => $data_disposisi_surat_masuk['DINAS_ID'],
-									'STATUS_DINAS' => 1
-								);
-			$this->dinas_model->add($data_dinas);
-			$data_disposisi_surat_masuk['DINAS_ID'] = $this->dinas_model->get_last_dinas_id()->row()->DINAS_ID;
+			if(!$this->dinas_model->cek_dinas2($data_disposisi_surat_masuk['DINAS_ID']))
+			{
+				$data_dinas = array(
+										'NAMA_DINAS' => $data_disposisi_surat_masuk['DINAS_ID'],
+										'STATUS_DINAS' => 1
+									);
+				$this->dinas_model->add($data_dinas);
+				$data_disposisi_surat_masuk['DINAS_ID'] = $this->dinas_model->get_last_dinas_id()->row()->DINAS_ID;
+			}
+			$nama_dinas = $this->dinas_model->get_dinas($data_disposisi_surat_masuk['DINAS_ID'])->row()->NAMA_DINAS;
+			$dinas = $this->user_model->get_user_by_role(6)->result();
+			
+			$date = date('Y-m-d H:i:s');
+			$message_dinas = 'ini pesan untuk dinas '.$nama_dinas;
+			
+			foreach($dinas as $row_dinas)
+			{
+				$no_dinas = $row_dinas->NO_HP;
+				$this->surat_masuk_model->sendMessage($no_dinas,$date,$message_dinas);
+			}
+			
+			$this->surat_masuk_model->update($surat_masuk_id, $data_surat_masuk);
+			$this->surat_masuk_model->add3($data_disposisi_surat_masuk);
+			redirect('surat_masuk');
 		}
-		$nama_dinas = $this->dinas_model->get_dinas($data_disposisi_surat_masuk['DINAS_ID'])->row()->NAMA_DINAS;
-		$dinas = $this->user_model->get_user_by_role(6)->result();
-		
-		$date = date('Y-m-d H:i:s');
-		$message_dinas = 'ini pesan untuk dinas '.$nama_dinas;
-		
-		foreach($dinas as $row_dinas)
+		else
 		{
-			$no_dinas = $row_dinas->NO_HP;
-			$this->surat_masuk_model->sendMessage($no_dinas,$date,$message_dinas);
+			$this->disposisi($surat_masuk_id);
 		}
 		
-		$this->surat_masuk_model->update($surat_masuk_id, $data_surat_masuk);
-		$this->surat_masuk_model->add3($data_disposisi_surat_masuk);
-		redirect('surat_masuk');
 	}
 	
 	function kirim_ke_sekretaris($surat_masuk_id)
