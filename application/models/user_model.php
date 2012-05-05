@@ -14,12 +14,14 @@ class User_model extends CI_Model{
 		$this->db->select('*');
 		$this->db->from('user');
 		$this->db->join('jabatan','jabatan.JABATAN_ID = user.JABATAN_ID');
+		$this->db->join('dinas','dinas.DINAS_ID = user.DINAS_ID');
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
 		
 		$this->db->select('*');
 		$this->db->from('user');
 		$this->db->join('jabatan','jabatan.JABATAN_ID = user.JABATAN_ID');
+		$this->db->join('dinas','dinas.DINAS_ID = user.DINAS_ID');
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
 		return $return;		

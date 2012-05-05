@@ -9,6 +9,7 @@ class Manajemen_pengguna extends CI_Controller {
 		$this->load->helper('flexigrid');
 		$this->load->model('user_model');
 		$this->load->model('jabatan_model');
+		$this->load->model('dinas_model');
 		$this->cek_session();
 	}
 	
@@ -29,12 +30,13 @@ class Manajemen_pengguna extends CI_Controller {
 	public function grid()
 	{
 		$colModel['no'] = array('No',20,TRUE,'center',0);
-		$colModel['NAMA'] = array('Nama',200,TRUE,'center',1);
-		$colModel['USERNAME'] = array('Username',150,TRUE,'center',1);
+		$colModel['NAMA'] = array('Nama',180,TRUE,'center',1);
+		$colModel['USERNAME'] = array('Username',120,TRUE,'center',1);
 		$colModel['JABATAN'] = array('Jabatan',100,TRUE,'center',1);
-		$colModel['EMAIL'] = array('Email',150,TRUE,'center',1);
+		$colModel['EMAIL'] = array('Email',140,TRUE,'center',1);
 		$colModel['NO_HP'] = array('No HP',120,TRUE,'center',1);
 		$colModel['ROLE'] = array('Role',100,TRUE,'center',1);
+		$colModel['DINAS'] = array('Dinas',170,TRUE,'center',1);
 		$colModel['STATUS_USER'] = array('Status',50,TRUE,'center',1);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
 		//$colModel['hapus'] = array('Hapus',30,FALSE,'center',0);
@@ -161,6 +163,7 @@ class Manajemen_pengguna extends CI_Controller {
 										$row->EMAIL,
 										$row->NO_HP,
 										$role,
+										$row->NAMA_DINAS,
 										$status_user,
 								'<a href='.base_url().'index.php/manajemen_pengguna/edit/'.$row->USER_ID.'><img border=\'0\' src=\''.base_url().'images/icon/edit.png\'></a>'
 								//'<a href='.base_url().'index.php/manajemen_pengguna/delete/'.$row->USER_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
@@ -207,11 +210,18 @@ class Manajemen_pengguna extends CI_Controller {
 	public function add()
 	{
 		$jabatan = $this->jabatan_model->get_all_jabatan();
+		$dinas = $this->dinas_model->get_all_dinas();
 		//$hasil[0] = '-- Pilih Jabatan --';
-		foreach($jabatan->result() as $row){
-			$hasil[$row->JABATAN_ID] = $row->NAMA_JABATAN;
+		foreach($jabatan->result() as $row1){
+			$hasil1[$row1->JABATAN_ID] = $row1->NAMA_JABATAN;
 		}
-		$data['jabatan'] = $hasil;
+		
+		foreach($dinas->result() as $row2){
+			$hasil2[$row2->DINAS_ID] = $row2->NAMA_DINAS;
+		}
+		
+		$data['jabatan'] = $hasil1;
+		$data['dinas'] = $hasil2;
 		$data['content'] = $this->load->view('user/form_tambah_pengguna',$data,true);
 		$this->load->view('main',$data);
 	}
@@ -226,17 +236,25 @@ class Manajemen_pengguna extends CI_Controller {
 						'EMAIL' => $this->input->post('email'),
 						'NO_HP' => $this->input->post('handphone'),
 						'PASSWORD' => md5($this->input->post('password')),
+						'DINAS_ID' => $this->input->post('dinas'),
 						'STATUS_USER' => '1'
 					);
 		if($this->cek_validasi(false,null))
 		{
-			if(!$this->jabatan_model->cek_jabatan2($data['JABATAN_ID']))
+			if(!$this->jabatan_model->cek_jabatan2($data['JABATAN_ID']) || !$this->dinas_model->cek_dinas2($data['DINAS_ID']))
 			{
 				$data_jabatan = array(
 										'NAMA_JABATAN' => $data['JABATAN_ID'],
 										'STATUS_JABATAN' => 1
 									);
+									
+				$data_dinas = array(
+									'NAMA_DINAS' => $data_disposisi_surat_masuk['DINAS_ID'],
+									'STATUS_DINAS' => 1
+								);
 				$this->jabatan_model->add($data_jabatan);
+				$this->dinas_model->add($data_dinas);
+				$data['DINAS_ID'] = $this->dinas_model->get_last_dinas_id()->row()->DINAS_ID;
 				$data['JABATAN_ID'] = $this->jabatan_model->get_last_jabatan_id()->row()->JABATAN_ID;
 			}
 			$this->user_model->add($data);
@@ -261,17 +279,24 @@ class Manajemen_pengguna extends CI_Controller {
 						'EMAIL' => $this->input->post('email'),
 						'NO_HP' => $this->input->post('handphone'),
 						'PASSWORD' => $password,
+						'DINAS_ID' => $this->input->post('dinas'),
 						'STATUS_USER' => $this->input->post('status_user')
 					);
 		if($this->cek_validasi(true,$userid))
 		{
-			if(!$this->jabatan_model->cek_jabatan2($data['JABATAN_ID']))
+			if(!$this->jabatan_model->cek_jabatan2($data['JABATAN_ID']) || !$this->dinas_model->cek_dinas2($data['DINAS_ID']))
 			{
 				$data_jabatan = array(
 										'NAMA_JABATAN' => $data['JABATAN_ID'],
 										'STATUS_JABATAN' => 1
 									);
+				$data_dinas = array(
+									'NAMA_DINAS' => $data_disposisi_surat_masuk['DINAS_ID'],
+									'STATUS_DINAS' => 1
+								);					
 				$this->jabatan_model->add($data_jabatan);
+				$this->dinas_model->add($data_dinas);
+				$data['DINAS_ID'] = $this->dinas_model->get_last_dinas_id()->row()->DINAS_ID;
 				$data['JABATAN_ID'] = $this->jabatan_model->get_last_jabatan_id()->row()->JABATAN_ID;
 			}
 			$this->user_model->update($userid, $data);
@@ -281,15 +306,22 @@ class Manajemen_pengguna extends CI_Controller {
 		{
 			$result = $this->user_model->get_user($userid)->row();
 			$jabatan = $this->jabatan_model->get_all_jabatan();
+			$dinas = $this->dinas_model->get_all_dinas();
 			$hasil[0] = '-- Pilih Jabatan --';
-			foreach($jabatan->result() as $row){
-				$hasil[$row->JABATAN_ID] = $row->NAMA_JABATAN;
+			foreach($jabatan->result() as $row1){
+				$hasil1[$row1->JABATAN_ID] = $row1->NAMA_JABATAN;
 			}
-			$data['jabatan'] = $hasil;
+			foreach($dinas->result() as $row2){
+				$hasil2[$row2->DINAS_ID] = $row2->NAMA_DINAS;
+			}
+		
+			$data['dinas'] = $hasil2;
+			$data['jabatan'] = $hasil1;
 			$data['nama'] = $result->NAMA;
 			$data['username'] = $result->USERNAME;
 			$data['grup_dipilih'] = $result->ROLE;
 			$data['jabatan_dipilih'] = $result->JABATAN_ID;
+			$data['dinas_dipilih'] = $result->DINAS_ID;
 			$data['email'] = $result->EMAIL;
 			$data['handphone'] = $result->NO_HP;
 			$data['status_user'] = $result->STATUS_USER;
