@@ -40,11 +40,19 @@ class Instansi_model extends CI_Model{
 		$this->db->delete('instansi');
 	}
 	
-	function get_all_instansi()
+	function get_all_instansi_aktif()
 	{
 		$this->db->select('*');
 		$this->db->from('instansi');
 		$this->db->where('instansi.STATUS_INSTANSI', 1);
+		$result = $this->db->get();
+		return $result;
+	}
+	
+	function get_all_instansi()
+	{
+		$this->db->select('*');
+		$this->db->from('instansi');
 		$result = $this->db->get();
 		return $result;
 	}

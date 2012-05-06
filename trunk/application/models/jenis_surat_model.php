@@ -45,11 +45,19 @@ class Jenis_surat_model extends CI_Model{
 		$this->db->delete('jenis_surat');
 	}
 	
-	function get_all_jenis_surat()
+	function get_all_jenis_surat_aktif()
 	{
 		$this->db->select('*');
 		$this->db->from('jenis_surat');
 		$this->db->where('jenis_surat.STATUS_JENIS_SURAT', 1);
+		$result = $this->db->get();
+		return $result;
+	}
+	
+	function get_all_jenis_surat()
+	{
+		$this->db->select('*');
+		$this->db->from('jenis_surat');
 		$result = $this->db->get();
 		return $result;
 	}

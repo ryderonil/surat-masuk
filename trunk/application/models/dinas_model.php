@@ -13,14 +13,14 @@ class Dinas_model extends CI_Model{
 	{
 		$this->db->select('*');
 		$this->db->from('dinas');
-		$this->db->where('DINAS_ID <> ',0);
+		$this->db->where('DINAS_ID <> ',1);
 		//$this->db->join('jabatan','jabatan.JABATAN_ID = user.JABATAN_ID');
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
 		
 		$this->db->select('*');
 		$this->db->from('dinas');
-		$this->db->where('DINAS_ID <> ',0);
+		$this->db->where('DINAS_ID <> ',1);
 		//$this->db->join('jabatan','jabatan.JABATAN_ID = user.JABATAN_ID');
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
@@ -50,6 +50,15 @@ class Dinas_model extends CI_Model{
 		$this->db->from('dinas');
 		//$this->db->join('jabatan', 'jabatan.JABATAN_ID = user.JABATAN_ID');
 		$this->db->where('dinas.DINAS_ID', $dinas_id);
+		$result = $this->db->get();
+		return $result;
+	}
+	
+	function get_all_dinas_aktif()
+	{
+		$this->db->select('*');
+		$this->db->from('dinas');
+		$this->db->where('dinas.STATUS_DINAS', 1);
 		$result = $this->db->get();
 		return $result;
 	}

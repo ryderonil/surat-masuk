@@ -302,8 +302,8 @@ class Surat_masuk extends CI_Controller {
 	
 	public function add()
 	{
-		$result1 = $this->instansi_model->get_all_instansi();
-		$result2 = $this->jenis_surat_model->get_all_jenis_surat();
+		$result1 = $this->instansi_model->get_all_instansi_aktif();
+		$result2 = $this->jenis_surat_model->get_all_jenis_surat_aktif();
 		foreach($result1->result() as $row1)
 		{
 			$instansi[$row1->INSTANSI_ID] = $row1->NAMA_INSTANSI;

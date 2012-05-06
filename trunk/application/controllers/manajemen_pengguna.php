@@ -190,6 +190,8 @@ class Manajemen_pengguna extends CI_Controller {
 			$password = 'required';
 			$konfirmasi_password = '|required';
 		}
+		
+		if($this->input->post('grup') == 6)  $this->form_validation->set_rules('dinas', 'Nama Dinas', 'callback_cek_dinas');
 		$this->form_validation->set_rules('nama', 'Nama User', 'required');
 		$this->form_validation->set_rules('username', 'Username', 'required'.$callback_username);
 		$this->form_validation->set_rules('grup', 'Grup Pengguna', 'callback_cek_dropdown');
@@ -209,8 +211,8 @@ class Manajemen_pengguna extends CI_Controller {
 	
 	public function add()
 	{
-		$jabatan = $this->jabatan_model->get_all_jabatan();
-		$dinas = $this->dinas_model->get_all_dinas();
+		$jabatan = $this->jabatan_model->get_all_jabatan_aktif();
+		$dinas = $this->dinas_model->get_all_dinas_aktif();
 		//$hasil[0] = '-- Pilih Jabatan --';
 		foreach($jabatan->result() as $row1){
 			$hasil1[$row1->JABATAN_ID] = $row1->NAMA_JABATAN;
@@ -241,21 +243,25 @@ class Manajemen_pengguna extends CI_Controller {
 					);
 		if($this->cek_validasi(false,null))
 		{
-			if(!$this->jabatan_model->cek_jabatan2($data['JABATAN_ID']) || !$this->dinas_model->cek_dinas2($data['DINAS_ID']))
+			if(!$this->jabatan_model->cek_jabatan2($data['JABATAN_ID']))
 			{
 				$data_jabatan = array(
 										'NAMA_JABATAN' => $data['JABATAN_ID'],
 										'STATUS_JABATAN' => 1
 									);
 									
+				$this->jabatan_model->add($data_jabatan);
+				$data['JABATAN_ID'] = $this->jabatan_model->get_last_jabatan_id()->row()->JABATAN_ID;
+			}
+			
+			if(!$this->dinas_model->cek_dinas2($data['DINAS_ID']))
+			{
 				$data_dinas = array(
-									'NAMA_DINAS' => $data_disposisi_surat_masuk['DINAS_ID'],
+									'NAMA_DINAS' => $data['DINAS_ID'],
 									'STATUS_DINAS' => 1
 								);
-				$this->jabatan_model->add($data_jabatan);
 				$this->dinas_model->add($data_dinas);
 				$data['DINAS_ID'] = $this->dinas_model->get_last_dinas_id()->row()->DINAS_ID;
-				$data['JABATAN_ID'] = $this->jabatan_model->get_last_jabatan_id()->row()->JABATAN_ID;
 			}
 			$this->user_model->add($data);
 			redirect('manajemen_pengguna');
@@ -284,20 +290,25 @@ class Manajemen_pengguna extends CI_Controller {
 					);
 		if($this->cek_validasi(true,$userid))
 		{
-			if(!$this->jabatan_model->cek_jabatan2($data['JABATAN_ID']) || !$this->dinas_model->cek_dinas2($data['DINAS_ID']))
+			if(!$this->jabatan_model->cek_jabatan2($data['JABATAN_ID']))
 			{
 				$data_jabatan = array(
 										'NAMA_JABATAN' => $data['JABATAN_ID'],
 										'STATUS_JABATAN' => 1
 									);
-				$data_dinas = array(
-									'NAMA_DINAS' => $data_disposisi_surat_masuk['DINAS_ID'],
-									'STATUS_DINAS' => 1
-								);					
+									
 				$this->jabatan_model->add($data_jabatan);
+				$data['JABATAN_ID'] = $this->jabatan_model->get_last_jabatan_id()->row()->JABATAN_ID;
+			}
+			
+			if(!$this->dinas_model->cek_dinas2($data['DINAS_ID']))
+			{
+				$data_dinas = array(
+									'NAMA_DINAS' => $data['DINAS_ID'],
+									'STATUS_DINAS' => 1
+								);
 				$this->dinas_model->add($data_dinas);
 				$data['DINAS_ID'] = $this->dinas_model->get_last_dinas_id()->row()->DINAS_ID;
-				$data['JABATAN_ID'] = $this->jabatan_model->get_last_jabatan_id()->row()->JABATAN_ID;
 			}
 			$this->user_model->update($userid, $data);
 			redirect('manajemen_pengguna');
@@ -404,6 +415,19 @@ class Manajemen_pengguna extends CI_Controller {
 			return FALSE;
 		}
 		else{
+			return TRUE;
+		}
+	}
+	
+	function cek_dinas($value)
+	{
+		if($value == 1)
+		{
+			$this->form_validation->set_message('cek_dinas', 'Kolom %s harus dipilih!!');
+			return FALSE;
+		}
+		else
+		{
 			return TRUE;
 		}
 	}

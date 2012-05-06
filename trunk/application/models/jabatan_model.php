@@ -57,6 +57,15 @@ class Jabatan_model extends CI_Model{
 		return $result;
 	}
 	
+	function get_all_jabatan_aktif()
+	{
+		$this->db->select('*');
+		$this->db->from('jabatan');
+		$this->db->where('jabatan.STATUS_JABATAN',1);
+		$result = $this->db->get();
+		return $result;
+	}
+	
 	function get_last_jabatan_id()
 	{
 		$this->db->select_max('JABATAN_ID');
