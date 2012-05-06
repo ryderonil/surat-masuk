@@ -195,7 +195,7 @@ class Jenis_surat extends CI_Controller {
 			$result = $this->jenis_surat_model->get_jenis_surat($jenis_surat_id)->row();
 			
 			$data['jenis_surat'] = $result->NAMA_JENIS_SURAT;
-			$data['status_jenis_surat'] = $result->STATUS_SURAT;
+			$data['status_jenis_surat'] = $result->STATUS_JENIS_SURAT;
 			
 			$data['content'] = $this->load->view('master/form_edit_jenis_surat',$data,true);
 			$this->load->view('main',$data);

@@ -69,7 +69,7 @@
 					<div>
 						<?php 
 							if(isset($dinas_dipilih)) $dinas_dipilih = $dinas_dipilih; else $dinas_dipilih = '';
-							echo form_dropdown('dinas',$dinas, $dinas_dipilih, 'class="id="dinas" element select medium"');
+							echo form_dropdown('dinas',$dinas, $dinas_dipilih, 'id="dinas" class=element select medium"');
 						?>					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Dinas</small></p> 
