@@ -11,6 +11,23 @@ class Jabatan extends CI_Controller {
 		$this->cek_session();
 	}
 	
+	function tes()
+	{
+		$a = array(
+			"one" => 1,
+			"two" => 2,
+			"three" => 3,
+			"seventeen" => 17
+		);
+		$b = array(
+				1,2,3,4,5
+				);
+
+		foreach ($b as $k => $v) {
+			echo "\$a[$k] => $v.\n";
+		}
+	}
+	
 	function cek_session()
 	{	
 		$kode_role = $this->session->userdata('kode_role');
