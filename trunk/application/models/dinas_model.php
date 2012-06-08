@@ -131,7 +131,7 @@ class Dinas_model extends CI_Model{
 	public function cek_referensi($DINAS_ID)
 	{	
 		$this->db->select('DINAS_ID');
-		$this->db->from('disposisi_surat_masuk');
+		$this->db->from('tujuan_disposisi');
 		$this->db->where('DINAS_ID', $DINAS_ID);
 		if($this->db->get()->num_rows())
 		{

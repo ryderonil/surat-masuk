@@ -1,16 +1,16 @@
 <div id="form_container">
-		<div class="title">EDIT DINAS</div>
+		<div class="title">EDIT SKPD</div>
 		
 		<?php 
 			$attributes = array('class' => 'appnitro');
 			echo form_open(uri_string(),$attributes); ?>
 			<ul>
 			  	<li>
-					<?= anchor(site_url('dinas'),img(array('src'=>'images/flexigrid/prev.gif','border'=>'0','alt'=>'')).'Kembali Ke Master Dinas',''); ?>
+					<?= anchor(site_url('dinas'),img(array('src'=>'images/flexigrid/prev.gif','border'=>'0','alt'=>'')).'Kembali Ke Master SKPD',''); ?>
 				</li>
 				
 				<li id="li_1" >
-					<label class="description" for="element_1">Nama Dinas</label>
+					<label class="description" for="element_1">Nama SKPD</label>
 					<div>
 						<?php if(set_value('nama_dinas')!='') $nama_dinas = set_value('nama_dinas')?>
 						<input id="nama_dinas" name="nama_dinas" class="element text medium" type="text" maxlength="11" value="<?php echo $nama_dinas;?>"/> 

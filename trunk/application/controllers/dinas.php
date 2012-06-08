@@ -28,7 +28,7 @@ class Dinas extends CI_Controller {
 	public function grid()
 	{
 		$colModel['no'] = array('No',20,TRUE,'center',0);
-		$colModel['NAMA_DINAS'] = array('Nama Dinas',200,TRUE,'center',1);
+		$colModel['NAMA_DINAS'] = array('Nama SKPD',200,TRUE,'center',1);
 		$colModel['SINGKATAN'] = array('Singkatan',150,TRUE,'center',1);
 		$colModel['STATUS_DINAS'] = array('Status',50,TRUE,'center',1);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
@@ -42,7 +42,7 @@ class Dinas extends CI_Controller {
 							'rpOptions' => '[15,30,50,100]',
 							'pagestat' => 'Menampilkan : {from} ke {to} dari {total} data.',
 							'blockOpacity' => 0,
-							'title' => 'Master Dinas',
+							'title' => 'Master SKPD',
 							'showTableToggleBtn' => false
 							);
 							
@@ -102,6 +102,36 @@ class Dinas extends CI_Controller {
 		//$data['added_js'] variabel untuk membungkus javascript yang dipakai pada tombol yang ada di toolbar atas
 		$data['content'] = $this->load->view('grid',$data,true);
 		$this->load->view('main',$data);
+	}
+	
+	function tes()
+	{
+		$options = array(
+                  'small'  => 'Small Shirt',
+                  'med'    => 'Medium Shirt',
+                  'large'   => 'Large Shirt',
+                  'xlarge' => 'Extra Large Shirt',
+                );
+		echo '<!DOCTYPE html>
+			<html>
+			<body>
+
+			<form action="'.base_url().'index.php/dinas/tes_proses" method="post">
+				'.form_multiselect('shirts[]', $options, 'large').'
+				<input type="submit" />
+			</form>
+
+			<p>Hold down the Ctrl (windows) / Command (Mac) button to select multiple options.</p>
+
+			</body>
+			</html>	';
+	}
+	
+	function tes_proses()
+	{
+		$a[] = $this->input->post('shirts');
+		print_r($a);
+		//echo $this->input->post('shirts');
 	}
 	
 	function grid_data_dinas() 

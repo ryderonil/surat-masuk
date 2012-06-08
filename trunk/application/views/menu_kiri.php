@@ -37,7 +37,7 @@
 		<?php if ($master_data) { ?><p class="menu_head"><?php echo img(array('src'=>'images/icon/dir.png','border'=>'0','alt'=>''))?> Master Data</p>
 		<div class="menu_body" align="left">
 			<?php echo anchor(site_url('jenis_surat'),img(array('src'=>'images/icon/doc.png','border'=>'0','alt'=>'')).' Jenis Surat',''); ?>
-			<?php echo anchor(site_url('dinas'),img(array('src'=>'images/icon/doc.png','border'=>'0','alt'=>'')).' Dinas',''); ?>
+			<?php echo anchor(site_url('dinas'),img(array('src'=>'images/icon/doc.png','border'=>'0','alt'=>'')).' SKPD',''); ?>
 			<?php echo anchor(site_url('instansi'),img(array('src'=>'images/icon/doc.png','border'=>'0','alt'=>'')).' Instansi',''); ?>
 			<?php echo anchor(site_url('jabatan'),img(array('src'=>'images/icon/doc.png','border'=>'0','alt'=>'')).' Jabatan',''); ?>
 		</div><?php } ?>
