@@ -29,6 +29,7 @@ class Instansi extends CI_Controller {
 	{
 		$colModel['no'] = array('No',20,TRUE,'center',0);
 		$colModel['NAMA_INSTANSI'] = array('Nama Instansi',200,TRUE,'center',1);
+		$colModel['ALAMAT_INSTANSI'] = array('Alamat Instansi',200,TRUE,'center',1);
 		$colModel['STATUS_INSTANSI'] = array('Status',50,TRUE,'center',1);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
 		//$colModel['hapus'] = array('Hapus',30,FALSE,'center',0);
@@ -105,7 +106,7 @@ class Instansi extends CI_Controller {
 	
 	function grid_data_instansi() 
 	{
-		$valid_fields = array('INSTANSI_ID','NAMA_INSTANSI','STATUS_INSTANSI');
+		$valid_fields = array('INSTANSI_ID','NAMA_INSTANSI','ALAMAT_INSTANSI','STATUS_INSTANSI');
 		$this->flexigrid->validate_post('INSTANSI_ID','asc',$valid_fields);
 		$records = $this->instansi_model->grid_instansi();	
 		$this->output->set_header($this->config->item('json_header'));
@@ -126,6 +127,7 @@ class Instansi extends CI_Controller {
 										$row->INSTANSI_ID,
 										$no,
 										$row->NAMA_INSTANSI,
+										$row->ALAMAT_INSTANSI,
 										$status_instansi,
 								'<a href='.base_url().'index.php/instansi/edit/'.$row->INSTANSI_ID.'><img border=\'0\' src=\''.base_url().'images/icon/edit.png\'></a>'
 								//'<a href='.base_url().'index.php/manajemen_pengguna/delete/'.$row->USER_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
@@ -165,6 +167,7 @@ class Instansi extends CI_Controller {
 	{
 		$data = array(
 						'NAMA_INSTANSI' => $this->input->post('nama_instansi'),
+						'ALAMAT_INSTANSI' => $this->input->post('alamat_instansi'),
 						'STATUS_INSTANSI' => '1'
 					);
 		if($this->cek_validasi(false,null))
@@ -183,6 +186,7 @@ class Instansi extends CI_Controller {
 	{
 		$data = array(
 						'NAMA_INSTANSI' => $this->input->post('nama_instansi'),
+						'ALAMAT_INSTANSI' => $this->input->post('alamat_instansi'),
 						'STATUS_INSTANSI' => $this->input->post('status_instansi')
 					);
 		if($this->cek_validasi(true,$instansi_id))
@@ -200,12 +204,6 @@ class Instansi extends CI_Controller {
 			$data['content'] = $this->load->view('master/form_edit_instansi',$data,true);
 			$this->load->view('main',$data);
 		}
-	}
-	
-	public function delete_1($userid)
-	{
-		$this->user_model->delete($userid);
-		redirect('master_pengguna');
 	}
 	
 	public function delete()

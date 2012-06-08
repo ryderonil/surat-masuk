@@ -74,7 +74,7 @@ class Login extends CI_Controller {
 									);
 					$this->session->set_userdata($sess_array);
 				}
-				return TRUE;     
+				return TRUE;
 			}
 			$this->form_validation->set_message('validate_login', 'Invalid username or password');
 			return FALSE;
