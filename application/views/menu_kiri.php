@@ -5,6 +5,7 @@
 	$manajemen_pengguna = true;
 	$surat_masuk = true;
 	$catat_surat_masuk = true;
+	$surat_masuk_disposisi = true;
 	
 
 	$this->load->library('session');
@@ -13,13 +14,15 @@
 		$master_data = true;
 		$manajemen_pengguna = true;
 		$surat_masuk = true;
-		$catat_surat_masuk = true; 
+		$catat_surat_masuk = true;
+		$surat_masuk_disposisi = false; 
 	}
 	else { //untuk role asisten dan sekretaris
 		$master_data = false;
 		$manajemen_pengguna = false;
 		$surat_masuk = true;
 		$catat_surat_masuk = false; 
+		$surat_masuk_disposisi = true;
 	}
 
 
@@ -32,6 +35,7 @@
 		<div class="menu_body" align="left">
 			<?php if($catat_surat_masuk) echo anchor(site_url('surat_masuk/add'),img(array('src'=>'images/flexigrid/iconedit.png','border'=>'0','alt'=>'')).' Catat Surat Masuk',''); ?>
 			<?php if($surat_masuk) echo anchor(site_url('surat_masuk'),img(array('src'=>'images/icon/mail.png','border'=>'0','alt'=>'')).' Daftar Surat Masuk',''); ?>
+			<?php if($surat_masuk_disposisi) echo anchor(site_url('surat_masuk/grid_surat_disposisi'),img(array('src'=>'images/icon/disposisi.png','border'=>'0','alt'=>'')).' Surat Masuk Disposisi',''); ?>
 		</div>
 		
 		<?php if ($master_data) { ?><p class="menu_head"><?php echo img(array('src'=>'images/icon/dir.png','border'=>'0','alt'=>''))?> Master Data</p>

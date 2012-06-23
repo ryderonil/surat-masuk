@@ -63,6 +63,16 @@ class User_model extends CI_Model{
 		$result = $this->db->get();
 		return $result;
 	}
+	
+	function get_user_by_dinas_id($dinas_id)
+	{
+		$this->db->select('*');
+		$this->db->from('user');
+		$this->db->join('jabatan', 'jabatan.JABATAN_ID = user.JABATAN_ID');
+		$this->db->where('user.DINAS_ID', $dinas_id);
+		$result = $this->db->get();
+		return $result;
+	}
 		
 	function cek_username($username)
 	{

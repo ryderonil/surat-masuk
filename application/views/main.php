@@ -15,9 +15,9 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/accordion.css" media="screen, tv, projection" title="Default" />	
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/ext-all.css" media="screen, tv, projection" title="Default" />	
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/downloadButtons.css" media="screen, tv, projection" title="Default" />	
-
+		<link rel="stylesheet" href="<?php echo base_url() ?>css/uniform.default.css" type="text/css" media="screen">
 		<!-- JAVASCRIPT -->
-		<script type="text/javascript" src="<?php echo base_url() ?>js/jquery.js"></script>
+		<script type="text/javascript" src="<?php echo base_url() ?>js/jquery-1.7.2.js"></script>
 		<script type="text/javascript" src="<?php echo base_url() ?>js/jquery.ui.all.js"></script>
 		<script type="text/javascript" src="<?php echo base_url() ?>js/jquery.layout.js"></script>
 		<script type="text/javascript" src="<?php echo base_url() ?>js/flexigrid.pack.js"></script>
@@ -30,6 +30,7 @@
 		<script type="text/javascript" src="<?php echo base_url() ?>js/ext-base.js"></script>
 		<script type="text/javascript" src="<?php echo base_url() ?>js/ext-all.js"></script>
 		<script type="text/javascript" src="<?php echo base_url() ?>js/ext-combo.js"></script>
+		<script src="<?php echo base_url() ?>js/jquery.uniform.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			<!-- <MENU_KANAN>
 			//  Developed by Roshan Bhattarai 
@@ -102,7 +103,7 @@
 		</div>
 		
 		<div class="ui-layout-south">
-			<div align="center" class="footer_panel"><div style="padding:10px 0 0 10px;">© 2012 Research & Development Team</div></div>
+			<div align="center" class="footer_panel"><div style="padding:10px 0 0 10px;">© 2012 - Sistem Informasi ITS</div></div>
 		</div> 
 	</div> 
 	</body>

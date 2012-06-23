@@ -102,6 +102,20 @@ a{
 	color: #F40509;
 }
 
+.success_message{
+	color: #0D9F19;
+}
+
+.successbox {
+	border: 1px solid #66CC00;
+	font-weight: bold;
+	background-color: #DDFFC6;
+	text-align: center;
+	padding: 10px;
+	color: #009933;
+}
+
+
 .border_content{
 	background-color: #FFF;
     border: thin solid #8C8D8E;
@@ -114,6 +128,25 @@ a{
 	text-shadow: none;
 }
 
+tr.carttableproduct td {
+	background-color: 
+	#DFFFE0;
+	color: 
+	#666;
+	padding: 10px;
+}
 
+table.data tr th {
+    background-color: #666666;
+    border-bottom: 3px solid #888888;
+    color: white;
+    font-weight: 700;
+    padding: 10px;
+    text-align: center;
+}
+table.data {
+    margin: 10px 0;
+    padding: 0;
+}
 
 

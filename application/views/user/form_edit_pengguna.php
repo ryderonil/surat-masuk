@@ -52,29 +52,33 @@
 								$options = array(
 												'0' => '-- Pilih Grup --',
 												'1' => 'Administrator',
-												'2' => 'Asisten',
-												'3' => 'Sekretaris',
-												'4' => 'Wakil Bupati',
-												'5' => 'Bupati',
-												'6' => 'Dinas'
+												'2' => 'Asisten I',
+												'3' => 'Asisten II',
+												'4' => 'Asisten III',
+												'5' => 'Sekretaris',
+												'6' => 'Wakil Bupati',
+												'7' => 'Bupati',
+												'8' => 'Dinas'
 											);
-								echo form_dropdown('grup',$options,$grup_dipilih, 'class="element select medium" onChange="document.getElementById(\'hideme\').style.visibility=(this.options[6].selected?\'visible\':\'hidden\');"');
+								echo form_dropdown('grup',$options,$grup_dipilih, 'id="grup" class="element select medium" onChange="ubahGrup();"');
 						?>					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Grup Pengguna</small></p> 
 					<?php echo form_error('grup'); ?>
 				</li>
-				<li id="li_14" >
-					<label class="description" for="element_14">Dinas</label>
-					<div>
-						<?php 
-							if(isset($dinas_dipilih)) $dinas_dipilih = $dinas_dipilih; else $dinas_dipilih = '';
-							echo form_dropdown('dinas',$dinas, $dinas_dipilih, 'id="dinas" class=element select medium"');
-						?>					
-					</div>
-					<p class="guidelines" id="guide_14"><small>Dinas</small></p> 
-					<?php echo form_error('dinas'); ?>
-				</li>
+				<div id="hideme">
+					<li id="li_14" >
+						<label class="description" for="element_14">Dinas</label>
+						<div>
+							<?php 
+								if(isset($dinas_dipilih)) $dinas_dipilih = $dinas_dipilih; else $dinas_dipilih = '';
+								echo form_dropdown('dinas',$dinas, $dinas_dipilih, 'id="dinas" class=element select medium"');
+							?>					
+						</div>
+						<p class="guidelines" id="guide_14"><small>Dinas</small></p> 
+						<?php echo form_error('dinas'); ?>
+					</li>
+				</div>
 				<li id="li_21" >
 					<label class="description" for="element_21">Jabatan</label>
 					<div>
@@ -127,7 +131,20 @@
 			</ul>
 		<?php echo form_close(); ?>
 	</div>
-	<script type="text/javascript">		
+	<script type="text/javascript">
+		function ubahGrup()
+		{
+			var grup = $('#grup').val();
+			if(grup == 8)
+			{
+				$('#hideme').show();
+			}
+			else
+			{
+				$('#hideme').hide();
+			}
+		}
+				
 		Ext.onReady(function(){
 			var jabatan = new Ext.form.ComboBox({
 				typeAhead: true,
@@ -146,5 +163,17 @@
 			});
 		}	
 	);
+	
+	$(document).ready(function(){
+		if($('#grup').val() != 8)
+		{
+			$('#hideme').hide();
+		}
+		else
+		{
+			$('#hideme').show();
+		}
+		
+	});
 	</script>
 	

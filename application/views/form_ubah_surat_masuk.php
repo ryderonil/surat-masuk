@@ -9,7 +9,7 @@
 					<?= anchor(site_url('surat_masuk'),img(array('src'=>'images/flexigrid/prev.gif','border'=>'0','alt'=>'')).'Kembali Ke Daftar Surat Masuk',''); ?>
 				</li>
 				<li id="li_14" >
-					<div class="left"><label class="description" for="element_14">Sifat</label></div>
+					<label class="description" for="element_14">Sifat</label>
 					<div>
 						<?php 
 								if(set_value('sifat')!='') $sifat = set_value('sifat');
@@ -17,14 +17,14 @@
 												'1' => 'Reguler',
 												'2' => 'Rahasia',
 											);
-								echo form_dropdown('sifat',$options, $sifat, 'class="element select small" onChange="document.form_ubah_surat_masuk.nomor.value = (this.options[1].selected?\'\':null); document.form_ubah_surat_masuk.nomor.disabled=(this.options[1].selected?true:false); document.getElementById(\'hideme\').style.visibility=(this.options[0].selected?\'visible\':\'hidden\'); document.getElementById(\'fd-but-date-8\').style.visibility=(this.options[0].selected?\'visible\':\'hidden\'); document.getElementById(\'rhs\').style.visibility=(this.options[0].selected?\'hidden\':\'visible\');"');
+								echo form_dropdown('sifat',$options, $sifat, 'id="sifat" class="element select small" onChange="ubahSifat();"');
 						?>					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Sifat</small></p> 
 					<?php echo form_error('sifat'); ?>
 				</li>
 				<li id="li_14" >
-					<div class="left"><label class="description" for="element_14">Nomor</label></div>
+					<label class="description" for="element_14">Nomor</label>
 					<div>
 						<input id="nomor" name="nomor" class="element text medium" type="text" value="<?php if(isset($nomor))echo $nomor;?>"/> 					
 					</div>
@@ -32,7 +32,7 @@
 					<?php echo form_error('nomor'); ?>
 				</li>
 				<li>
-					<div class="left"><label class="description">Tanggal Terima</label></div>
+					<label class="description">Tanggal Terima</label>
 						<span>
 							<div id="newline-wrapper">
 								<table class="split-date-wrap" cellpadding="0" cellspacing="0" border="0">
@@ -58,7 +58,7 @@
 						</span>
 				</li>
 				<li id="li_21" >
-					<div class="left"><label class="description" for="element_21">Jenis Surat</label></div>
+					<label class="description" for="element_21">Jenis Surat</label>
 					<div>
 						<?php 
 							echo form_dropdown('jenis_surat',$jenis_surat,$jenis_surat_dipilih, 'id="jenis_surat" class="element select medium"');
@@ -68,7 +68,7 @@
 					<?php echo form_error('jenis_surat'); ?>
 				</li>
 				<li id="li_21" >
-					<div class="left"><label class="description" for="element_21">Dari</label></div>
+					<label class="description" for="element_21">Dari</label>
 					<div>
 						<?php
 							
@@ -79,49 +79,50 @@
 					<?php echo form_error('instansi'); ?>
 				</li>
 				<li id="li_14" >
-					<div class="left"><label class="description" for="element_14">Perihal</label></div>
+					<label class="description" for="element_14">Perihal</label>
 					<div>
 						<input id="perihal" name="perihal" class="element text medium" type="text" value="<?php echo $perihal;?>"/> 					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Perihal</small></p> 
 					<?php echo form_error('perihal'); ?>
 				</li>
-				<li id="li_1" >
-					<div id="dvFile_file">
-						<div class="left"><label class="description" for="element_1">File Surat</label></div>
-						<table width="60%" border="1" cellspacing="0" cellpadding="2">
-						<tr>
-							<th align="center" bgcolor="#b9c9fe">Update File</th>
-							<th align="center" bgcolor="#b9c9fe">File Saat Ini</th>
-						</tr>
-						<?php foreach($file_surat_masuk as $row) {?>
-						<tr>
-							<td align="center">
-								<p>
-									<input name="userfile_<?php echo $row->FILE_SURAT_MASUK_ID;?>" class="element file" type="file"/> 
-								</p>
-							</td>
-							<td align="center"><p><?php echo anchor(site_url('surat_masuk/download/'.$row->FILE_SURAT_MASUK_ID),$row->NAMA_FILE,'')?></p></td>
-						</tr>
-						<?php } ?>
-					</table>
-						<p class="guidelines" id="guide_1"><small>File Surat</small></p> 
-					</div>
-				</li>
-				<?php if($sifat == 1) $tampilan = 'hidden'; else $tampilan = 'visible'; ?>
-				<div id="rhs" style="visibility:<?php echo $tampilan;?>;">
-					<li>
-						<div class="left"></div>
-						<div>
-							<input id="submit-button" type="submit" name="daftar_warna" value="Tambah" />
-							<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('surat_masuk')?>'"/>
+				<div id="hideme">
+					<li id="li_1" >
+						<div id="dvFile_file">
+							<label class="description" for="element_1">File Surat</label>
+							<table class="data" width="60%" border="0" cellspacing="0" cellpadding="2">
+								<tr>
+									<th align="center" bgcolor="#b9c9fe">Update File</th>
+									<th align="center" bgcolor="#b9c9fe">File Saat Ini</th>
+								</tr>
+								<?php if(count($file_surat_masuk) != 0){
+									foreach($file_surat_masuk as $row) {
+								?>
+								<tr class="carttableproduct">
+									<td align="center">
+										<p>
+											<input name="userfile_<?php echo $row->FILE_SURAT_MASUK_ID;?>" class="element file" type="file"/> 
+										</p>
+									</td>
+									<td align="center"><p><?php echo anchor(site_url('surat_masuk/download/'.$row->FILE_SURAT_MASUK_ID),$row->NAMA_FILE,'')?></p></td>
+								</tr>
+								<?php 
+									}
+								} 
+								else { ?>
+								<tr class="carttableproduct">
+									<td align="center">
+										<p>-</p>
+									</td>
+									<td align="center"><p>-</p></td>
+								</tr>
+								<?php } ?>
+							</table>
+							<p class="guidelines" id="guide_1"><small>File Surat</small></p> 
 						</div>
 					</li>
-				</div>
-				<?php if($sifat == 2) $tampilan2 = 'hidden'; else $tampilan2 = 'visible'; ?>
-				<div id="hideme" style="visibility:<?php echo $tampilan2;?>;">
 					<li id="li_21" >
-						<div class="left"><label class="description" for="element_21">Kepada</label></div>
+						<label class="description" for="element_21">Kepada</label>
 						<div>
 							<?php
 								echo form_dropdown('pejabat',$pejabat,$pejabat_dipilih, 'class="element select medium"');
@@ -131,7 +132,7 @@
 						<?php echo form_error('pejabat'); ?>
 					</li>
 					<li>
-						<div class="left"><label class="description">Tanggal Surat</label></div>
+						<label class="description">Tanggal Surat</label>
 							<span>
 								<div id="newline-wrapper">
 									<table class="split-date-wrap" cellpadding="0" cellspacing="0" border="0">
@@ -158,15 +159,15 @@
 					</li>
 					
 					<li id="li_14" >
-						<div class="left"><label class="description" for="element_14">Lampiran</label></div>
+						<label class="description" for="element_14">Jumlah Lampiran</label>
 						<div>
 							<input id="lampiran" name="lampiran" class="element text medium" type="text" value="<?php echo $lampiran;?>"/> 					
 						</div>
-						<p class="guidelines" id="guide_14"><small>Lampiran</small></p> 
+						<p class="guidelines" id="guide_14"><small>Jumlah Lampiran</small></p> 
 						<?php echo form_error('lampiran'); ?>
 					</li>
 					<li id="li_14" >
-						<div class="left"><label class="description" for="element_14">Catatan</label></div>
+						<label class="description" for="element_14">Catatan</label>
 						<div>
 							<?php 
 								$data = array(
@@ -182,22 +183,32 @@
 						<p class="guidelines" id="guide_14"><small>Catatan</small></p> 
 						<?php echo form_error('catatan'); ?>
 					</li>
-					<li>
-						<div class="left"></div>
-						<div>	
-							<input id="submit-button" type="submit" name="daftar_warna" value="Tambah" />
-							<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('surat_masuk')?>'"/>
-						</div>
-					</li>
+					
 				</div>
+				<li>
+					<div>	
+						<input id="submit-button" type="submit" name="daftar_warna" value="Perbarui" />
+						<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('surat_masuk')?>'"/>
+					</div>
+				</li>
 			</ul>
 		<?php echo form_close(); ?>
 	</div>
 	<script type="text/javascript">
-		function init() {
-			document.getElementById("fd-but-date-8").style.visibility='<?php echo $tampilan2;?>';
+		function ubahSifat()
+		{
+			var sifat = $('#sifat').val();
+			if(sifat == 1)
+			{
+				$('#hideme').show();
+				$('#hideme1').show();
+			}
+			else
+			{
+				$('#hideme').hide();
+				$('#hideme1').hide();
+			}
 		}
-		window.onload = init;
 
 		function hapus_tanggal_terima(){
 			document.form_catat_surat_masuk.tgl_terima.value = '';
@@ -244,4 +255,16 @@
 			});
 		}	
 	);
+	
+	$(document).ready(function(){
+		if($('#sifat').val() == 2)
+		{
+			$('#hideme').hide();
+		}
+		else
+		{
+			$('#hideme').show();
+		}
+		
+	});
 </script>

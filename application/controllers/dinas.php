@@ -28,8 +28,13 @@ class Dinas extends CI_Controller {
 	public function grid()
 	{
 		$colModel['no'] = array('No',20,TRUE,'center',0);
-		$colModel['NAMA_DINAS'] = array('Nama SKPD',200,TRUE,'center',1);
-		$colModel['SINGKATAN'] = array('Singkatan',150,TRUE,'center',1);
+		$colModel['NAMA_DINAS'] = array('Nama SKPD',300,TRUE,'center',1);
+		$colModel['SINGKATAN'] = array('Singkatan',70,TRUE,'center',1);
+		$colModel['NAMA_KEPALA'] = array('Nama Kepala',150,TRUE,'center',1);
+		$colModel['ALAMAT'] = array('Alamat',200,TRUE,'center',1);
+		$colModel['EMAIL_SKPD'] = array('Email',150,TRUE,'center',1);
+		$colModel['HP'] = array('No HP',100,TRUE,'center',1);
+		$colModel['TELEPON'] = array('Telepon',100,TRUE,'center',1);
 		$colModel['STATUS_DINAS'] = array('Status',50,TRUE,'center',1);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
 		//$colModel['hapus'] = array('Hapus',30,FALSE,'center',0);
@@ -40,7 +45,7 @@ class Dinas extends CI_Controller {
 							'height' => 330,
 							'rp' => 15,
 							'rpOptions' => '[15,30,50,100]',
-							'pagestat' => 'Menampilkan : {from} ke {to} dari {total} data.',
+							'pagestat' => 'Menampilkan : {from} sampai {to} dari {total} data.',
 							'blockOpacity' => 0,
 							'title' => 'Master SKPD',
 							'showTableToggleBtn' => false
@@ -136,7 +141,7 @@ class Dinas extends CI_Controller {
 	
 	function grid_data_dinas() 
 	{
-		$valid_fields = array('DINAS_ID','NAMA_DINAS','SINGKATAN','STATUS_DINAS');
+		$valid_fields = array('DINAS_ID','NAMA_DINAS','SINGKATAN','STATUS_DINAS','NAMA_KEPALA','EMAIL_SKPD','ALAMAT','HP','TELEPON');
 		$this->flexigrid->validate_post('DINAS_ID','asc',$valid_fields);
 		$records = $this->dinas_model->grid_dinas();	
 		$this->output->set_header($this->config->item('json_header'));
@@ -158,6 +163,11 @@ class Dinas extends CI_Controller {
 										$no,
 										$row->NAMA_DINAS,
 										$row->SINGKATAN,
+										$row->NAMA_KEPALA,
+										$row->ALAMAT,
+										$row->EMAIL_SKPD,
+										$row->HP,
+										$row->TELEPON,
 										$status_dinas,
 								'<a href='.base_url().'index.php/dinas/edit/'.$row->DINAS_ID.'><img border=\'0\' src=\''.base_url().'images/icon/edit.png\'></a>'
 								//'<a href='.base_url().'index.php/manajemen_pengguna/delete/'.$row->USER_ID.' onclick="return confirm(\'Are you sure you want to delete?\')"><img border=\'0\' src=\''.base_url().'images/flexigrid/2.png\'></a>'
@@ -175,13 +185,20 @@ class Dinas extends CI_Controller {
 		if($edit)
 		{
 			$callback_dinas = '|callback_cek_dinas_baru['.$dinas_id.']';
+			$callback_singkatan_dinas = '|callback_cek_singkatan_dinas_baru['.$dinas_id.']';
 		}
 		else
 		{
 			$callback_dinas = '|callback_cek_dinas';
+			$callback_singkatan_dinas = '|callback_cek_singkatan_dinas';
 		}
-		$this->form_validation->set_rules('singkatan', 'Singkatan', 'required');
+		$this->form_validation->set_rules('singkatan', 'Singkatan', 'required'.$callback_singkatan_dinas);
 		$this->form_validation->set_rules('nama_dinas', 'Nama Dinas', 'required'.$callback_dinas);
+		$this->form_validation->set_rules('nama_kepala', 'Nama Kepala', 'required');
+		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+		$this->form_validation->set_rules('no_hp', 'HP', 'required|numeric');
+		$this->form_validation->set_rules('telp', 'Telepon', 'required|numeric');
+		$this->form_validation->set_rules('alamat', 'Alamat', 'required');
 		
 		$this->form_validation->set_error_delimiters('<p class="error_message">', '</p>');
 		$this->form_validation->set_message('required', 'Kolom %s harus diisi !!');
@@ -199,7 +216,13 @@ class Dinas extends CI_Controller {
 		$data = array(
 						'NAMA_DINAS' => $this->input->post('nama_dinas'),
 						'SINGKATAN' => $this->input->post('singkatan'),
-						'STATUS_DINAS' => '1'
+						'NAMA_KEPALA' => $this->input->post('nama_kepala'),
+						'EMAIL_SKPD' => $this->input->post('email'),
+						'HP' => $this->input->post('no_hp'),
+						'TELEPON' => $this->input->post('telp'),
+						'ALAMAT' => $this->input->post('alamat'),
+						'STATUS_DINAS' => '1',
+						'STATUS' => '1'
 					);
 		if($this->cek_validasi(false,null))
 		{
@@ -218,7 +241,13 @@ class Dinas extends CI_Controller {
 		$data = array(
 						'NAMA_DINAS' => $this->input->post('nama_dinas'),
 						'SINGKATAN' => $this->input->post('singkatan'),
-						'STATUS_DINAS' => $this->input->post('status_dinas')
+						'NAMA_KEPALA' => $this->input->post('nama_kepala'),
+						'EMAIL_SKPD' => $this->input->post('email'),
+						'HP' => $this->input->post('no_hp'),
+						'TELEPON' => $this->input->post('telp'),
+						'ALAMAT' => $this->input->post('alamat'),
+						'STATUS_DINAS' => '1',
+						'STATUS' => '1'
 					);
 		if($this->cek_validasi(true,$dinas_id))
 		{
@@ -231,6 +260,11 @@ class Dinas extends CI_Controller {
 			
 			$data['singkatan'] = $result->SINGKATAN;
 			$data['nama_dinas'] = $result->NAMA_DINAS;
+			$data['nama_kepala'] = $result->NAMA_KEPALA;
+			$data['email'] = $result->EMAIL_SKPD;
+			$data['no_hp'] = $result->HP;
+			$data['telp'] = $result->TELEPON;
+			$data['alamat'] = $result->ALAMAT;
 			$data['status_dinas'] = $result->STATUS_DINAS;
 			
 			$data['content'] = $this->load->view('master/form_edit_dinas',$data,true);
@@ -284,6 +318,32 @@ class Dinas extends CI_Controller {
 		if($this->dinas_model->cek_dinas_baru($value, $dinas_id))
 		{
 			$this->form_validation->set_message('cek_dinas_baru', 'Dinas Sudah Ada');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+	
+	function cek_singkatan_dinas($value)
+	{
+		if($this->dinas_model->cek_singkatan_dinas($value))
+		{
+			$this->form_validation->set_message('cek_singkatan_dinas', 'Singkatan Dinas Sudah Ada');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+	
+	function cek_singkatan_dinas_baru($value, $dinas_id)
+	{
+		if($this->dinas_model->cek_singkatan_dinas_baru($value, $dinas_id))
+		{
+			$this->form_validation->set_message('cek_singkatan_dinas_baru', 'Singkatan Dinas Sudah Ada');
 			return FALSE;
 		}
 		else

@@ -1,17 +1,17 @@
-input[type="submit"], input.submit[type="button"] {
-    background: url("../images/login-btn.png");
-	width:104px;
-	height:43px;
-	margin-left:90px;
-}
 
 #login-box {
 	width:333px;
 	height: 352px;
 	padding: 58px 76px 0 76px;
 	color: #ebebeb;
-	font:12px "Lucida Grande",Arial, Helvetica, sans-serif;
+	font: 12px Arial, Helvetica, sans-serif;
 	background: url("../images/login-box-backg.png") no-repeat left top;
+}
+
+.shadow {
+  -moz-box-shadow:    3px 3px 5px 6px #ccc;
+  -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+  box-shadow:         3px 3px 5px 6px #ccc;
 }
 
 #login-box img {
@@ -23,18 +23,6 @@ input[type="submit"], input.submit[type="button"] {
 	margin:0;
 	color: #ebebeb;
 	font: bold 44px "Calibri", Arial;
-}
-
-div.msg {
-	color: #120C0C;
-	font:12px "Lucida Grande",Arial, Helvetica, sans-serif;
-	padding: 1px 1px 1px 37px;
-	margin-bottom: 5px;
-}
-
-div.error {
-	border: 1px solid #ffa2aa;
-	background: #fae8e8 url("../images/exclamation-red.png") 10px 13px no-repeat;
 }
 
 
