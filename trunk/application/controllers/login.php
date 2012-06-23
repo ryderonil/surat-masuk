@@ -29,19 +29,22 @@ class Login extends CI_Controller {
 	
 	function cek_login()
 	{
-		$this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean|callback_cek_info_login|callback_validate_login');
+		$this->form_validation->set_rules('user', 'Username', 'trim|required|xss_clean|callback_cek_info_login|callback_validate_login');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 		$this->form_validation->set_message('required', 'Field %s harus diisi');
 		
 		//cek apakah username dan password sudah diisikan dengan benar
 		if ($this->form_validation->run())
 		{
-			redirect ('home'); //true gak bisa tapi false kok bisa ??/ //			
+			//redirect ('home'); //true gak bisa tapi false kok bisa ??/ //	
+			$arr = array("result" => "true");		
 		}//end validation
 		else
 		{
-			$this->index();
+			//$this->index();
+			$arr = array("result" => "false");
 		}
+		echo json_encode($arr);
 	}
 	
 	function cek_info_login($username)
@@ -53,30 +56,33 @@ class Login extends CI_Controller {
 			return FALSE;
 		}
 		else
+		{
 			return TRUE;
+		}
 	}
 	
 	function validate_login()
 	{
-		$username = $this->input->post('username');
-		$password = md5($this->input->post('password'));
+		$username = $this->input->post('user', TRUE);
+		$password = md5($this->input->post('password',TRUE));
 		if($username && $password)
 		{
 			$result = $this->user_model->login($username, $password);
-			if($result->num_rows())
+			if($result->num_rows() > 0)
 			{
 				foreach($result->result() as $row){
 					$sess_array = array(
 									'username' => $row->USERNAME,
 									'login' => TRUE,
 									'iduser' => $row->USER_ID,
-									'kode_role' => $row->ROLE
+									'kode_role' => $row->ROLE,
+									'dinas_id' => $row->DINAS_ID
 									);
 					$this->session->set_userdata($sess_array);
 				}
 				return TRUE;
 			}
-			$this->form_validation->set_message('validate_login', 'Invalid username or password');
+			//$this->form_validation->set_message('validate_login', 'Invalid username or password');
 			return FALSE;
 		}
 		return FALSE;

@@ -14,6 +14,7 @@ class Dinas_model extends CI_Model{
 		$this->db->select('*');
 		$this->db->from('dinas');
 		$this->db->where('DINAS_ID <> ',1);
+		$this->db->where('STATUS',1);
 		//$this->db->join('jabatan','jabatan.JABATAN_ID = user.JABATAN_ID');
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
@@ -21,6 +22,7 @@ class Dinas_model extends CI_Model{
 		$this->db->select('*');
 		$this->db->from('dinas');
 		$this->db->where('DINAS_ID <> ',1);
+		$this->db->where('STATUS',1);
 		//$this->db->join('jabatan','jabatan.JABATAN_ID = user.JABATAN_ID');
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
@@ -59,14 +61,25 @@ class Dinas_model extends CI_Model{
 		$this->db->select('*');
 		$this->db->from('dinas');
 		$this->db->where('dinas.STATUS_DINAS', 1);
+		$this->db->where('dinas.STATUS', 1);
 		$result = $this->db->get();
 		return $result;
 	}
 	
-	function get_all_dinas()
+	function get_all_dinas_disposisi()
 	{
 		$this->db->select('*');
 		$this->db->from('dinas');
+		$this->db->where('DINAS_ID >',7);
+		$result = $this->db->get();
+		return $result;
+	}
+	
+	function get_dinas_by_id($dinas_id)
+	{
+		$this->db->select('*');
+		$this->db->from('dinas');
+		$this->db->where('DINAS_ID',$dinas_id);
 		$result = $this->db->get();
 		return $result;
 	}
@@ -83,6 +96,22 @@ class Dinas_model extends CI_Model{
 		$this->db->select('*');
 		$this->db->from('dinas');
 		$this->db->where('NAMA_DINAS', $dinas);
+		$result = $this->db->get();
+		if ($result->num_rows())
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function cek_singkatan_dinas($dinas)
+	{
+		$this->db->select('*');
+		$this->db->from('dinas');
+		$this->db->where('SINGKATAN', $dinas);
 		$result = $this->db->get();
 		if ($result->num_rows())
 		{
@@ -115,6 +144,24 @@ class Dinas_model extends CI_Model{
 		$this->db->select('*');
 		$this->db->from('dinas');
 		$this->db->where('NAMA_DINAS', $dinas);			
+		$this->db->where('DINAS_ID <>',$dinas_id);
+		//$query = $this->db->query('select * from login WHERE username =  "'.$username.'" and kode_user <> '.$kode_user);
+		$query = $this->db->get();
+		if ($query->num_rows())
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function cek_singkatan_dinas_baru($dinas, $dinas_id)
+	{	
+		$this->db->select('*');
+		$this->db->from('dinas');
+		$this->db->where('SINGKATAN', $dinas);			
 		$this->db->where('DINAS_ID <>',$dinas_id);
 		//$query = $this->db->query('select * from login WHERE username =  "'.$username.'" and kode_user <> '.$kode_user);
 		$query = $this->db->get();

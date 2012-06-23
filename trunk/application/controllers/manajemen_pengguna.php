@@ -113,7 +113,7 @@ class Manajemen_pengguna extends CI_Controller {
 	
 	function grid_data_pengguna() 
 	{
-		$valid_fields = array('USER_ID','JABATAN_ID','NAMA','USERNAME','PASSWORD','EMAIL','NO_HP','STATUS_USER','ROLE');
+		$valid_fields = array('USER_ID','JABATAN_ID','NAMA','USERNAME','PASSWORD','user.EMAIL','NO_HP','STATUS_USER','ROLE');
 		$this->flexigrid->validate_post('USER_ID','asc',$valid_fields);
 		$records = $this->user_model->grid_user();
 		$this->output->set_header($this->config->item('json_header'));
@@ -129,30 +129,16 @@ class Manajemen_pengguna extends CI_Controller {
 					$status_user = 'Tidak Aktif';
 				}
 				
-				if($row->ROLE == 1)
-				{
-					$role = 'Administrator';
-				}
-				else if($row->ROLE == 2)
-				{
-					$role = 'Asisten';
-				}
-				else if($row->ROLE == 3)
-				{
-					$role = 'Sekretaris';
-				}
-				else if($row->ROLE == 4)
-				{
-					$role = 'Wakil Bupati';
-				}
-				else if($row->ROLE == 5)
-				{
-					$role = 'Bupati';
-				}
-				else
-				{
-					$role = 'Dinas';
-				}
+				$role = array(
+							'1' => 'Administrator',
+							'2' => 'Asisten I',
+							'3' => 'Asisten II',
+							'4' => 'Asisten III',
+							'5' => 'Sekretaris',
+							'6' => 'Wakil Bupati',
+							'7' => 'Bupati',
+							'8' => 'Dinas'
+							);
 				$no = $no+1;
 				$record_items[] = array(
 										$row->USER_ID,
@@ -162,7 +148,7 @@ class Manajemen_pengguna extends CI_Controller {
 										$row->NAMA_JABATAN,
 										$row->EMAIL,
 										$row->NO_HP,
-										$role,
+										$role[$row->ROLE],
 										$row->NAMA_DINAS,
 										$status_user,
 								'<a href='.base_url().'index.php/manajemen_pengguna/edit/'.$row->USER_ID.'><img border=\'0\' src=\''.base_url().'images/icon/edit.png\'></a>'
@@ -277,6 +263,10 @@ class Manajemen_pengguna extends CI_Controller {
 	{
 		$password = $this->user_model->get_user($userid)->row()->PASSWORD;
 		if($this->input->post('password')!='') $password = md5($this->input->post('password'));
+		if($this->input->post('grup') == 8)
+			$dinas = $this->input->post('dinas');
+		else
+			$dinas = 1;
 		$data = array(
 						'NAMA' => $this->input->post('nama'),
 						'USERNAME' => $this->input->post('username'),
@@ -285,7 +275,7 @@ class Manajemen_pengguna extends CI_Controller {
 						'EMAIL' => $this->input->post('email'),
 						'NO_HP' => $this->input->post('handphone'),
 						'PASSWORD' => $password,
-						'DINAS_ID' => $this->input->post('dinas'),
+						'DINAS_ID' => $dinas,
 						'STATUS_USER' => $this->input->post('status_user')
 					);
 		if($this->cek_validasi(true,$userid))
@@ -316,8 +306,8 @@ class Manajemen_pengguna extends CI_Controller {
 		else
 		{
 			$result = $this->user_model->get_user($userid)->row();
-			$jabatan = $this->jabatan_model->get_all_jabatan();
-			$dinas = $this->dinas_model->get_all_dinas();
+			$jabatan = $this->jabatan_model->get_all_jabatan_aktif();
+			$dinas = $this->dinas_model->get_all_dinas_aktif();
 			$hasil[0] = '-- Pilih Jabatan --';
 			foreach($jabatan->result() as $row1){
 				$hasil1[$row1->JABATAN_ID] = $row1->NAMA_JABATAN;

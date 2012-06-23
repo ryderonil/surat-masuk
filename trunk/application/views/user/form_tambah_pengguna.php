@@ -49,28 +49,32 @@
 								$options = array(
 												'0' => '-- Pilih Grup --',
 												'1' => 'Administrator',
-												'2' => 'Asisten',
-												'3' => 'Sekretaris',
-												'4' => 'Wakil Bupati',
-												'5' => 'Bupati',
-												'6' => 'Dinas'
+												'2' => 'Asisten I',
+												'3' => 'Asisten II',
+												'4' => 'Asisten III',
+												'5' => 'Sekretaris',
+												'6' => 'Wakil Bupati',
+												'7' => 'Bupati',
+												'8' => 'Dinas'
 											);
-								echo form_dropdown('grup',$options, set_value('grup'), 'class="element select medium"');
+								echo form_dropdown('grup',$options, set_value('grup'), 'id="grup" class="element select medium" onChange="ubahGrup();"');
 						?>					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Grup Pengguna</small></p> 
 					<?php echo form_error('grup'); ?>
 				</li>
-				<li id="li_14" >
-					<label class="description" for="element_14">Dinas</label>
-					<div>
-						<?php 
-							echo form_dropdown('dinas',$dinas, set_value('dinas'), 'id="dinas" class="element select medium"');
-						?>					
-					</div>
-					<p class="guidelines" id="guide_14"><small>Dinas</small></p> 
-					<?php echo form_error('dinas'); ?>
-				</li>
+				<div id="hideme">
+					<li id="li_14" >
+						<label class="description" for="element_14">Dinas</label>
+						<div>
+							<?php 
+								echo form_dropdown('dinas',$dinas, set_value('dinas'), 'id="dinas" class="element select medium"');
+							?>					
+						</div>
+						<p class="guidelines" id="guide_14"><small>Dinas</small></p> 
+						<?php echo form_error('dinas'); ?>
+					</li>
+				</div>
 				<li id="li_21" >
 					<label class="description" for="element_21">Jabatan</label>
 					<div>
@@ -106,7 +110,20 @@
 			</ul>
 		<?php echo form_close(); ?>
 	</div>
-	<script type="text/javascript">		
+	<script type="text/javascript">	
+		function ubahGrup()
+		{
+			var grup = $('#grup').val();
+			if(grup == 8)
+			{
+				$('#hideme').show();
+			}
+			else
+			{
+				$('#hideme').hide();
+			}
+		}
+		
 		Ext.onReady(function(){
 			var jabatan = new Ext.form.ComboBox({
 				typeAhead: true,
@@ -125,5 +142,9 @@
 			});
 		}	
 	);
+	
+	$(document).ready(function(){
+		$('#hideme').hide();
+	});
 	</script>
 	

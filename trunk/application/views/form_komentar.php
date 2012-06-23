@@ -11,8 +11,7 @@
 				<li id="li_14" >
 					<label class="description" for="element_14">Nomor Surat</label>
 					<div>
-						<?php if(set_value('nomor')!='') $nomor = set_value('nomor')?>
-						<input id="nomor" name="nomor" disabled="true" class="element text medium" type="text" value="<?php echo $nomor;?>"/> 					
+						<p><?php echo $nomor;?></p> 					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Nomor Surat</small></p>
 				</li>
@@ -33,7 +32,7 @@
 					<p class="guidelines" id="guide_14"><small>Komentar</small></p> 
 				</li>	
 				<li>
-					<input id="submit-button" type="submit" name="daftar_warna" value="Tambah" />
+					<input id="submit-button" type="submit" name="daftar_warna" value="<?=$val_button?>" />
 					<input id="submit-button" type="button" name="batal" value="Batal" onClick="location.href='<?php echo site_url('surat_masuk')?>'"/>
 				</li>
 			</ul>
