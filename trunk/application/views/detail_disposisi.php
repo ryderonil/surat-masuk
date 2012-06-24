@@ -80,7 +80,7 @@
 			echo form_open('surat_masuk/d2_process',$attributes); 
 			?>
 			<fieldset>
-			<legend><label><b>| Komentar Pejabat Penerima |</b></label></legend>
+			<legend><label><b>| Komentar |</b></label></legend>
 			
 				<?php 
 				if(count($komentar_disposisi) > 0)
