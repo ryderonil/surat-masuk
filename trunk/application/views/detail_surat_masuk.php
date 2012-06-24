@@ -105,6 +105,7 @@
 					</div>
 				</ul>
 			</fieldset>
+			<?php if(count($komentar)>0) { ?>
 			<fieldset>
 			<legend><label><b>| Komentar dari Pejabat |</b></label></legend>
 			<table align="left">
@@ -118,6 +119,7 @@
 				<?php } ?>
 			</table>
 			</fieldset>
+			<?php } ?>
 		<?php echo form_close(); ?>
 	</div>
 <script>

@@ -15,7 +15,7 @@ class Dinas_model extends CI_Model{
 		$this->db->from('dinas');
 		$this->db->where('DINAS_ID <> ',1);
 		$this->db->where('STATUS',1);
-		//$this->db->join('jabatan','jabatan.JABATAN_ID = user.JABATAN_ID');
+		
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
 		
@@ -23,7 +23,7 @@ class Dinas_model extends CI_Model{
 		$this->db->from('dinas');
 		$this->db->where('DINAS_ID <> ',1);
 		$this->db->where('STATUS',1);
-		//$this->db->join('jabatan','jabatan.JABATAN_ID = user.JABATAN_ID');
+		
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
 		return $return;		
