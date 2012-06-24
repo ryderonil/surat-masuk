@@ -75,7 +75,16 @@
 					<li id="li_14" >
 						<div class="left"><label class="description" for="element_14">Catatan Disposisi :</label></div>
 						<div>
-							<p><?php if(isset($catatan_disposisi))echo $catatan_disposisi;?></p>
+							<table width="60%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td align="left">
+										<p><?php if(isset($catatan_disposisi))echo $catatan_disposisi;?></p>
+									</td>
+								</tr>
+								<tr>
+									<td><br /></td>
+								</tr>				
+							</table>
 						</div>
 					</li>
 				</ul>
@@ -93,8 +102,17 @@
 					foreach($komentar_disposisi as $row) {?>
 					<li id="li_14" >
 						<div class="left"><label class="description" for="element_14"><?php echo $row->NAMA_DINAS.' &nbsp&nbsp <i>('.date("d-m-Y G:i:s", strtotime($row->TGL_KOMENTAR)).')</i> ';?> : </label></div>
-						<div>
-							<p><?php echo $row->KOMENTAR_DISPOSISI;?></p>	
+						<div>	
+							<table width="60%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td align="left">
+										<p><?php echo $row->KOMENTAR_DISPOSISI;?></p>
+									</td>
+								</tr>
+								<tr>
+									<td><br /></td>
+								</tr>				
+							</table>
 						</div>
 					</li>
 				<?php } 
