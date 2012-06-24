@@ -35,15 +35,26 @@ class Surat_masuk_model extends CI_Model{
 	
 	function grid_surat_masuk_disposisi($id)
 	{
-		$sql = 'SELECT * FROM detail_disposisi JOIN disposisi_surat_masuk ON disposisi_surat_masuk.disposisi_id = detail_disposisi.disposisi_id JOIN surat_masuk ON surat_masuk.surat_masuk_id = disposisi_surat_masuk.surat_masuk_id WHERE detail_disposisi.penerima = ?';
-		$result = $this->db->query($sql, array($id));
+		//$sql = 'SELECT * FROM detail_disposisi JOIN disposisi_surat_masuk ON disposisi_surat_masuk.disposisi_id = detail_disposisi.disposisi_id JOIN surat_masuk ON surat_masuk.surat_masuk_id = disposisi_surat_masuk.surat_masuk_id WHERE detail_disposisi.penerima = ?';
+		$this->db->select('*');
+		$this->db->from('detail_disposisi');
+		$this->db->join('disposisi_surat_masuk', 'disposisi_surat_masuk.disposisi_id = detail_disposisi.disposisi_id');
+		$this->db->join('surat_masuk', 'surat_masuk.surat_masuk_id = disposisi_surat_masuk.surat_masuk_id');
+		$this->db->where('detail_disposisi.penerima', $id);
+		//$result = $this->db->query($sql, array($id));
 		$this->CI->flexigrid->build_query();		
-		$return['records'] = $result;
+		$return['records'] =$this->db->get();
 		
-		$sql2 = 'SELECT COUNT(*) FROM detail_disposisi JOIN disposisi_surat_masuk ON disposisi_surat_masuk.disposisi_id = detail_disposisi.disposisi_id JOIN surat_masuk ON surat_masuk.surat_masuk_id = disposisi_surat_masuk.surat_masuk_id WHERE detail_disposisi.penerima = ?';
-		$result2 = $this->db->query($sql2, array($id));
+		//$sql2 = 'SELECT COUNT(*) FROM detail_disposisi JOIN disposisi_surat_masuk ON disposisi_surat_masuk.disposisi_id = detail_disposisi.disposisi_id JOIN surat_masuk ON surat_masuk.surat_masuk_id = disposisi_surat_masuk.surat_masuk_id WHERE detail_disposisi.penerima = ?';
+		//$result2 = $this->db->query($sql2, array($id));
+		$this->db->select('*');
+		$this->db->from('detail_disposisi');
+		$this->db->join('disposisi_surat_masuk', 'disposisi_surat_masuk.disposisi_id = detail_disposisi.disposisi_id');
+		$this->db->join('surat_masuk', 'surat_masuk.surat_masuk_id = disposisi_surat_masuk.surat_masuk_id');
+		$this->db->where('detail_disposisi.penerima', $id);
+		
 		$this->CI->flexigrid->build_query(FALSE);
-		$return['record_count'] = $result2;
+		$return['record_count'] = $this->db->count_all_results();
 		return $return;		
 	}
 	
@@ -179,6 +190,17 @@ class Surat_masuk_model extends CI_Model{
 		return $result;
 	}
 	
+	function get_disposisi2($disposisi_id)
+	{
+		$this->db->select('*');
+		$this->db->from('disposisi_surat_masuk');
+		$this->db->join('user','user.USER_ID = disposisi_surat_masuk.USER_ID');
+		$this->db->join('dinas','dinas.DINAS_ID = user.DINAS_ID');
+		$this->db->where('DISPOSISI_ID', $disposisi_id);
+		$result = $this->db->get();
+		return $result;
+	}
+	
 	function get_komentar($komentator, $surat_masuk_id)
 	{
 		$this->db->select('*');
@@ -216,10 +238,24 @@ class Surat_masuk_model extends CI_Model{
 		return $result;
 	}
 	
+	function get_all_komentar_disposisi2($disposisi_id)
+	{
+		$sql = 'SELECT * FROM komentar_disposisi JOIN dinas ON dinas.dinas_id = komentar_disposisi.dinas_id JOIN disposisi_surat_masuk ON disposisi_surat_masuk.disposisi_id = komentar_disposisi.disposisi_id WHERE disposisi_surat_masuk.disposisi_id = ?';
+		$result = $this->db->query($sql, array($disposisi_id));
+		return $result;
+	}
+	
 	function get_all_penerima_disposisi($user_id, $surat_masuk_id)
 	{
 		$sql = 'SELECT * FROM detail_disposisi JOIN dinas ON dinas.dinas_id = detail_disposisi.penerima JOIN disposisi_surat_masuk ON disposisi_surat_masuk.disposisi_id = detail_disposisi.disposisi_id WHERE disposisi_surat_masuk.surat_masuk_id = ? AND disposisi_surat_masuk.user_id = ?';
 		$result = $this->db->query($sql, array($surat_masuk_id, $user_id));
+		return $result;
+	}
+	
+	function get_all_penerima_disposisi2($disposisi_id)
+	{
+		$sql = 'SELECT * FROM detail_disposisi JOIN dinas ON dinas.dinas_id = detail_disposisi.penerima JOIN disposisi_surat_masuk ON disposisi_surat_masuk.disposisi_id = detail_disposisi.disposisi_id WHERE disposisi_surat_masuk.disposisi_id = ?';
+		$result = $this->db->query($sql, array($disposisi_id));
 		return $result;
 	}
 		

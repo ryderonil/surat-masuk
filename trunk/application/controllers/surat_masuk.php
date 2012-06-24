@@ -138,8 +138,9 @@ class Surat_masuk extends CI_Controller {
 			$colModel['disposisi'] = array('Disposisi',60,FALSE,'center',0);
 			$colModel['status'] = array('Status',90,FALSE,'center',0);
 		}
-		$colModel['komentar'] = array('Komentar',60,FALSE,'center',0);
-		$colModel['detail'] = array('Detail',40,FALSE,'center',0);
+		//$colModel['komentar'] = array('Komentar',60,FALSE,'center',0);
+		$colModel['detail_disposisi'] = array('Detail Disposisi',80,FALSE,'center',0);
+		$colModel['detail'] = array('Detail Surat',80,FALSE,'center',0);
 			
 		//setting konfigurasi pada bottom tool bar flexigrid
 		$gridParams = array(
@@ -216,7 +217,7 @@ class Surat_masuk extends CI_Controller {
 											$kirim,
 											'<a href='.base_url().'index.php/surat_masuk/status1/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/status.png\'></a>',
 											'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
-											'<a href='.base_url().'index.php/surat_masuk/detail/1/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>',
+											'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>',
 											'<a href='.base_url().'index.php/surat_masuk/ubah/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/application--pencil.png\'></a>'
 										);
 				}
@@ -230,7 +231,7 @@ class Surat_masuk extends CI_Controller {
 											$disposisi,								
 											'<a href='.base_url().'index.php/surat_masuk/status2/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/status.png\'></a>',
 											'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
-											'<a href='.base_url().'index.php/surat_masuk/detail/1/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>',
+											'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>',
 										);
 				}
 		}
@@ -268,8 +269,8 @@ class Surat_masuk extends CI_Controller {
 											$row->PERIHAL,									
 											'<a href='.base_url().'index.php/surat_masuk/disposisi/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/disposisi.png\'></a>',
 											'<a href='.base_url().'index.php/surat_masuk/status2/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/status.png\'></a>',
-											'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
-											'<a href='.base_url().'index.php/surat_masuk/detail/2/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>'
+											//'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
+											'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>'
 										);
 				}
 				else
@@ -279,8 +280,9 @@ class Surat_masuk extends CI_Controller {
 											$no,
 											$row->NOMOR,
 											$row->PERIHAL,									
-											'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
-											'<a href='.base_url().'index.php/surat_masuk/detail/2/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>'
+											//'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
+											'<a href='.base_url().'index.php/surat_masuk/disposisi3/'.$row->SURAT_MASUK_ID.'/'.$row->DISPOSISI_ID.'><img border=\'0\' src=\''.base_url().'images/icon/doc.png\'></a>',
+											'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>'
 										);
 				}
 		}
@@ -736,12 +738,15 @@ class Surat_masuk extends CI_Controller {
 	{
 		$result1 = $this->surat_masuk_model->get_surat_masuk_by_id($surat_masuk_id)->row();
 		$result2 = $this->dinas_model->get_all_dinas_disposisi();
-		$dinas[2] = 'Asisten I';
-		$dinas[3] = 'Asisten II';
-		$dinas[4] = 'Asisten III';
-		$dinas[5] = 'Sekretaris';
-		$dinas[6] = 'Wakil Bupati';
-		$dinas[7] = 'Bupati';
+		
+		if($this->session->userdata('kode_role') == 5 || $this->session->userdata('kode_role') == 6 || $this->session->userdata('kode_role') == 7)
+		{
+			$dinas[2] = 'Asisten I';
+			$dinas[3] = 'Asisten II';
+			$dinas[4] = 'Asisten III';
+		}
+		if($this->session->userdata('kode_role') == 6 || $this->session->userdata('kode_role') == 7) $dinas[5] = 'Sekretaris';
+		if($this->session->userdata('kode_role') == 7) $dinas[6] = 'Wakil Bupati';
 		foreach($result2->result() as $row)
 		{
 			$dinas[$row->DINAS_ID] = $row->NAMA_DINAS;
@@ -783,6 +788,28 @@ class Surat_masuk extends CI_Controller {
 		$this->load->view('main',$data);
 	}
 	
+	function disposisi3($surat_masuk_id,$disposisi_id)
+	{
+		$urgensi = $this->urgensi();
+		//$user_id = $this->session->userdata('iduser');
+		$result = $this->surat_masuk_model->get_disposisi2($disposisi_id)->row();
+		$result1 = $this->surat_masuk_model->get_surat_masuk_by_id($surat_masuk_id)->row();
+		$result2 = $this->surat_masuk_model->get_all_penerima_disposisi2($disposisi_id)->result();
+		$result3 = $this->surat_masuk_model->get_all_komentar_disposisi2($disposisi_id)->result();
+		$data['tgl_disposisi'] = date("d-m-Y", strtotime($result->TANGGAL_DISPOSISI));
+		$data['nomor'] = $result1->NOMOR;
+		$data['penerima'] = $result2;
+		$data['urgensi'] = $urgensi[$result->URGENSI];
+		$data['disposisi_dari'] = $result->NAMA_DINAS;
+		$data['surat_masuk_id'] = $surat_masuk_id;
+		$data['catatan_disposisi'] = $result->CATATAN_DISPOSISI;
+		$data['disposisi_id'] = $result->DISPOSISI_ID;
+		$data['file_disposisi_surat_masuk'] = $result->FILE_DISPOSISI;
+		$data['komentar_disposisi'] = $result3;
+		$data['content'] = $this->load->view('detail_disposisi2',$data,true);
+		$this->load->view('main',$data);
+	}
+	
 	function d2_process()
 	{
 		if($this->session->userdata('kode_role') == 8)
@@ -801,6 +828,26 @@ class Surat_masuk extends CI_Controller {
 				);
 		$this->surat_masuk_model->add7($data);
 		redirect('surat_masuk/disposisi2/'.$this->input->post('surat_masuk_id'));
+	}
+	
+	function d3_process()
+	{
+		if($this->session->userdata('kode_role') == 8)
+		{
+			$dinas_id = $this->session->userdata('dinas_id');
+		}
+		else
+		{
+			$dinas_id = $this->session->userdata('kode_role');
+		}
+		$data = array(
+					'DISPOSISI_ID' => $this->input->post('disposisi_id'),
+					'DINAS_ID' => $dinas_id,
+					'TGL_KOMENTAR' => date("Y-m-j G:i:s"),
+					'KOMENTAR_DISPOSISI' => $this->input->post('komentar_disposisi') 		
+				);
+		$this->surat_masuk_model->add7($data);
+		redirect('surat_masuk/disposisi3/'.$this->input->post('surat_masuk_id').'/'.$this->input->post('disposisi_id'));
 	}
 	
 	function disposisi_process($surat_masuk_id)
@@ -822,6 +869,7 @@ class Surat_masuk extends CI_Controller {
 												'TANGGAL_DISPOSISI' => date("Y-m-j"),
 												'CATATAN_DISPOSISI' => $this->input->post('catatan_disposisi'),
 												'FILE_DISPOSISI'  	=> $surat[1],
+												'URGENSI'  			=> $this->input->post('urgensi'),
 												'USER_ID'  			=> $this->session->userdata('iduser')
 											);
 			$this->surat_masuk_model->add3($data_disposisi_surat_masuk);
@@ -834,6 +882,7 @@ class Surat_masuk extends CI_Controller {
 											);
 				$this->surat_masuk_model->add6($data_detail_disposisi);
 			}
+			redirect('surat_masuk');
 		}
 		else
 		{
@@ -1046,7 +1095,7 @@ class Surat_masuk extends CI_Controller {
 		}
 	}// end of download
 	
-	function detail($status,$surat_masuk_id)
+	function detail($surat_masuk_id)
 	{
 		$komentar = $this->surat_masuk_model->get_all_komentar()->result();
 		$kode_role = $this->session->userdata('kode_role');
@@ -1111,14 +1160,7 @@ class Surat_masuk extends CI_Controller {
 		$data['catatan'] = $result3->CATATAN_TERIMA_SURAT_MASUK;
 		$data['file_surat_masuk'] = $result4;
 		$data['komentar'] = $komentar;
-		if($status == 1)
-		{
-			$data['content'] = $this->load->view('detail_surat_masuk',$data,true);
-		}
-		else if($status == 2)
-		{
-			$data['content'] = $this->load->view('detail_surat_masuk_disposisi',$data,true);
-		}
+		$data['content'] = $this->load->view('detail_surat_masuk',$data,true);
 		$this->load->view('main',$data);
 	}
 	
