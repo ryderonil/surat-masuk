@@ -1097,7 +1097,7 @@ class Surat_masuk extends CI_Controller {
 	
 	function detail($surat_masuk_id)
 	{
-		$komentar = $this->surat_masuk_model->get_all_komentar()->result();
+		$komentar = $this->surat_masuk_model->get_all_komentar($surat_masuk_id)->result();
 		$kode_role = $this->session->userdata('kode_role');
 		$dinas_id = $this->session->userdata('dinas_id');
 		if($kode_role != 1)

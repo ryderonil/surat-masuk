@@ -211,11 +211,12 @@ class Surat_masuk_model extends CI_Model{
 		return $result;
 	}
 	
-	function get_all_komentar()
+	function get_all_komentar($surat_masuk_id)
 	{
 		$this->db->select('*');
 		$this->db->from('komentar_surat');
 		$this->db->join('dinas','dinas.DINAS_ID = komentar_surat.KOMENTATOR');
+		$this->db->where('komentar_surat.SURAT_MASUK_ID', $surat_masuk_id);
 		
 		$result = $this->db->get();
 		return $result;

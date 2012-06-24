@@ -22,7 +22,10 @@
 		$manajemen_pengguna = false;
 		$surat_masuk = true;
 		$catat_surat_masuk = false; 
-		$surat_masuk_disposisi = true;
+		if($kode_role == 7 ) 
+			$surat_masuk_disposisi = false;
+		else
+			$surat_masuk_disposisi = true;
 	}
 
 

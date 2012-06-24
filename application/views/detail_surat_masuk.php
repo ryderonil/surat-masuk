@@ -98,26 +98,41 @@
 						<li id="li_14" >
 							<div class="left"><label class="description" for="element_14">Catatan Terima Surat Masuk :</label></div>
 							<div>
-								<p><?php if($catatan != null) echo $catatan; else echo '-';?></p>	
+								<table width="60%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td align="left">
+											<p><?php if($catatan != null) echo $catatan; else echo '-';?></p>
+										</td>
+									</tr>
+									<tr>
+										<td><br /></td>
+									</tr>				
+								</table>
 							</div>
-							
 						</li>
 					</div>
 				</ul>
 			</fieldset>
 			<?php if(count($komentar)>0) { ?>
 			<fieldset>
-			<legend><label><b>| Komentar dari Pejabat |</b></label></legend>
-			<table align="left">
+			<legend><label><b>| Komentar |</b></label></legend>
 				<?php foreach($komentar as $row) {?>
 				<li id="li_14" >
 					<div class="left"><label class="description" for="element_14"><?php if($row->KOMENTATOR == 1) echo 'Bagian Umum'; else echo $row->NAMA_DINAS;?> :</label></div>
 					<div>
-						<p><?php echo $row->KOMENTAR;?></p>	
+						<table width="60%" border="0" cellspacing="0" cellpadding="0">
+							<tr>
+								<td align="left">
+									<p><?php echo $row->KOMENTAR;?></p>
+								</td>
+							</tr>
+							<tr>
+								<td><br /></td>
+							</tr>				
+						</table>
 					</div>
 				</li>
 				<?php } ?>
-			</table>
 			</fieldset>
 			<?php } ?>
 		<?php echo form_close(); ?>
