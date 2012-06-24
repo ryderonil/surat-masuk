@@ -761,8 +761,8 @@ class Surat_masuk extends CI_Controller {
 	function urgensi()
 	{
 		$urgensi = array(
-					'Biasa',
-					'Mendesak'
+					'1' => 'Biasa',
+					'2' => 'Mendesak'
 					);
 		return $urgensi;
 	}
@@ -1161,6 +1161,24 @@ class Surat_masuk extends CI_Controller {
 		$data['file_surat_masuk'] = $result4;
 		$data['komentar'] = $komentar;
 		$data['content'] = $this->load->view('detail_surat_masuk',$data,true);
+		$this->load->view('main',$data);
+	}
+	
+	function status1($surat_masuk_id)
+	{
+		$kode_role = $this->session->userdata('kode_role');
+		$dinas_id = $this->surat_masuk_model->get_surat_masuk_by_id($surat_masuk_id)->row()->KIRIM;
+		$data['penerima'] = $this->dinas_model->get_dinas_by_id($dinas_id)->row()->NAMA_DINAS;
+		if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $dinas_id))
+		{
+			$data['status_terima'] = '<p class="success_message">Surat Sudah Diperiksa</p>';
+			$data['success_sign'] = '<td><img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'></td>';
+		}
+		else
+		{
+			$data['status_terima'] = '<p class="error_message">Surat Belum Diperiksa</p>';
+		}	
+		$data['content'] = $this->load->view('status_kirim',$data,true);
 		$this->load->view('main',$data);
 	}
 	
