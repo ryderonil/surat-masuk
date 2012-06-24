@@ -1,0 +1,227 @@
+.center {
+    margin: 0 auto;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+#wrap {
+    width: auto;
+    margin: 0;
+}
+
+#header {
+    width:auto;
+    height: 80px;
+    background-image: url("../images/bg_head.png");
+    /*
+    background-color: #C2ECFC;
+    */
+}
+
+#logo-header {
+    width:20%;
+    height: 80px;
+    background-image: url("../images/logo_header.png");
+    background-repeat:no-repeat;
+    float:left;
+}
+
+#judul-header {
+    width:80%;
+    height: 75px;
+    float:left;
+    text-align: center;
+    padding-top: 8px;
+}
+
+#header-2 {
+    width:auto;
+    height:4px;
+    background-color: #C2ECFC;
+}
+
+#leftmenu {
+    /* width:250px; */
+    width:20%;
+    min-width:20%;
+    height: 710px;
+    /*
+    background-color:#C6CBF9;
+    */
+    background-repeat: repeat-y;
+    /* overflow: scroll-y; */
+    float:left;
+    /* z-index: 100; */
+}
+
+#separator {
+    /*width:5px;*/
+    width:0.5%;
+    height: 710px;
+    float: left;
+    background: url('../images/vertical-separator.gif') repeat-y center top;
+    border-color: #FFF;
+    cursor:pointer;
+}
+#separator:hover {
+    border-color: #ABC;
+    background: #C2ECFC; /*#DEF;*/
+}
+
+#content-wrapper {
+    width:7%;
+    min-width: 79%;
+    color: red;
+    background-image: url('../images/bg-home.gif');
+    float:left;
+}
+
+#content {
+    width: 79.5%;
+    min-width: 79.5%;
+    margin-left: 0px;
+    background-repeat: repeat-y;
+    float:left;
+    /* background-image: url('../images/bg-home-002.gif'); */
+    /*background-size: 100%;*/
+}
+
+#main-content {
+    padding-left: 15px;
+    padding-bottom: 10px;
+    height: 650px;
+}
+
+#test-box {
+    width: 100%;
+    height: 100px;
+    border: 1px;
+    border-style: solid;
+}
+
+#content-line-bottom {
+    width: 100%;
+    height:1px;
+    background-color: #CCCCCC;
+    min-width: 10px;
+}
+
+#footer {
+    font-size: 10px;
+    padding-top:10px;
+    clear: both;
+    height: 50px;
+    width: auto;
+    background-image: url("../images/bg_content_bottom.jpg");
+    background-repeat: repeat-x;
+}
+
+#toolbar {
+background:#FBBBD1 none repeat scroll 0%;
+border:1px solid #CC0000;
+position:absolute;
+padding-top:2px;
+left:0pt;
+position:fixed !important;
+position:absolute;
+top:0pt;
+width:100%;
+z-index:1000;
+}
+
+* html #toolbar { position: absolute; top: 0px; }
+
+#accordion {
+	list-style: none;
+	padding: 0 0 0 0;
+	width: 170px;
+}
+#accordion div {
+	display: block;
+	background-color: #039; /* #FF9927 */;
+        color: #fff;
+	font-weight: bold;
+	cursor: pointer;
+        background-image: url("../images/bg_menu_accord.jpg");
+        background-repeat: repeat-x;
+	/*
+        padding: 5 10 10 7;
+        */
+        padding-top: 5px;
+        padding-bottom: 5px;
+	list-style: circle;
+
+        margin: 3px;
+        /*
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+        */
+}
+
+#accordion div:hover {
+        background-image: url("../images/bg_menu_accord_hover.jpg");
+        background-repeat: repeat-x;
+}
+#accordion ul {
+	list-style: none;
+	padding: 0 0 0 0;
+}
+#accordion ul{
+	display: none;
+}
+#accordion ul li {
+	font-weight: normal;
+	cursor: auto;
+	background-color: #fff;
+	padding: 0 0 0 7px;
+        display: block;
+        height: 20px;
+}
+#accordion a {
+	text-decoration: none;
+}
+#accordion a:hover {
+	text-decoration: underline;
+}
+
+#user-info {
+    width: 250px;
+    height: 62px;
+    /*background-color: #C2ECFC;*/
+    background-image: url("../images/bg_user_info.gif");
+}
+
+#wrapper {
+        min-height: 100%;
+        height:     auto !important;
+        height:     100%;
+        margin:     0 auto -50px; /* -44px being the size of the footer */
+}
+
+#login-footer {
+    background-image: url("../images/bg-footer-login.png");
+    background-repeat: repeat-x;
+    height: 50px;
+}
+
+.no-border {
+  border-style: none;
+}
+
+#bgcontent {
+    position:absolute;
+    z-index: -1;
+    width:79.5%;
+    height:710px;
+}
+
+.shadow {
+    -moz-box-shadow:    7px 7px 25px -2px #666;
+    -webkit-box-shadow: 7px 7px 25px -2px #666;
+    box-shadow:         7px 7px 25px -2px #666;
+}
