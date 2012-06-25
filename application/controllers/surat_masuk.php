@@ -1182,21 +1182,50 @@ class Surat_masuk extends CI_Controller {
 		$this->load->view('main',$data);
 	}
 	
-	function status1($surat_masuk_id)
+	function status2($surat_masuk_id)
 	{
-		$kode_role = $this->session->userdata('kode_role');
-		$dinas_id = $this->surat_masuk_model->get_surat_masuk_by_id($surat_masuk_id)->row()->KIRIM;
-		$data['penerima'] = $this->dinas_model->get_dinas_by_id($dinas_id)->row()->NAMA_DINAS;
-		if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $dinas_id))
+		$user_id = $this->session->userdata('iduser');
+		$result = $this->surat_masuk_model->get_disposisi($surat_masuk_id,$user_id)->row();
+		$result2 = $this->surat_masuk_model->get_all_penerima_disposisi($user_id, $surat_masuk_id)->result();
+		$data_penerima_disposisi = array();
+		$status_terima = array();
+		$success_sign = array();
+		$i = 0;
+		foreach($result2 as $row_penerima_disposisi)
 		{
-			$data['status_terima'] = '<p class="success_message">Surat Sudah Diperiksa</p>';
-			$data['success_sign'] = '<td><img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'></td>';
+			$data_penerima_disposisi[$i] = $row_penerima_disposisi->NAMA_DINAS;
+			if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $row_penerima_disposisi->PENERIMA))
+			{
+				$status_terima[$i] = '<p class="success_message">Surat Sudah Diperiksa</p>';
+				$success_sign[$i] = '<td><img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'></td>';
+			}
+			else
+			{
+				$status_terima[$i] = '<p class="error_message">Surat Belum Diperiksa</p>';
+				$success_sign[$i] = '';
+			}
+			$i++;
 		}
-		else
+		$data['data_penerima_disposisi'] = $data_penerima_disposisi;
+		$data['status_terima'] = $status_terima;
+		$data['success_sign'] = $success_sign;
+		
+		if($this->session->userdata('kode_role') == 2 || $this->session->userdata('kode_role') == 3 || $this->session->userdata('kode_role') == 4)
 		{
-			$data['status_terima'] = '<p class="error_message">Surat Belum Diperiksa</p>';
-		}	
-		$data['content'] = $this->load->view('status_kirim',$data,true);
+			$data['content'] = $this->load->view('status_disposisi_asisten',$data,true);
+		}
+		else if($this->session->userdata('kode_role') == 5)
+		{
+			$data['content'] = $this->load->view('status_disposisi_sekretaris',$data,true);
+		}
+		else if($this->session->userdata('kode_role') == 6)
+		{
+			$data['content'] = $this->load->view('status_disposisi_wabup',$data,true);
+		}
+		else if($this->session->userdata('kode_role') == 7)
+		{
+			$data['content'] = $this->load->view('status_disposisi_bupati',$data,true);
+		}
 		$this->load->view('main',$data);
 	}
 }
