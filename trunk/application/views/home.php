@@ -6,11 +6,12 @@
 	$manajemen_pengguna = false;
 	$surat_masuk = false;
 	$catat_surat_masuk = false;
+	$surat_masuk_disposisi = false;
 
 	$this->load->library('session');
 	$kode_role = $this->session->userdata('kode_role');
 	if($kode_role == 1)
-	{	//untuk role admin dan KAL
+	{	
 		$master_dinas = true;
 		$master_instansi = true;
 		$master_jenis_surat = true;
@@ -19,7 +20,8 @@
 		$surat_masuk = true;
 		$catat_surat_masuk = true;
 	}
-	else {
+	else
+	{
 		$master_dinas = false;
 		$master_instansi = false;
 		$master_jenis_surat = false;
@@ -27,6 +29,10 @@
 		$manajemen_pengguna = false;
 		$surat_masuk = true;
 		$catat_surat_masuk = false;
+		if($kode_role == 7 ) 
+			$surat_masuk_disposisi = false;
+		else
+			$surat_masuk_disposisi = true;
 	}
 
 
@@ -50,8 +56,9 @@
 			<table width="100%" cellpadding="20">
 			<tr>
 				<td></td>
-				<?php if($catat_surat_masuk){?><td width="25%"><div align="center"><?php echo anchor(site_url('surat_masuk/add'),img(array('src'=>'images/icon/catat_surat_masuk.png','border'=>'0','alt'=>'')).'<b>Catat Surat Masuk</b>',''); ?></td><?php } ?>
-				<?php if($surat_masuk){?><td width="25%"><div align="center"><?php echo anchor(site_url('surat_masuk'),img(array('src'=>'images/icon/inbox.png','border'=>'0','alt'=>'')).'<b>Daftar Surat Masuk</b>',''); ?></td><?php } ?>
+				<?php if($catat_surat_masuk){?><td width="auto"><div align="center"><?php echo anchor(site_url('surat_masuk/add'),img(array('src'=>'images/icon/catat_surat_masuk.png','border'=>'0','alt'=>'')).'<b>Catat Surat Masuk</b>',''); ?></td><?php } ?>
+				<?php if($surat_masuk){?><td width="auto"><div align="center"><?php echo anchor(site_url('surat_masuk'),img(array('src'=>'images/icon/inbox.png','border'=>'0','alt'=>'')).'<b>Daftar Surat Masuk</b>',''); ?></td><?php } ?>
+				<?php if($surat_masuk_disposisi){?><td width="auto"><div align="center"><?php echo anchor(site_url('surat_masuk/grid_surat_disposisi'),img(array('src'=>'images/icon/email_icon.png','border'=>'0','alt'=>'')).'<b>Daftar Surat Masuk Disposisi</b>',''); ?></td><?php } ?>
 				<td></td>
 			</tr>
 			<tr>

@@ -87,6 +87,7 @@
 										'cols'		  => '200'
 									);
 							echo form_textarea($data);
+							echo form_hidden('type',1);
 						?> 					
 					</div>
 					<p class="guidelines" id="guide_14"><small>Catatan Disposisi</small></p> 
