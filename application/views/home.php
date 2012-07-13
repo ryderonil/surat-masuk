@@ -39,14 +39,14 @@
 ?>
 
 <div class="border_content">
-	<div class="title" align="center">Selamat Datang</div>
+	<div class="title" align="center">Selamat Datang, <?php echo $this->session->userdata('username');?></div>
 	<div class="inner_content">
 		<fieldset>
 		<legend><label><b>| Informasi umum aplikasi |</b></label></legend>
 			<table width="100%" cellpadding="10">
 			<tr>
 				<td>
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitationLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
+					Aplikasi ini adalah aplikasi yang dikembangkan untuk membantu mempermudah pengelolaan surat masuk di lingkup pemerintahan. Dengan aplikasi ini, serangkaian proses surat masuk dapat dilakukan dengan cepat karena salah satunya juga didukung oleh teknologi SMS Gateway. SMS Gateway digunakan sebagai pemberi informasi peringatan kepada setiap pejabat yang terkait bahwa terdapat surat masuk yang ditujukan kepada pejabat terkait
 				</td>
 			</tr>
 		</table>
