@@ -32,12 +32,12 @@ class Manajemen_pengguna extends CI_Controller {
 		$colModel['no'] = array('No',20,TRUE,'center',0);
 		$colModel['NAMA'] = array('Nama',180,TRUE,'center',1);
 		$colModel['USERNAME'] = array('Username',120,TRUE,'center',1);
-		$colModel['JABATAN'] = array('Jabatan',100,TRUE,'center',1);
-		$colModel['EMAIL'] = array('Email',140,TRUE,'center',1);
+		$colModel['NAMA_JABATAN'] = array('Jabatan',100,TRUE,'center',1);
+		$colModel['user.EMAIL'] = array('Email',140,TRUE,'center',1);
 		$colModel['NO_HP'] = array('No HP',120,TRUE,'center',1);
-		$colModel['ROLE'] = array('Role',100,TRUE,'center',1);
-		$colModel['DINAS'] = array('Dinas',170,TRUE,'center',1);
-		$colModel['STATUS_USER'] = array('Status',50,TRUE,'center',1);
+		$colModel['ROLE'] = array('Role',100,TRUE,'center',0);
+		$colModel['NAMA_DINAS'] = array('Dinas',170,TRUE,'center',1);
+		$colModel['STATUS_USER'] = array('Status',50,TRUE,'center',0);
 		$colModel['ubah'] = array('Ubah',30,FALSE,'center',0);
 		//$colModel['hapus'] = array('Hapus',30,FALSE,'center',0);
 			
@@ -113,7 +113,7 @@ class Manajemen_pengguna extends CI_Controller {
 	
 	function grid_data_pengguna() 
 	{
-		$valid_fields = array('USER_ID','JABATAN_ID','NAMA','USERNAME','PASSWORD','user.EMAIL','NO_HP','STATUS_USER','ROLE');
+		$valid_fields = array('USER_ID','JABATAN_ID','NAMA_DINAS','NAMA','USERNAME','NAMA_JABATAN','PASSWORD','user.EMAIL','NO_HP','STATUS_USER','ROLE');
 		$this->flexigrid->validate_post('USER_ID','asc',$valid_fields);
 		$records = $this->user_model->grid_user();
 		$this->output->set_header($this->config->item('json_header'));

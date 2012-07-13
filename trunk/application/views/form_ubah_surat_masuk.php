@@ -20,7 +20,6 @@
 								echo form_dropdown('sifat',$options, $sifat, 'id="sifat" class="element select small" onChange="ubahSifat();"');
 						?>					
 					</div>
-					<p class="guidelines" id="guide_14"><small>Sifat</small></p> 
 					<?php echo form_error('sifat'); ?>
 				</li>
 				<li id="li_14" >
@@ -28,7 +27,6 @@
 					<div>
 						<input id="nomor" name="nomor" class="element text medium" type="text" value="<?php if(isset($nomor))echo $nomor;?>"/> 					
 					</div>
-					<p class="guidelines" id="guide_14"><small>Nomor</small></p> 
 					<?php echo form_error('nomor'); ?>
 				</li>
 				<li>
@@ -54,7 +52,6 @@
 									</tbody>
 								</table>
 							</div>
-							<p class="guidelines" id="guide_14"><small>Tanggal Surat</small></p>
 						</span>
 				</li>
 				<li id="li_21" >
@@ -64,7 +61,6 @@
 							echo form_dropdown('jenis_surat',$jenis_surat,$jenis_surat_dipilih, 'id="jenis_surat" class="element select medium"');
 						?>
 					</div>
-					<p class="guidelines" id="guide_21"><small>Jenis Surat</small></p>
 					<?php echo form_error('jenis_surat'); ?>
 				</li>
 				<li id="li_21" >
@@ -75,7 +71,6 @@
 							echo form_dropdown('instansi',$instansi,$instansi_dipilih, 'id="instansi" class="element select medium"');
 						?>
 					</div>
-					<p class="guidelines" id="guide_21"><small>Dari</small></p>
 					<?php echo form_error('instansi'); ?>
 				</li>
 				<li id="li_14" >
@@ -83,7 +78,6 @@
 					<div>
 						<input id="perihal" name="perihal" class="element text medium" type="text" value="<?php echo $perihal;?>"/> 					
 					</div>
-					<p class="guidelines" id="guide_14"><small>Perihal</small></p> 
 					<?php echo form_error('perihal'); ?>
 				</li>
 				<div id="hideme">
@@ -118,7 +112,6 @@
 								</tr>
 								<?php } ?>
 							</table>
-							<p class="guidelines" id="guide_1"><small>File Surat</small></p> 
 						</div>
 					</li>
 					<li id="li_21" >
@@ -128,7 +121,6 @@
 								echo form_dropdown('pejabat',$pejabat,$pejabat_dipilih, 'class="element select medium"');
 							?>
 						</div>
-						<p class="guidelines" id="guide_21"><small>Kepada</small></p>
 						<?php echo form_error('pejabat'); ?>
 					</li>
 					<li>
@@ -154,7 +146,6 @@
 										</tbody>
 									</table>
 								</div>
-								<p class="guidelines" id="guide_14"><small>Tanggal Surat</small></p>
 							</span>
 					</li>
 					
@@ -163,7 +154,6 @@
 						<div>
 							<input id="lampiran" name="lampiran" class="element text medium" type="text" value="<?php echo $lampiran;?>"/> 					
 						</div>
-						<p class="guidelines" id="guide_14"><small>Jumlah Lampiran</small></p> 
 						<?php echo form_error('lampiran'); ?>
 					</li>
 					<li id="li_14" >
@@ -180,7 +170,6 @@
 								echo form_textarea($data);
 							?> 					
 						</div>
-						<p class="guidelines" id="guide_14"><small>Catatan</small></p> 
 						<?php echo form_error('catatan'); ?>
 					</li>
 					

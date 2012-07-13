@@ -316,10 +316,14 @@ class Surat_masuk extends CI_Controller {
 		if($sifat == '1')
 		{
 			$this->form_validation->set_rules('tgl_terima', 'Tanggal Terima', 'required');
+			$this->form_validation->set_rules('bln_terima', 'Bulan Terima', 'required');
+			$this->form_validation->set_rules('thn_terima', 'Tahun Terima', 'required');
 			$this->form_validation->set_rules('nomor', 'Nomor Surat', 'required'.$cek_nomor);
 			$this->form_validation->set_rules('perihal', 'Perihal Surat', 'required');
 			$this->form_validation->set_rules('pejabat', 'Kepada', 'callback_cek_dropdown');
 			$this->form_validation->set_rules('tgl_surat', 'Tanggal Surat', 'required');
+			$this->form_validation->set_rules('bln_surat', 'Bulan Surat', 'required');
+			$this->form_validation->set_rules('thn_surat', 'Tahun Surat', 'required');
 			$this->form_validation->set_rules('lampiran', 'Lampiran Surat', 'required');
 		}
 		else if($sifat == '2')
@@ -906,6 +910,8 @@ class Surat_masuk extends CI_Controller {
 	
 	function disposisi_process($surat_masuk_id)
 	{
+		$date = date('Y-m-d H:i:s');
+		$message = 'Terdapat surat disposisi dari Bupati';
 		$this->form_validation->set_rules('tgl_disposisi', 'Tanggal Disposisi', 'required');
 		$this->form_validation->set_rules('bln_disposisi', 'Bulan Disposisi', 'required');
 		$this->form_validation->set_rules('thn_disposisi', 'Tahun Disposisi', 'required');
@@ -930,6 +936,33 @@ class Surat_masuk extends CI_Controller {
 			$disposisi_id = $this->surat_masuk_model->get_max_disposisi_id()->row()->DISPOSISI_ID;
 			foreach($this->input->post('skpd') as $items)
 			{
+				if($items > 7)
+				{
+					$result = $this->user_model->get_user_by_dinas_id($items);
+					$result2 = $this->dinas_model->get_dinas_by_id($items);
+					if(count($result2->result()) > 0)
+					{
+						foreach($result2->result() as $row2)
+						{
+							$no_hp_kepala_dinas = $row2->HP;
+							$this->surat_masuk_model->sendMessage($no_hp_kepala_dinas,$date,$message);
+						}
+					}
+				}
+				else
+				{
+					$result = $this->user_model->get_user_by_dinas_id($items);
+				}
+				
+				if(count($result->result()) > 0)
+				{
+					foreach($result->result() as $row)
+					{
+						$no_hp = $row->NO_HP;
+						$this->surat_masuk_model->sendMessage($no_hp,$date,$message);
+					}
+				}
+				
 				$data_detail_disposisi = array(
 												'PENERIMA'    => $items,
 												'DISPOSISI_ID' => $disposisi_id											
@@ -1253,14 +1286,20 @@ class Surat_masuk extends CI_Controller {
 		$data_penerima_disposisi_a1 = array();
 		$data_penerima_disposisi_a2 = array();
 		$data_penerima_disposisi_a3 = array();
+		$data_penerima_disposisi_s = array();
+		$data_penerima_disposisi_w = array();
 		$status_terima = array();
 		$status_terima_a1 = array();
 		$status_terima_a2 = array();
 		$status_terima_a3 = array();
+		$status_terima_s = array();
+		$status_terima_w = array();
 		$success_sign = array();
 		$success_sign_a1 = array();
 		$success_sign_a2 = array();
 		$success_sign_a3 = array();
+		$success_sign_s = array();
+		$success_sign_w = array();
 		$i = 0;
 		$j = 0;
 		foreach($result2 as $row_penerima_disposisi)
@@ -1329,6 +1368,48 @@ class Surat_masuk extends CI_Controller {
 				}
 				$j = 0;
 			}
+			if($row_penerima_disposisi->PENERIMA == 5)
+			{
+				$user_id_s = $this->user_model->get_user_by_dinas_id($row_penerima_disposisi->PENERIMA)->row()->USER_ID;
+				$result_s = $this->surat_masuk_model->get_all_penerima_disposisi($user_id_s,$surat_masuk_id)->result();
+				foreach($result_s as $terima_dr_s)
+				{
+					$data_penerima_disposisi_s[$j] = $terima_dr_s->NAMA_DINAS;
+					if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $terima_dr_s->PENERIMA))
+					{
+						$status_terima_s[$j] = '<p class="success_message">Surat Sudah Diperiksa</p>';
+						$success_sign_s[$j] = '<td><img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'></td>';
+					}
+					else
+					{
+						$status_terima_s[$j] = '<p class="error_message">Surat Belum Diperiksa</p>';
+						$success_sign_s[$j] = '';
+					}
+					$j++;
+				}
+				$j = 0;
+			}
+			if($row_penerima_disposisi->PENERIMA == 6)
+			{
+				$user_id_w = $this->user_model->get_user_by_dinas_id($row_penerima_disposisi->PENERIMA)->row()->USER_ID;
+				$result_w = $this->surat_masuk_model->get_all_penerima_disposisi($user_id_w,$surat_masuk_id)->result();
+				foreach($result_w as $terima_dr_w)
+				{
+					$data_penerima_disposisi_w[$j] = $terima_dr_w->NAMA_DINAS;
+					if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $terima_dr_w->PENERIMA))
+					{
+						$status_terima_w[$j] = '<p class="success_message">Surat Sudah Diperiksa</p>';
+						$success_sign_w[$j] = '<td><img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'></td>';
+					}
+					else
+					{
+						$status_terima_w[$j] = '<p class="error_message">Surat Belum Diperiksa</p>';
+						$success_sign_w[$j] = '';
+					}
+					$j++;
+				}
+				$j = 0;
+			}
 			
 			if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $row_penerima_disposisi->PENERIMA))
 			{
@@ -1346,14 +1427,20 @@ class Surat_masuk extends CI_Controller {
 		$data['data_penerima_disposisi_a1'] = $data_penerima_disposisi_a1;
 		$data['data_penerima_disposisi_a2'] = $data_penerima_disposisi_a2;
 		$data['data_penerima_disposisi_a3'] = $data_penerima_disposisi_a3;
+		$data['data_penerima_disposisi_s'] = $data_penerima_disposisi_s;
+		$data['data_penerima_disposisi_w'] = $data_penerima_disposisi_w;
 		$data['status_terima'] = $status_terima;
 		$data['status_terima_a1'] = $status_terima_a1;
 		$data['status_terima_a2'] = $status_terima_a2;
 		$data['status_terima_a3'] = $status_terima_a3;
+		$data['status_terima_s'] = $status_terima_s;
+		$data['status_terima_w'] = $status_terima_w;
 		$data['success_sign'] = $success_sign;
 		$data['success_sign_a1'] = $success_sign_a1;
 		$data['success_sign_a2'] = $success_sign_a2;
 		$data['success_sign_a3'] = $success_sign_a3;
+		$data['success_sign_s'] = $success_sign_s;
+		$data['success_sign_w'] = $success_sign_w;
 		
 		if($this->session->userdata('kode_role') == 2 || $this->session->userdata('kode_role') == 3 || $this->session->userdata('kode_role') == 4)
 		{
@@ -1380,12 +1467,134 @@ class Surat_masuk extends CI_Controller {
 		$result = $this->surat_masuk_model->get_disposisi($surat_masuk_id,$user_id)->row();
 		$result2 = $this->surat_masuk_model->get_all_penerima_disposisi($user_id, $surat_masuk_id)->result();
 		$data_penerima_disposisi = array();
+		$data_penerima_disposisi = array();
+		$data_penerima_disposisi_a1 = array();
+		$data_penerima_disposisi_a2 = array();
+		$data_penerima_disposisi_a3 = array();
+		$data_penerima_disposisi_s = array();
+		$data_penerima_disposisi_w = array();
 		$status_terima = array();
+		$status_terima_a1 = array();
+		$status_terima_a2 = array();
+		$status_terima_a3 = array();
+		$status_terima_s = array();
+		$status_terima_w = array();
 		$success_sign = array();
+		$success_sign_a1 = array();
+		$success_sign_a2 = array();
+		$success_sign_a3 = array();
+		$success_sign_s = array();
+		$success_sign_w = array();
 		$i = 0;
+		$j = 0;
 		foreach($result2 as $row_penerima_disposisi)
 		{
 			$data_penerima_disposisi[$i] = $row_penerima_disposisi->NAMA_DINAS;
+			if($row_penerima_disposisi->PENERIMA == 2)
+			{
+				$user_id_a1 = $this->user_model->get_user_by_dinas_id($row_penerima_disposisi->PENERIMA)->row()->USER_ID;
+				$result_a1 = $this->surat_masuk_model->get_all_penerima_disposisi($user_id_a1,$surat_masuk_id)->result();
+				foreach($result_a1 as $terima_dr_a1)
+				{
+					$data_penerima_disposisi_a1[$j] = $terima_dr_a1->NAMA_DINAS;
+					if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $terima_dr_a1->PENERIMA))
+					{
+						$status_terima_a1[$j] = '<p class="success_message">Surat Sudah Diperiksa</p>';
+						$success_sign_a1[$j] = '<td><img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'></td>';
+					}
+					else
+					{
+						$status_terima_a1[$j] = '<p class="error_message">Surat Belum Diperiksa</p>';
+						$success_sign_a1[$j] = '';
+					}
+					$j++;
+				}
+				$j = 0;
+			}
+			if($row_penerima_disposisi->PENERIMA == 3)
+			{
+				$user_id_a2 = $this->user_model->get_user_by_dinas_id($row_penerima_disposisi->PENERIMA)->row()->USER_ID;
+				$result_a2 = $this->surat_masuk_model->get_all_penerima_disposisi($user_id_a2,$surat_masuk_id)->result();
+				foreach($result_a2 as $terima_dr_a2)
+				{
+					$data_penerima_disposisi_a2[$j] = $terima_dr_a2->NAMA_DINAS;
+					if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $terima_dr_a2->PENERIMA))
+					{
+						$status_terima_a2[$j] = '<p class="success_message">Surat Sudah Diperiksa</p>';
+						$success_sign_a2[$j] = '<td><img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'></td>';
+					}
+					else
+					{
+						$status_terima_a2[$j] = '<p class="error_message">Surat Belum Diperiksa</p>';
+						$success_sign_a2[$j] = '';
+					}
+					$j++;
+				}
+				$j = 0;
+			}
+			if($row_penerima_disposisi->PENERIMA == 4)
+			{
+				$user_id_a3 = $this->user_model->get_user_by_dinas_id($row_penerima_disposisi->PENERIMA)->row()->USER_ID;
+				$result_a3 = $this->surat_masuk_model->get_all_penerima_disposisi($user_id_a3,$surat_masuk_id)->result();
+				foreach($result_a3 as $terima_dr_a3)
+				{
+					$data_penerima_disposisi_a3[$j] = $terima_dr_a3->NAMA_DINAS;
+					if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $terima_dr_a3->PENERIMA))
+					{
+						$status_terima_a3[$j] = '<p class="success_message">Surat Sudah Diperiksa</p>';
+						$success_sign_a3[$j] = '<td><img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'></td>';
+					}
+					else
+					{
+						$status_terima_a3[$j] = '<p class="error_message">Surat Belum Diperiksa</p>';
+						$success_sign_a3[$j] = '';
+					}
+					$j++;
+				}
+				$j = 0;
+			}
+			if($row_penerima_disposisi->PENERIMA == 5)
+			{
+				$user_id_s = $this->user_model->get_user_by_dinas_id($row_penerima_disposisi->PENERIMA)->row()->USER_ID;
+				$result_s = $this->surat_masuk_model->get_all_penerima_disposisi($user_id_s,$surat_masuk_id)->result();
+				foreach($result_s as $terima_dr_s)
+				{
+					$data_penerima_disposisi_s[$j] = $terima_dr_s->NAMA_DINAS;
+					if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $terima_dr_s->PENERIMA))
+					{
+						$status_terima_s[$j] = '<p class="success_message">Surat Sudah Diperiksa</p>';
+						$success_sign_s[$j] = '<td><img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'></td>';
+					}
+					else
+					{
+						$status_terima_s[$j] = '<p class="error_message">Surat Belum Diperiksa</p>';
+						$success_sign_s[$j] = '';
+					}
+					$j++;
+				}
+				$j = 0;
+			}
+			if($row_penerima_disposisi->PENERIMA == 6)
+			{
+				$user_id_w = $this->user_model->get_user_by_dinas_id($row_penerima_disposisi->PENERIMA)->row()->USER_ID;
+				$result_w = $this->surat_masuk_model->get_all_penerima_disposisi($user_id_w,$surat_masuk_id)->result();
+				foreach($result_w as $terima_dr_w)
+				{
+					$data_penerima_disposisi_w[$j] = $terima_dr_w->NAMA_DINAS;
+					if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $terima_dr_w->PENERIMA))
+					{
+						$status_terima_w[$j] = '<p class="success_message">Surat Sudah Diperiksa</p>';
+						$success_sign_w[$j] = '<td><img border=\'0\' src=\''.base_url().'images/flexigrid/1.png\'></td>';
+					}
+					else
+					{
+						$status_terima_w[$j] = '<p class="error_message">Surat Belum Diperiksa</p>';
+						$success_sign_w[$j] = '';
+					}
+					$j++;
+				}
+				$j = 0;
+			}
 			if(!$this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $row_penerima_disposisi->PENERIMA))
 			{
 				$status_terima[$i] = '<p class="success_message">Surat Sudah Diperiksa</p>';
@@ -1399,8 +1608,23 @@ class Surat_masuk extends CI_Controller {
 			$i++;
 		}
 		$data['data_penerima_disposisi'] = $data_penerima_disposisi;
+		$data['data_penerima_disposisi_a1'] = $data_penerima_disposisi_a1;
+		$data['data_penerima_disposisi_a2'] = $data_penerima_disposisi_a2;
+		$data['data_penerima_disposisi_a3'] = $data_penerima_disposisi_a3;
+		$data['data_penerima_disposisi_s'] = $data_penerima_disposisi_s;
+		$data['data_penerima_disposisi_w'] = $data_penerima_disposisi_w;
 		$data['status_terima'] = $status_terima;
+		$data['status_terima_a1'] = $status_terima_a1;
+		$data['status_terima_a2'] = $status_terima_a2;
+		$data['status_terima_a3'] = $status_terima_a3;
+		$data['status_terima_s'] = $status_terima_s;
+		$data['status_terima_w'] = $status_terima_w;
 		$data['success_sign'] = $success_sign;
+		$data['success_sign_a1'] = $success_sign_a1;
+		$data['success_sign_a2'] = $success_sign_a2;
+		$data['success_sign_a3'] = $success_sign_a3;
+		$data['success_sign_s'] = $success_sign_s;
+		$data['success_sign_w'] = $success_sign_w;
 		
 		if($this->session->userdata('kode_role') == 2 || $this->session->userdata('kode_role') == 3 || $this->session->userdata('kode_role') == 4)
 		{
