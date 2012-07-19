@@ -38,13 +38,13 @@
 									<tbody>
 										<tr>
 											<td>
-												<input type="text" class="w2em" id="date-9-dd" readonly name="tgl_terima" maxlength="2" value="<? if(set_value('tgl_terima')!='') echo set_value('tgl_terima');?>"/>-<label for="date-9-dd">DD</label>
+												<input type="text" class="w2em" id="date-9-dd" readonly name="tgl_terima" maxlength="2" value="<?php echo $tgl;?>"/>-<label for="date-9-dd">DD</label>
 											</td>												
 											<td>
-												<input type="text" class="w2em" id="date-9-mm"readonly name="bln_terima" maxlength="2" value="<? if(set_value('bln_terima')!='') echo set_value('bln_terima');?>"/>-<label for="date-9-mm">MM</label>
+												<input type="text" class="w2em" id="date-9-mm"readonly name="bln_terima" maxlength="2" value="<?php echo $bln;?>"/>-<label for="date-9-mm">MM</label>
 											</td>
 											<td>
-												<input type="text" class="w4em highlight-days-67 split-date" readonly id="date-9" name="thn_terima" maxlength="4" value="<? if(set_value('thn_terima')!='') echo set_value('thn_terima');?>"/>
+												<input type="text" class="w4em highlight-days-67 split-date" readonly id="date-9" name="thn_terima" maxlength="4" value="<?php echo $thn;?>"/>
 												&nbsp;<img src="<?=base_url();?>images/icon/hapus.png" onclick="hapus_tanggal_terima();"/>
 												<label for="date-9">YYYY</label>
 											</td>
@@ -104,8 +104,7 @@
 						<label class="description" for="element_21">Kepada</label>
 						<div>
 							<?php
-								
-								echo form_dropdown('pejabat',$pejabat,set_value('pejabat'), 'class="element select medium"');
+								echo form_multiselect('pejabat[]',$pejabat,set_value('pejabat'), 'id="pejabat" class="element select small" multiple="multiple" size="20"');
 							?>
 						</div>
 						<?php echo form_error('pejabat'); ?>
@@ -215,6 +214,14 @@
 				alert("Maksimum file yang diupload 10");
 			}
 		}
+		
+		$(document).ready( function() {
+			$("#pejabat").multiSelect({
+				selectAll: false,
+				noneSelected: 'Pilih Pejabat',
+				oneOrMoreSelected: '% pejabat dipilih'
+			});
+		});
 		
 		Ext.onReady(function(){
 			// autocomplete utk jenis surat

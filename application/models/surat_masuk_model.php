@@ -9,24 +9,36 @@ class Surat_masuk_model extends CI_Model{
 		$this->CI = get_instance();
 	}
 		
-	function grid_surat_masuk($kode_role)
+	function grid_surat_masuk()
 	{
 		$this->db->select('*');
 		$this->db->from('surat_masuk');
-		if($kode_role != 1)
-		{
-			$this->db->where('KIRIM', $kode_role);
-		}
 		
 		$this->CI->flexigrid->build_query();		
 		$return['records'] = $this->db->get();
 		
 		$this->db->select('*');
 		$this->db->from('surat_masuk');
-		if($kode_role != 1)
-		{
-			$this->db->where('KIRIM', $kode_role);
-		}
+		
+		$this->CI->flexigrid->build_query(FALSE);
+		$return['record_count'] = $this->db->count_all_results();
+		return $return;		
+	}
+	
+	function grid_surat_masuk2($dinas_id)
+	{
+		$this->db->select('*');
+		$this->db->from('tujuan_surat');
+		$this->db->join('surat_masuk','surat_masuk.surat_masuk_id = tujuan_surat.tujuan');
+		$this->db->where('tujuan',$dinas_id);
+		
+		$this->CI->flexigrid->build_query();		
+		$return['records'] = $this->db->get();
+		
+		$this->db->select('*');
+		$this->db->from('tujuan_surat');
+		$this->db->join('surat_masuk','surat_masuk.surat_masuk_id = tujuan_surat.tujuan');
+		$this->db->where('tujuan',$dinas_id);
 		
 		$this->CI->flexigrid->build_query(FALSE);
 		$return['record_count'] = $this->db->count_all_results();
@@ -92,6 +104,11 @@ class Surat_masuk_model extends CI_Model{
 	{
 		$this->db->insert('komentar_disposisi', $komentar_disposisi);
 	}
+	
+	function add8($tujuan_surat)
+	{
+		$this->db->insert('tujuan_surat', $tujuan_surat);
+	}
 			
 	function update($surat_masuk_id, $surat_masuk)
 	{
@@ -110,6 +127,13 @@ class Surat_masuk_model extends CI_Model{
 		$this->db->where('komentar_surat.SURAT_MASUK_ID', $surat_masuk_id);
 		$this->db->where('komentar_surat.KOMENTATOR', $komentator);
 		$this->db->update('komentar_surat', $komentar);
+	}
+	
+	function update4($surat_masuk_id,$penerima,$data)
+	{
+		$this->db->where('tujuan_surat.SURAT_MASUK_ID', $surat_masuk_id);
+		$this->db->where('tujuan_surat.TUJUAN', $penerima);
+		$this->db->update('tujuan_surat', $data);
 	}
 		
 	function delete($userid)
@@ -259,6 +283,25 @@ class Surat_masuk_model extends CI_Model{
 		$result = $this->db->query($sql, array($disposisi_id));
 		return $result;
 	}
+	
+	function get_penerima_surat($surat_masuk_id)
+	{
+		$this->db->select('*');
+		$this->db->from('tujuan_surat');
+		$this->db->join('dinas','dinas.dinas_id = tujuan_surat.tujuan');
+		$this->db->where('surat_masuk_id',$surat_masuk_id);
+		$this->db->where('status_kirim',0);
+		return $this->db->get();
+	}
+	
+	function get_penerima_surat2($surat_masuk_id)
+	{
+		$this->db->select('*');
+		$this->db->from('tujuan_surat');
+		$this->db->join('dinas','dinas.dinas_id = tujuan_surat.tujuan');
+		$this->db->where('surat_masuk_id',$surat_masuk_id);
+		return $this->db->get();
+	}
 		
 	function cek_surat_masuk_id($surat_masuk_id)
 	{
@@ -292,6 +335,25 @@ class Surat_masuk_model extends CI_Model{
 			return FALSE;
 		}
 	}
+	
+	function cek_apa_sudah_dikirim($surat_masuk_id)
+	{
+		$this->db->select('*');
+		$this->db->from('disposisi_surat_masuk');
+		$this->db->where('SURAT_MASUK_ID', $surat_masuk_id);
+		$this->db->where('USER_ID', $user_id);
+		$result = $this->db->get();
+		if ($result->num_rows())
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	
 	
 	function cek_nomor($nomor)
 	{
@@ -356,6 +418,14 @@ class Surat_masuk_model extends CI_Model{
 		{
 			return TRUE;
 		}	
+	}
+	
+	function count_penerima_surat($surat_masuk_id)
+	{				
+		$this->db->where('STATUS_KIRIM', 0);
+		$this->db->where('SURAT_MASUK_ID', $surat_masuk_id);
+		$this->db->from('tujuan_surat');
+		return $this->db->count_all_results();
 	}
 	
 	function count_file_surat_masuk($surat_masuk_id)

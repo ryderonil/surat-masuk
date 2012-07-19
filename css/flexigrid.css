@@ -742,4 +742,13 @@ div.colCopy {
 	.flexigrid div.fbutton .kembali
 		{
 			background: url(../images/flexigrid/kembali.png) no-repeat center left;
-		}
+		}	
+	.flexigrid div.fbutton .set
+	{
+		background: url(../images/icon/cek.png) no-repeat center left;
+	}
+	
+	.flexigrid div.fbutton .unset
+	{
+		background: url(../images/icon/DeleteRed.png) no-repeat center left;
+	}
