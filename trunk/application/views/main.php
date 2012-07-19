@@ -16,6 +16,7 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/ext-all.css" media="screen, tv, projection" title="Default" />	
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>css/downloadButtons.css" media="screen, tv, projection" title="Default" />	
 		<link rel="stylesheet" href="<?php echo base_url() ?>css/uniform.default.css" type="text/css" media="screen">
+		<link href="<?php echo base_url() ?>css/jquery.multiSelect.css" rel="stylesheet" type="text/css" />
 		<!-- JAVASCRIPT -->
 		<script type="text/javascript" src="<?php echo base_url() ?>js/jquery-1.7.2.js"></script>
 		<script type="text/javascript" src="<?php echo base_url() ?>js/jquery.ui.all.js"></script>
@@ -31,6 +32,10 @@
 		<script type="text/javascript" src="<?php echo base_url() ?>js/ext-all.js"></script>
 		<script type="text/javascript" src="<?php echo base_url() ?>js/ext-combo.js"></script>
 		<script src="<?php echo base_url() ?>js/jquery.uniform.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<?php echo base_url() ?>js/jquery.bgiframe.min.js" type="text/javascript"></script>
+		<script src="<?php echo base_url() ?>js/jquery.multiSelect.js" type="text/javascript"></script>
+
+		
 		<script type="text/javascript">
 			<!-- <MENU_KANAN>
 			//  Developed by Roshan Bhattarai 

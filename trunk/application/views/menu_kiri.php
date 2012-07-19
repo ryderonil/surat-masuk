@@ -6,6 +6,7 @@
 	$surat_masuk = true;
 	$catat_surat_masuk = true;
 	$surat_masuk_disposisi = true;
+	$laporan = true;
 	
 
 	$this->load->library('session');
@@ -19,6 +20,7 @@
 	}
 	else { //untuk role asisten dan sekretaris
 		$master_data = false;
+		$laporan = false;
 		$manajemen_pengguna = false;
 		$surat_masuk = true;
 		$catat_surat_masuk = false; 
@@ -47,6 +49,11 @@
 			<?php echo anchor(site_url('dinas'),img(array('src'=>'images/icon/doc.png','border'=>'0','alt'=>'')).' SKPD',''); ?>
 			<?php echo anchor(site_url('instansi'),img(array('src'=>'images/icon/doc.png','border'=>'0','alt'=>'')).' Instansi',''); ?>
 			<?php echo anchor(site_url('jabatan'),img(array('src'=>'images/icon/doc.png','border'=>'0','alt'=>'')).' Jabatan',''); ?>
+			<?php echo anchor(site_url('sms'),img(array('src'=>'images/icon/sms.png','border'=>'0','alt'=>'')).' Redaksional SMS',''); ?>
+		</div><?php } ?>
+		<?php if ($laporan) { ?><p class="menu_head"><?php echo img(array('src'=>'images/icon/dir.png','border'=>'0','alt'=>''))?> Laporan Manajerial</p>
+		<div class="menu_body" align="left">
+		  <?php if ($laporan) { ?><?php echo anchor(site_url('chart_data'),img(array('src'=>'images/icon/reports_icon.png','border'=>'0','alt'=>'')).' Grafik',''); ?><?php } ?>
 		</div><?php } ?>
 		<p class="menu_head"><?php echo img(array('src'=>'images/icon/dir.png','border'=>'0','alt'=>''))?> User Menu</p>
 		<div class="menu_body" align="left">

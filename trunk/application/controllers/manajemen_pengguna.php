@@ -266,7 +266,7 @@ class Manajemen_pengguna extends CI_Controller {
 		if($this->input->post('grup') == 8)
 			$dinas = $this->input->post('dinas');
 		else
-			$dinas = 1;
+			$dinas = $this->input->post('grup');
 		$data = array(
 						'NAMA' => $this->input->post('nama'),
 						'USERNAME' => $this->input->post('username'),

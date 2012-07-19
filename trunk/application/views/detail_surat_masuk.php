@@ -77,7 +77,20 @@
 						<li id="li_21" >
 							<div class="left"><label class="description" for="element_21">Kepada :</label></div>
 							<div>
-								<p><?php if($kepada != null) echo $kepada; else echo '-';?></p>
+								<table>
+								<?php 
+										foreach($penerima as $row)
+										{
+											echo '<tr>';
+											echo '<td>';
+											echo '- '.$row->NAMA_DINAS;
+											echo '</td>';
+											echo '</tr>';
+										}
+									?>
+								</table>
+									
+								</p>
 							</div>
 						</li>
 						<li>
