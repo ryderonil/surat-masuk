@@ -66,6 +66,16 @@ class Dinas_model extends CI_Model{
 		return $result;
 	}
 	
+	function get_all_non_dinas()
+	{
+		$this->db->select('*');
+		$this->db->from('dinas');
+		$this->db->where('dinas.STATUS_DINAS', 1);
+		$this->db->where('dinas.STATUS', 0);
+		$result = $this->db->get();
+		return $result;
+	}
+	
 	function get_all_dinas_disposisi()
 	{
 		$this->db->select('*');

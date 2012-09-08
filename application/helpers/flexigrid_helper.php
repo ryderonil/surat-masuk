@@ -35,7 +35,7 @@ if (! function_exists('build_grid_js'))
 	 * @param	array with aditional parameters
 	 * @return	string
 	 */
-	function build_grid_js($grid_id,$url,$colModel,$sortname,$sortorder,$gridParams = NULL,$buttons = NULL)
+	function build_grid_js($grid_id,$url,$colModel,$sortname,$sortorder,$gridParams = NULL,$buttons = NULL,$usepager)
 	{
 		//Basic propreties
 		$grid_js = '<script type="text/javascript">$(document).ready(function(){';
@@ -44,7 +44,7 @@ if (! function_exists('build_grid_js'))
 		$grid_js .= "dataType: 'json',";
 		$grid_js .= "sortname: '".$sortname."',";
 		$grid_js .= "sortorder: '".$sortorder."',";
-		$grid_js .= "usepager: true,";
+		$grid_js .= "usepager: '".$usepager."',";
 		$grid_js .= "useRp: true,";
 		
 		//Other propreties

@@ -12,7 +12,9 @@ Sistem Surat Masuk - Login
     <link href="<?php echo base_url() ?>css/default.css" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url() ?>css/login-box.css" rel="stylesheet" type="text/css" />
     <link href="css/login.css" rel="stylesheet" type="text/css">
+    <link href="<?php echo base_url() ?>css/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
 	<script type="text/javascript" src="<?php echo base_url() ?>js/jquery-1.7.2.js"></script>
+	<script src="<?php echo base_url() ?>js/jquery.alerts.js" type="text/javascript"></script>
 	<script type="text/javascript">
 $(document).ready(function(){
     base_url = "http://localhost/surat-masuk/";

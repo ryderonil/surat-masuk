@@ -74,7 +74,7 @@ class Jabatan extends CI_Controller {
 				
 		// mengambil data dari file controler ajax pada method grid_user		
 		$url = site_url()."/jabatan/grid_data_jabatan";
-		$grid_js = build_grid_js('user',$url,$colModel,'ID','asc',$gridParams,$buttons);
+		$grid_js = build_grid_js('user',$url,$colModel,'ID','asc',$gridParams,$buttons,true);
 		$data['js_grid'] = $grid_js;
 		$data['added_js'] = 
 		"<script type='text/javascript'>
