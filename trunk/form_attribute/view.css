@@ -343,7 +343,7 @@ textarea.textarea
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: normal;
   padding: 3px;
-  color: #777;
+  color: #000;
   background: url('../images/bg-input-focus.png') repeat-x 0px 0px;
   background: url('../images/bg-input.png') repeat-x 0px 0px;
   border-top: solid 1px #aaa;

@@ -23,7 +23,7 @@ class Login extends CI_Controller {
 	
 	function login_ulang()
 	{
-		echo "<script> alert('Maaf, Anda tidak punya hak untuk mengakses halaman ini. Silakan login terlebih dahulu !!');</script>";	
+		echo "<script> jAlert('Maaf, Anda tidak punya hak untuk mengakses halaman ini. Silakan login terlebih dahulu !!','gagal');</script>";
 		$this->index();
 	}
 	

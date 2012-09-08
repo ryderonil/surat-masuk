@@ -82,7 +82,7 @@ class Surat_masuk extends CI_Controller {
 		
 		// mengambil data dari file controler ajax pada method grid_user	
 		$url = site_url()."/surat_masuk/grid_data_surat_masuk";
-		$grid_js = build_grid_js('user',$url,$colModel,'ID','asc',$gridParams,$buttons);
+		$grid_js = build_grid_js('user',$url,$colModel,'ID','asc',$gridParams,$buttons,true);
 		$data['js_grid'] = $grid_js;
 		$data['added_js'] = 
 		"<script type='text/javascript'>
@@ -140,7 +140,7 @@ class Surat_masuk extends CI_Controller {
 			$colModel['status'] = array('Status',90,FALSE,'center',0);
 		}
 		//$colModel['komentar'] = array('Komentar',60,FALSE,'center',0);
-		$colModel['detail_disposisi'] = array('Detail Disposisi',80,FALSE,'center',0);
+		//$colModel['detail_disposisi'] = array('Detail Disposisi',80,FALSE,'center',0);
 		$colModel['detail'] = array('Detail Surat',80,FALSE,'center',0);
 			
 		//setting konfigurasi pada bottom tool bar flexigrid
@@ -158,7 +158,7 @@ class Surat_masuk extends CI_Controller {
 		//menambah tombol pada flexigrid top toolbar
 		// mengambil data dari file controler ajax pada method grid_user	
 		$url = site_url()."/surat_masuk/grid_data_surat_masuk_disposisi";
-		$grid_js = build_grid_js('user',$url,$colModel,'ID','asc',$gridParams,null);
+		$grid_js = build_grid_js('user',$url,$colModel,'ID','asc',$gridParams,null,true);
 		$data['js_grid'] = $grid_js;
 		//$data['added_js'] variabel untuk membungkus javascript yang dipakai pada tombol yang ada di toolbar atas
 		$data['content'] = $this->load->view('grid',$data,true);
@@ -284,8 +284,7 @@ class Surat_masuk extends CI_Controller {
 											$disposisi,
 											'<a href='.base_url().'index.php/surat_masuk/status2_gdd/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/status.png\'></a>',
 											//'<a href='.base_url().'index.php/surat_masuk/komentar/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/comment.png\'></a>',
-											'<a href='.base_url().'index.php/surat_masuk/disposisi3/'.$row->SURAT_MASUK_ID.'/'.$row->DISPOSISI_ID.'><img border=\'0\' src=\''.base_url().'images/icon/doc.png\'></a>',
-											'<a href='.base_url().'index.php/surat_masuk/detail/'.$row->SURAT_MASUK_ID.'><img border=\'0\' src=\''.base_url().'images/icon/39.png\'></a>'
+											'<a href='.base_url().'index.php/surat_masuk/detail_surat_masuk_dan_disposisi/'.$row->SURAT_MASUK_ID.'/'.$row->DISPOSISI_ID.'><img border=\'0\' src=\''.base_url().'images/icon/doc.png\'></a>',
 										);
 				}
 				else
@@ -781,7 +780,7 @@ class Surat_masuk extends CI_Controller {
 	
 	function disposisi($surat_masuk_id)
 	{
-		$get_message = $this->sms_model->get_template_kirim()->row();
+		$get_message = $this->sms_model->get_template_kirim($this->session->userdata('dinas_id'))->row();
 		$message = $get_message->TEMPLATE_SMS;
 		$date = explode("-",date("Y-m-j"));
 		$tgl = $date[2];
@@ -947,7 +946,7 @@ class Surat_masuk extends CI_Controller {
 					'KOMENTAR_DISPOSISI' => $this->input->post('komentar_disposisi') 		
 				);
 		$this->surat_masuk_model->add7($data);
-		redirect('surat_masuk/disposisi3/'.$this->input->post('surat_masuk_id').'/'.$this->input->post('disposisi_id'));
+		redirect('surat_masuk/detail_surat_masuk_dan_disposisi/'.$this->input->post('surat_masuk_id').'/'.$this->input->post('disposisi_id'));
 	}
 	
 	function disposisi_process($surat_masuk_id)
@@ -1057,7 +1056,7 @@ class Surat_masuk extends CI_Controller {
 		$this->form_validation->set_rules('teks_sms', 'Teks SMS', 'required');
 		$this->form_validation->set_error_delimiters('<p class="error_message">', '</p>');
 		$this->form_validation->set_message('required', 'Kolom %s harus diisi !!');
-		$get_message = $this->sms_model->get_template_kirim()->row();
+		$get_message = $this->sms_model->get_template_kirim($this->session->userdata('dinas_id'))->row();
 		$message = $get_message->TEMPLATE_SMS;
 		if($this->form_validation->run())
 		{
@@ -1281,6 +1280,85 @@ class Surat_masuk extends CI_Controller {
 		$data['file_surat_masuk'] = $result4;
 		$data['komentar'] = $komentar;
 		$data['content'] = $this->load->view('detail_surat_masuk',$data,true);
+		$this->load->view('main',$data);
+	}
+	
+	function detail_surat_masuk_dan_disposisi($surat_masuk_id,$disposisi_id)
+	{
+		$urgensi = $this->urgensi();
+		//$user_id = $this->session->userdata('iduser');
+		$result = $this->surat_masuk_model->get_disposisi2($disposisi_id)->row();
+		$result1 = $this->surat_masuk_model->get_surat_masuk_by_id($surat_masuk_id)->row();
+		$result2 = $this->surat_masuk_model->get_all_penerima_disposisi2($disposisi_id)->result();
+		$result3 = $this->surat_masuk_model->get_all_komentar_disposisi2($disposisi_id)->result();
+		$data['tgl_disposisi'] = date("d-m-Y", strtotime($result->TANGGAL_DISPOSISI));
+		$data['nomor'] = $result1->NOMOR;
+		$data['penerima'] = $result2;
+		$data['urgensi'] = $urgensi[$result->URGENSI];
+		$data['disposisi_dari'] = $result->NAMA_DINAS;
+		$data['surat_masuk_id'] = $surat_masuk_id;
+		$data['catatan_disposisi'] = $result->CATATAN_DISPOSISI;
+		$data['disposisi_id'] = $result->DISPOSISI_ID;
+		$data['file_disposisi_surat_masuk'] = $result->FILE_DISPOSISI;
+		$data['komentar_disposisi'] = $result3;
+		
+		$penerima = $this->surat_masuk_model->get_penerima_surat2($surat_masuk_id);
+		$komentar = $this->surat_masuk_model->get_all_komentar($surat_masuk_id)->result();
+		$kode_role = $this->session->userdata('kode_role');
+		$dinas_id = $this->session->userdata('dinas_id');
+		if($kode_role != 1)
+		{
+			if($kode_role > 7)
+			{
+				if($this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $dinas_id))
+				{
+					$data = array(
+								'SURAT_MASUK_ID' => $surat_masuk_id, 
+								'PENERIMA' => $dinas_id
+								);
+					$this->surat_masuk_model->add4($data);
+				}
+			}
+			else
+			{
+				if($this->surat_masuk_model->cek_status_terima_surat($surat_masuk_id, $kode_role))
+				{
+					$data = array(
+								'SURAT_MASUK_ID' => $surat_masuk_id, 
+								'PENERIMA' => $kode_role
+								);
+					$this->surat_masuk_model->add4($data);
+				}
+			}
+		}
+		
+		$results3 = $this->surat_masuk_model->get_surat_masuk_by_id2($surat_masuk_id)->row();
+		$results4 = $this->surat_masuk_model->get_file_surat_masuk_by_id($surat_masuk_id)->result();
+		$results5 = '';
+		if($this->surat_masuk_model->cek_surat_masuk_id($surat_masuk_id))
+		{
+			$results5 = $this->surat_masuk_model->get_catatan_disposisi($surat_masuk_id);
+		}
+		$temp1 = explode('-', $results3->TGL_TERIMA);
+		$temp2 = explode('-', $results3->TGL_SURAT);
+		$data['sifat'] = $results3->SIFAT;
+		$data['nomor'] = $results3->NOMOR;
+		$data['tgl_terima'] = $temp1[2].'-'.$temp1[1].'-'.$temp1[0];
+		if($results3->TGL_SURAT != null)
+		{
+			$data['tgl_surat'] = $temp2[2].'-'.$temp2[1].'-'.$temp2[0];
+		}
+		$data['jenis_surat'] = $results3->NAMA_JENIS_SURAT;
+		$data['dari'] = $results3->NAMA_INSTANSI;
+		$data['perihal'] = $results3->PERIHAL;
+		
+		
+		$data['penerima'] = $penerima->result();
+		$data['lampiran'] = $results3->LAMPIRAN;
+		$data['catatan'] = $results3->CATATAN_TERIMA_SURAT_MASUK;
+		$data['file_surat_masuk'] = $results4;
+		$data['komentar'] = $komentar;
+		$data['content'] = $this->load->view('detail_surat_masuk_join_disposisi',$data,true);
 		$this->load->view('main',$data);
 	}
 	
